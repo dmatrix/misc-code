@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # set the tracking server to be Databricks Community Edition
     # set the experiment name; if name does not exist, MLflow will
     # create one for you
-    local_registry = "sqlite:///mlruns_db"
+    local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     model_name = "sk-learn-random-forest-reg-model"
     mlflow.set_tracking_uri(local_registry)
@@ -55,10 +55,5 @@ if __name__ == "__main__":
     [print(pprint.pprint(dict(rm), indent=4)) for rm in clnt.list_registered_models()]
     # Get a list of specific versions of the named models
     print(f"List of Model = {model_name} and Versions")
-    print("=" * 80)
-    [pprint.pprint(dict(mv), indent=4) for mv in clnt.search_model_versions("name='sk-learn-random-forest-reg-model'")]
-
-    clnt.delete_model_version(name="sk-learn-random-forest-reg-model",
-    version=1)
     print("=" * 80)
     [pprint.pprint(dict(mv), indent=4) for mv in clnt.search_model_versions("name='sk-learn-random-forest-reg-model'")]

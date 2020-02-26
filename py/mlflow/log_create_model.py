@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # set the tracking server to be Databricks Community Edition
     # set the experiment name; if name does not exist, MLflow will
     # create one for you
-    local_registry = "sqlite:///mlruns_db"
+    local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     model_name = "sk-learn-random-forest-reg-model"
     mlflow.set_tracking_uri(local_registry)

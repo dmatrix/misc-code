@@ -1,6 +1,6 @@
 import os
 import shutil
-import pprint
+import sys
 from pprint import pprint as pp
 
 from random import random, randint
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # set the tracking server to be Databricks Community Edition
     # set the experiment name; if name does not exist, MLflow will
     # create one for you
-    local_registry = "sqlite:///mlruns_db"
+    local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     model_name = "sk-learn-random-forest-reg-model"
     mlflow.set_tracking_uri(local_registry)
@@ -51,14 +51,14 @@ if __name__ == "__main__":
     #
     client = MlflowClient()
     result = mlflow.register_model(
-                "runs:/3f57ae604b6a4b51a10b72d6e5a13b63/artifacts/sklearn-model",
+                f"runs:/{run_id}/artifacts/sklearn-model",
                 model_name)
     print(result)
 
     result = client.create_model_version(
             name="sk-learn-random-forest-reg-model",
-            source="mlruns/0/3f57ae604b6a4b51a10b72d6e5a13b63/artifacts/sk-model",
-            run_id="3f57ae604b6a4b51a10b72d6e5a13b63")
+            source=f"mlruns/0/{run_id}/artifacts/sk-model",
+            run_id=run_id)
     print(result)
     [pp(dict(rm), indent=4) for rm in client.list_registered_models()]
     # Get a list of specific versions of the named models
