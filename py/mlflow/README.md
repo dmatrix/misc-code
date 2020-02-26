@@ -28,7 +28,7 @@ Some simple tests to check API usage for the OSS documentation
   [del_all_reg_models.py](py/mlflow/del_all_reg_models.py)
   * deletes all versions of a registered model
   
-  [archive_model_versions.py](py/mlflow/archive_t of model_versions.py)
+  [archive_model_versions.py](py/mlflow/archive_model_versions.py)
   * takes a list model's versions and archives them
   * searches and lists versions of the a registered model; their stage should
   indicate as "Archived."
