@@ -39,4 +39,3 @@ Some simple tests to check API usage for the OSS documentation
    
   [search_model_versions.py](search_model_versions.py)
    * search versions of a regsitered model
-
