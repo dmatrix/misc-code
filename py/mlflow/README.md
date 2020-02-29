@@ -32,4 +32,11 @@ Some simple tests to check API usage for the OSS documentation
   * takes a list model's versions and archives them
   * searches and lists versions of the a registered model; their stage should
   indicate as "Archived."
+  
+  [list_models.py](list_models.py)
+   * List all registered models
+   * search versions of a model
+   
+  [search_model_versions.py](search_model_versions.py)
+   * search versions of a regsitered model
 

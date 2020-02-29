@@ -13,13 +13,12 @@ if __name__ == "__main__":
         print("Usage: Need version number for the model")
         sys.exit(1)
 
-    # set the tracking server to be Databricks Community Edition
-    # set the experiment name; if name does not exist, MLflow will
-    # create one for you
+    # set the tracking server to be localhost with sqlite as tracking store
     local_registry = "sqlite:///mlruns.db"
     mlflow.set_tracking_uri(local_registry)
     print(f"Running local model registry={local_registry}")
-    model_name = "sk-learn-random-forest-reg-model"
+    #model_name="sk-learn-random-forest-reg-model"
+    mode_name="WeatherForecastModel"
     version = int(sys.argv[1])
     #
     # Get model name if not regisered, register with model registry
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     #
     client = MlflowClient()
     client.delete_model_version(
-        name="sk-learn-random-forest-reg-model",
+        name="WeatherForecastModel",
         version=version)
     print("=" * 80)
     [pprint.pprint(dict(mv), indent=4) for mv in client.search_model_versions("name='sk-learn-random-forest-reg-model'")]
