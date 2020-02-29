@@ -15,10 +15,8 @@ if __name__ == "__main__":
     model_name="WeatherForecastModel"
     mlflow.set_tracking_uri(local_registry)
 
-    clnt = MlflowClient()
     # Search model versions
-    print("List of all registered models")
+    print(f"List of all versions of {model_name} model")
     print("=" * 80)
     client = MlflowClient()
-    [pprint.pprint(dict(mv), indent=4) for mv in
-    client.search_model_versions("name='WeatherForecastModel'")]
+    [pprint.pprint(dict(mv), indent=4) for mv in client.search_model_versions("name='WeatherForecastModel'")]
