@@ -1,22 +1,29 @@
 #
 # Classic strategy design pattern invovles the following components.
-# Exmaple borrowed from "Fluent Python: Luciano Ramalho."
+# Example borrowed from "Fluent Python: Luciano Ramalho."
+# Context:
+# Provides the service by delegating certain computations to other
+# components depending on their respective attributes. In our example below,
+# the context is "Order."
+
+# The class strategy design pattern invovles the following components.
+# Example borrowed from "Fluent Python: Luciano Ramalho."
+#
 # Context:
 # Provides the service by delegating certain computations to other
 # components depending on their respective attributes. In our example below,
 # the context is "Order."
 #
 # Strategy:
-# The interface common to the components that implement the different
-# algorithms. In the example, below this is played by an abstract class
-# "Promotion."
+# An abstract class that provides abstract classes for different
+# implememtation of algorithms
 #
 # Concrete Strategy:
-# One of the concrete subclasses of the abstract class "Promotion."
+# These are instances of an abstract class Promotion."
 # For example, "FidelityPromo," "BulkPromo," and "LargerOrderPromo."
 #
-from abc import ABC, abstractmethod
 from collections import namedtuple
+from abc import ABC, abstractmethod
 
 Customer = namedtuple('Customer', 'name fidelity')
 
@@ -50,6 +57,8 @@ class Order:
         if self.promotion is None:
             discount = 0
         else:
+            # invoke the concrete strategy class implementation
+            # of the discount function
             discount = self.promotion.discount(self)
 
         return self.total() - discount
