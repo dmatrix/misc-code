@@ -20,7 +20,7 @@ if __name__ == "__main__":
     local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     model_name = "WeatherForecastModel"
-    #model_name = "sk-learn-random-forest-reg-model"
+    # model_name = "sk-learn-random-forest-reg-model"
     mlflow.set_tracking_uri(local_registry)
     with mlflow.start_run(run_name="LOCAL_REGISTRY") as run:
         params = {"n_estimators": 3, "random_state": 0}
@@ -38,7 +38,7 @@ if __name__ == "__main__":
                     artifact_path = "sklearn-model",
                     registered_model_name="WeatherForecastModel")
         if not os.path.exists("outputs"):
-         os.makedirs("outputs")
+            os.makedirs("outputs")
         with open("outputs/test.txt", "w") as f:
             f.write("Looks, like I logged to the local store!")
 
