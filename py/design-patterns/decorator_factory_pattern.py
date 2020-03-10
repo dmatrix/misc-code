@@ -1,8 +1,9 @@
 #
-# Think of registry, as the name sugguests, a global factory where
-# functions are registered or deregistered
+# Think of registry, as the name suggests, a global factory where
+# functions are registered or de-registered
 #
 # Make this a set of additions and deletions are efficient
+#
 registry = set()
 
 def register(active=True):
