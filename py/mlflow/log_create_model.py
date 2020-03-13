@@ -57,3 +57,6 @@ if __name__ == "__main__":
     print(f"List of Model = {model_name} and Versions")
     print("=" * 80)
     [pp(dict(mv), indent=4) for mv in client.search_model_versions("name='WeatherForecastModel'")]
+    print("=" * 80)
+    [print(pp(dict(rm), indent=4)) for rm in client.list_registered_models()]
+    # Get a list of specific versions of the named models

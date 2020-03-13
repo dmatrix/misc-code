@@ -14,7 +14,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # set the tracking server to be localhost with sqlite as tracking store
+    # Set the tracking server to be localhost with sqlite as tracking store
     local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     model_name="WeatherForecastModel"
@@ -29,6 +29,7 @@ if __name__ == "__main__":
         log_metric("metric_1", random())
         log_metric("metric_2", random() + 1)
         log_metric("metric_33", random() + 2)
+
         # Log and register the model at the same time
         mlflow.sklearn.log_model(
                     sk_model = sk_learn_rfr,
@@ -41,11 +42,15 @@ if __name__ == "__main__":
         log_artifacts("outputs")
         shutil.rmtree('outputs')
         run_id = run.info.run_uuid
-    #
-    # Get model name if not regisered, register with model registry
-    # on a local host
-    #
+
     client = MlflowClient()
+    #
+    # transition model to stage
+    #
+    client.transition_model_version_stage(
+        name=model_name,
+        version=1,
+        stage="production")
     # Get a list of all registered models
     print("List of all registered models")
     print("=" * 80)

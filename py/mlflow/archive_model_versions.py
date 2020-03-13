@@ -17,7 +17,6 @@ if __name__ == "__main__":
     local_registry = "sqlite:///mlruns.db"
     mlflow.set_tracking_uri(local_registry)
     print(f"Running local model registry={local_registry}")
-    # model_name = "sk-learn-random-forest-reg-model"
     model_name = "WeatherForecastModel"
     version = int(sys.argv[1])
     #
