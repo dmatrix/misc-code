@@ -35,8 +35,7 @@ if __name__ == "__main__":
         # Log and register the model at the same time
         mlflow.sklearn.log_model(
                     sk_model = sk_learn_rfr,
-                    artifact_path = "sklearn-model",
-                    registered_model_name="WeatherForecastModel")
+                    artifact_path = "sklearn-model")
         if not os.path.exists("outputs"):
             os.makedirs("outputs")
         with open("outputs/test.txt", "w") as f:
@@ -51,7 +50,7 @@ if __name__ == "__main__":
     #
     client = MlflowClient()
     try:
-        client.create_registered_model("WeatherForecastModel")
+        client.create_registered_model(model_name)
     except MlflowException as ex:
         print(ex)
     # Get a list of specific versions of the named models
