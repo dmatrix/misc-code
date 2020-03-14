@@ -45,16 +45,18 @@ if __name__ == "__main__":
 
     client = MlflowClient()
     #
-    # transition model to stage
+    # transition model stage to production
     #
     client.transition_model_version_stage(
         name=model_name,
         version=1,
         stage="production")
+
     # Get a list of all registered models
     print("List of all registered models")
     print("=" * 80)
     [print(pprint.pprint(dict(rm), indent=4)) for rm in client.list_registered_models()]
+
     # Get a list of specific versions of the named models
     print(f"List of Model = {model_name} and Versions")
     print("=" * 80)

@@ -17,7 +17,7 @@ if __name__ == "__main__":
     mlflow.set_tracking_uri(local_registry)
     print(f"Running local model registry={local_registry}")
 
-    # Delete the registered model namme
+    # Rename a registered model name
     client = MlflowClient()
     old_model_name = sys.argv[1]
     new_model_name = sys.argv[2]

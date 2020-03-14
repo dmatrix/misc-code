@@ -39,3 +39,7 @@ Some simple tests to check API usage for the OSS documentation
    
   [search_model_versions.py](search_model_versions.py)
    * search versions of a regsitered model
+   
+   [rename_reg_model.py](rename_reg_model.py)
+    * rename a regisrtered model.
+    * takes two command line arguments: old_model_name, new_model_name
