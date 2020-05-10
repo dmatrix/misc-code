@@ -45,7 +45,8 @@ class Averager():
             self.max_value = new_value
         return (self.total / self.count, self.max_value, self.min_value)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+
     # Using Python class
     avg = Averager("DBX")
     print(f"Stats for Stock Symbol {avg.stock_sym}")
