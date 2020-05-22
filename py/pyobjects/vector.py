@@ -2,6 +2,8 @@ from array import array
 import reprlib
 import math
 import numbers
+import functools
+import operator
 
 # A Python class to illustrate a User-defined Sequence Type
 
@@ -22,6 +24,9 @@ class Vector:
       '''
       return iter(self._components)
 
+   def __bool__(self):
+      return bool(abs(self))
+
    def __repr__(self):
       '''
       Use reprlib.repr() to get a limited-length representation of self._components
@@ -38,7 +43,11 @@ class Vector:
       return (bytes([ord(self.typecode)]) + bytes(self._components))
 
    def __eq__(self, other):
-      return tuple(self) == tuple(other)
+      return len(self) == len(other) and all(a == b for a, b in zip(self, other))
+
+   def __hash__(self):
+      hashes = map(hash, self._components)
+      return functools.reduce(operator.xor, hashes)
 
    def __abs__(self):
       return math.sqrt(sum(x *x for x in self))
@@ -77,7 +86,7 @@ class Vector:
          if name in cls.short_names:
             error = 'readonly attribute {attr_name!r}'
          elif name.islower():
-            error = "cant't se attributes 'a' to 'z' in {cls_name!r}"
+            error = "cant't set attributes 'a' to 'z' in {cls_name!r}"
          else:
             error = ''
          if error:
@@ -105,4 +114,7 @@ if __name__ == "__main__":
    print(v7.x)
    print(v7.t)
 
-   v7.f = 5
+   v7.X = 25
+   print(v7.X)
+   v2 = Vector((3,4,5))
+   print(v == v2)
