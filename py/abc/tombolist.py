@@ -30,6 +30,11 @@ class TomboList(list):
 if __name__ == '__main__':
    tl = TomboList(list(range(10)))
    print(issubclass(TomboList, Tombola))
+   print(issubclass(TomboList, list))
+   print(issubclass(TomboList, object))
    print(isinstance(tl, TomboList))
    print(isinstance(tl, Tombola))
+   print(isinstance(tl, list))
+   print(isinstance(tl, object))
    print(TomboList.__mro__)
+

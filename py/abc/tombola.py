@@ -1,6 +1,7 @@
 import abc
+from abc import ABC
 
-class Tombola(abc.ABC):
+class Tombola(ABC):
    """
    Define an ABC subclass
    """
@@ -11,12 +12,11 @@ class Tombola(abc.ABC):
    @abc.abstractmethod
    def pick(self):
       """Remove item at random, returning it
-
       This method should raise `LookupError` when the instance is empty
       """
    def loaded(self):
       """Retrun `True` if there's at least i item, 'Falss` otherwise"""
-      return bool(self, self.inspect())
+      return bool(self.inspect())
 
    def inspect(self):
       """Return a sorted tuple with the items currently inside"""
@@ -28,3 +28,6 @@ class Tombola(abc.ABC):
             break
       self.load(items)
       return sorted(items)
+
+if __name__ == '__main__':
+   fake = Tombola()
