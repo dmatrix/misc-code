@@ -2,6 +2,10 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import pandas as pd
 import mlflow.pyfunc
 
+#
+# Good and readable paper to read from the authors of this package
+# http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf
+
 INPUT_TEXTS = [{'text': "This is a bad ass movie. You got to see it! :-)"},
                {'text': "Ricky Gervais is smart, witty, and creative!!!!!! :D"},
                {'text': "LOL, this guy fell off a chair while snoring in a meeting"},
@@ -41,6 +45,6 @@ if __name__ == "__main__":
          mlflow.log_param(f"text_{i}", text)
          model_input = pd.DataFrame([text])
          scores = loaded_model.predict(model_input)
-         print(f"{text} -------------- {str(scores[0])}")
+         print(f"<{text}> ------- {str(scores[0])}>")
          for index, value in scores.items():
             [mlflow.log_metric(f"{key}_{i}", value) for key, value in value.items()]
