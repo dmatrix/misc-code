@@ -22,6 +22,6 @@ if __name__ == "__main__":
                 name="WeatherForecastModel",
                 version=mv.version,
                 stage="archived")
-           
+
         # Delete this registered model
         client.delete_registered_model("WeatherForecastModel")

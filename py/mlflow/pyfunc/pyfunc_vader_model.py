@@ -8,9 +8,9 @@ import mlflow.pyfunc
 
 INPUT_TEXTS = [{'text': "This is a bad ass movie. You got to see it! :-)"},
                {'text': "Ricky Gervais is smart, witty, and creative!!!!!! :D"},
-               {'text': "LOL, this guy fell off a chair while snoring in a meeting"},
+               {'text': "LOL, this guy fell off a chair while sleeping and snoring in a meeting"},
                {'text': "Men shoots himself while trying to steal a dog, OMG"},
-               {'text': "Yay!! Another good phone interview!!"},
+               {'text': "Yay!! Another good phone interview. I nailed it!!"},
                {'text': "This is INSANE! I can't believe it. How could you do such a horrible thing?"}]
 
 class SocialMediaAnalyserModel(mlflow.pyfunc.PythonModel):
