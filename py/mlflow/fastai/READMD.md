@@ -3,7 +3,11 @@
 This simple example illustrates how you can use `mlflow.fastai.autolog()` API
 to train a simple MNIST model. Derived from fastai GitHub Repository of [vision examples](https://github.com/fastai/fastai/blob/master/examples/train_mnist.py),
 we modified to run as an MLflow project, with either default or supplied arguments. The default arguments are
-learning rate(`lr=0.01`) and number of epochs (`epochs=5`)
+learning rate(`lr=0.01`) and number of epochs (`epochs=5`).
+
+You can use this example as a template to try other advanced examples in
+[Fastai tutorials](https://docs.fast.ai/vision.html), using `mlfow.fastai.` model flavor API for
+tracking your experiments.
 
 ### How to run 
 
