@@ -15,7 +15,7 @@ You can run this MLflow project fastai example in two  ways:
 
 1. Run from the current git directory with default arguments.
 
- `mlflow run . -e main `
+ `mlflow run . -e main`
  `mlflow run . -e main -P lr=0.02 -P epochs=8`
  
 2. Run from outside git repository
