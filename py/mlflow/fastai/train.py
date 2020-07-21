@@ -35,7 +35,7 @@ def main():
 
    # start MLflow session
    with mlflow.start_run():
-      # train and fit with default/supplied arguments
+      # train and fit with default or supplied command line arguments
       learn.fit(args.epochs, args.lr)
 
 if __name__ == '__main__':
