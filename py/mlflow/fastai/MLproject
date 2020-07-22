@@ -8,6 +8,6 @@ entry_points:
       lr: {type: float, default: 0.01}
       epochs: {type: int, default: 5}
     command: |
-        python train_fastai.py \
+        python train.py \
             --lr {lr} \
             --epochs {epochs}
