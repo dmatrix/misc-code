@@ -8,10 +8,7 @@ if __name__ == '__main__':
       joblib.dump(test, f)
    mlflow.set_tracking_uri("http://127.0.0.1:5000")
    exp_info = MlflowClient().get_experiment_by_name("issue_3114")
-   if exp_info is None:
-      exp_id = MlflowClient().create_experiment("issue_3114")
-   else:
-      exp_id = exp_info.experiment_id
+   exp_id = exp_info.experiment_id if exp_info else MlflowClient().create_experiment("issue_3114")
    with mlflow.start_run(experiment_id=exp_id) as run:
       run_id = run.run_id = run.info.run_uuid
 
