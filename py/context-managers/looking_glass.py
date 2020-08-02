@@ -38,6 +38,35 @@ class LookingGlass:
             # Return True to tell the interpreter that exception was handled
             return True
 
+#
+# Use contextmanager decorator as an alternative to implementing a class
+# Recommended in Fluent Python
+#
+import contextlib
+
+@contextlib.contextmanager
+def looking_glass():
+    # Save the original write
+    original_write = sys.stdout.write
+
+    def reverse_write(text):
+        original_write(text[::-1])
+    # Monkey patch the stdout write
+    sys.stdout.write = reverse_write
+    # create msg for handling excpetion
+    msg = ''
+    try:
+        yield "JABBERWOCKY"
+    except ZeroDivisionError:
+        msg = "Please DO NOT DIVIDE BY ZERO!"
+    finally:
+        # Undo monkey patch
+        sys.stdout.write = original_write
+        if (msg):
+            print(msg)
+
+
+
 if __name__ == '__main__':
 
     with LookingGlass() as what:
@@ -58,3 +87,14 @@ if __name__ == '__main__':
     print(monster)
     manager.__exit__(None, None, None)
     print(monster)
+
+    print("==" * 30)
+    with looking_glass() as what:
+        print("Alice, Kitty, and Snowdrop")
+        print("PySpark is great, so is MLflow!")
+        print(what)
+
+        # Should print normal
+    print("Back to normal")
+    print("Alice, Kitty, and Snowdrop")
+    print("PySpark is great, so is MLflow!")
