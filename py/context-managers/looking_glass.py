@@ -53,7 +53,7 @@ def looking_glass():
         original_write(text[::-1])
     # Monkey patch the stdout write
     sys.stdout.write = reverse_write
-    # create msg for handling excpetion
+    # create msg for handling exception
     msg = ''
     try:
         yield "JABBERWOCKY"
@@ -64,8 +64,6 @@ def looking_glass():
         sys.stdout.write = original_write
         if (msg):
             print(msg)
-
-
 
 if __name__ == '__main__':
 
