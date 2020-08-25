@@ -14,11 +14,12 @@ if __name__ == "__main__":
 
     # Create a coroutine object
     coro_avg = averager()
+    # Priming the coroutine 
     next(coro_avg)
     print(coro_avg.send(10))
     print(coro_avg.send(5))
     print(coro_avg.send(5))
 
     # Terminate the coroutine
-    # coro_avg.close()
+    coro_avg.close()
 

@@ -6,8 +6,10 @@ from random import random, randint
 import mlflow.sklearn
 from mlflow import log_metric, log_param, log_artifacts
 from sklearn.ensemble import RandomForestRegressor
-from mlflow.tracking import MlflowClient
+import mlflow
 import warnings
+import sys
+import os
 
 if __name__ == "__main__":
 
@@ -17,7 +19,11 @@ if __name__ == "__main__":
     # Set the tracking server to be localhost with sqlite as tracking store
     local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
-    model_name="AzureWeatherForecastModel"
+    if len(sys.argv) != 2:
+        print("usage: {} <model_name>".format(os.path.basename(__file__)))
+        sys.exit(1)
+    model_name= sys.argv[1]
+    filter_name = "name='{}'".format(model_name)
     mlflow.set_tracking_uri(local_registry)
     with mlflow.start_run(run_name="LOCAL_REGISTRY") as run:
         params = {"n_estimators": 3, "random_state": 0}
@@ -34,7 +40,7 @@ if __name__ == "__main__":
         mlflow.sklearn.log_model(
                     sk_model = sk_learn_rfr,
                     artifact_path = "sklearn-model",
-                    registered_model_name="AzureWeatherForecastModel")
+                    registered_model_name=model_name)
         if not os.path.exists("outputs"):
             os.makedirs("outputs")
         with open("outputs/test.txt", "w") as f:
@@ -43,7 +49,7 @@ if __name__ == "__main__":
         shutil.rmtree('outputs')
         run_id = run.info.run_uuid
 
-    client = MlflowClient()
+    client = mlflow.tracking.MlflowClientMlflowClient()
     #
     # transition model stage to production
     #
@@ -60,4 +66,4 @@ if __name__ == "__main__":
     # Get a list of specific versions of the named models
     print(f"List of Model = {model_name} and Versions")
     print("=" * 80)
-    [pprint.pprint(dict(mv), indent=4) for mv in client.search_model_versions("name='AzureWeatherForecastModel'")]
+    [pprint.pprint(dict(mv), indent=4) for mv in client.search_model_versions(filter_name)]

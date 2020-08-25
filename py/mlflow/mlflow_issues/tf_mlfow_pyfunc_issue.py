@@ -1,7 +1,7 @@
-import tensorflow as tf
 import pandas as pd
-import mlflow.tensorflow
+import mlflow.keras
 import mlflow.pyfunc
+import keras
 
 def predict_pyfunc(model_uri, verbose=False):
 
@@ -19,7 +19,6 @@ def predict_pyfunc(model_uri, verbose=False):
         print(f"x_test new dim={new_x_test.ndim}")
 
     pyfunc_model = mlflow.pyfunc.load_model(model_uri, suppress_warnings=True)
-    # cols = [str(c) for c in range(n2 * n3)]
     predictions = pyfunc_model.predict(pd.DataFrame(data=x_test))
     print("+-" * 25)
     print(f"predictions = {predictions}")
@@ -27,26 +26,25 @@ def predict_pyfunc(model_uri, verbose=False):
 
 if __name__== '__main__':
     # Read data
-    mnist = tf.keras.datasets.mnist
+    mnist = keras.datasets.mnist
     (x_train, y_train),(x_test, y_test) = mnist.load_data()
     x_train, x_test = x_train / 255.0, x_test / 255.0
     # Build the model
-    model = tf.keras.models.Sequential([
-      tf.keras.layers.Flatten(input_shape=(28, 28)),
-      tf.keras.layers.Dense(128, activation='relu'),
-      tf.keras.layers.Dropout(0.2),
-      tf.keras.layers.Dense(10, activation='softmax')
+    model = keras.models.Sequential([
+      keras.layers.Flatten(input_shape=(28, 28)),
+      keras.layers.Dense(128, activation='relu'),
+      keras.layers.Dropout(0.2),
+      keras.layers.Dense(10, activation='softmax')
     ])
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
-    model.fit(x_train, y_train, epochs=1)
-    model.evaluate(x_test, y_test)
-    tf_models = './tf_models'
-    model.save(tf_models)
+    run_id = None
     with mlflow.start_run() as run:
+        mlflow.keras.autolog()
+        model.fit(x_train, y_train, epochs=1)
+        model.evaluate(x_test, y_test)
         run_id = run.info.run_id
-        mlflow.keras.log_model(model,artifact_path='model')
 
     model_uri = f'runs:/{run.info.run_id}/model'
     predict_pyfunc(model_uri, verbose=True)
