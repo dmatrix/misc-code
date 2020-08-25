@@ -35,6 +35,7 @@ if __name__ == "__main__":
         log_metric("metric_1", random())
         log_metric("metric_2", random() + 1)
         log_metric("metric_33", random() + 2)
+        mlflow.set_tag("my_runid", run.info.run_uuid)
 
         # Log and register the model at the same time
         mlflow.sklearn.log_model(
@@ -49,7 +50,7 @@ if __name__ == "__main__":
         shutil.rmtree('outputs')
         run_id = run.info.run_uuid
 
-    client = mlflow.tracking.MlflowClientMlflowClient()
+    client = mlflow.tracking.MlflowClient()
     #
     # transition model stage to production
     #
