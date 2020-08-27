@@ -1,0 +1,5 @@
+entry_points:
+  main:
+    parameters:
+      equation: {type: string, default: "y=mx+c"}
+    command: python equation-parser.py --equation {equation}

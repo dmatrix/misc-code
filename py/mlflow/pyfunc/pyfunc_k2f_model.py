@@ -26,5 +26,3 @@ if __name__ == "__main__":
       model_output = loaded_model.predict(model_input)
       model_output.rename_axis(['Fahrenheit'], axis=0, inplace=True)
       print(model_output.head())
-
-
