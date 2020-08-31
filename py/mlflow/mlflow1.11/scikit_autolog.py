@@ -4,6 +4,8 @@ import sklearn.linear_model
 import mlflow
 
 # enable autologging
+mlflow.set_tracking_uri("sqlite:///mlruns.db")
+
 mlflow.sklearn.autolog()
 
 # prepare training data
@@ -13,6 +15,7 @@ y = np.dot(X, np.array([1, 2])) + 3
 
 def fetch_logged_data(run_id):
     client = mlflow.tracking.MlflowClient()
+    
     data = client.get_run(run_id).data
     tags = {k: v for k, v in data.tags.items() if not k.startswith("mlflow.")}
     metrics = {k: v for k, v in data.metrics.items()}
