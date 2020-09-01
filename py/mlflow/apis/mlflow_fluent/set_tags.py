@@ -12,8 +12,7 @@ if __name__ == "__main__":
 
     tags = {"engineering": "ML Platform",
             "release.candidate": "RC1",
-            "release.version": "2.2.0"
-            }
+            "release.version": "2.2.0"}
     # Creates a run if one is not active and set three tags
     mlflow.set_tags(tags)
 

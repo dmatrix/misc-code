@@ -10,7 +10,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    metrics = {"mse": 2500.00, "rsme": 50.00}
+    metrics = {"mse": 2500.00, "rmse": 50.00}
 
     # Creates a run if one is not active and log two metrics
     mlflow.log_metrics(metrics)
