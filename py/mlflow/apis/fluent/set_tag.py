@@ -1,5 +1,5 @@
 #
-# Code snippet for https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tags
+# Code snippet for https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tag
 #
 import warnings
 
@@ -13,15 +13,16 @@ if __name__ == "__main__":
     tags = {"engineering": "ML Platform",
             "release.candidate": "RC1",
             "release.version": "2.2.0"}
-    # Creates a run if one is not active and set three tags
-    mlflow.set_tags(tags)
+
+    # Creates a run if one is not active and set tags
+    [mlflow.set_tag(key, value) for key, value in tags.items()]
 
     # end the run above
     mlflow.end_run()
 
-    # Or use Context Manager to create a new run
+    # Or use Context Manager to create a new run and set tags
     with mlflow.start_run(run_name="My Runs"):
-        mlflow.set_tags(tags)
+        [mlflow.set_tag(key, value) for key, value in tags.items()]
 
 
 
