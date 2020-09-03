@@ -10,7 +10,7 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Set existing run_ids to delete
-    run_ids = ["13ee9e661cbf4095a7c92cc55b4e12b4", "948fbf2d0b7f4056b3dd4914845a1e1b"]
+    run_ids = ["9010b659f83142938e21dc2baa8fcbe8"]
 
     # Delete run_ids and fetch the results.
     # Note that runs are not actually delete, only lifecycle stage is set to "deleted"

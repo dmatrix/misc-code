@@ -10,15 +10,16 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Creates a run if one is not active and deletes the tag
-    mlflow.delete_tag("engineering", "ML Platform")
+    tags = {"engineering": "ML Platform",
+            "engineering_remote": "ML Platform",
+            "release.candidate": "RC1",
+            "release.version": "2.2.0"}
 
-    # end the run above
-    mlflow.end_run()
-
-    # Or use Context Manager to create a new run
+    # Or use Context Manager to create a new run and set tags
     with mlflow.start_run(run_name="My Runs"):
-        mlflow.delete_tag("engineering", "ML Platform")
+        [mlflow.set_tag(key, value) for key, value in tags.items()]
+
+        mlflow.delete_tag("engineering_remote")
 
 
 

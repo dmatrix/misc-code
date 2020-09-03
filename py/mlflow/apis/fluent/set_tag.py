@@ -14,12 +14,6 @@ if __name__ == "__main__":
             "release.candidate": "RC1",
             "release.version": "2.2.0"}
 
-    # Creates a run if one is not active and set tags
-    [mlflow.set_tag(key, value) for key, value in tags.items()]
-
-    # end the run above
-    mlflow.end_run()
-
     # Or use Context Manager to create a new run and set tags
     with mlflow.start_run(run_name="My Runs"):
         [mlflow.set_tag(key, value) for key, value in tags.items()]
