@@ -15,10 +15,10 @@ if __name__ == "__main__":
     # Examine the deleted experiment details. Deleted experiments
     # are moved to a .thrash folder under the artifact location top
     # level directory.
-    data = mlflow.get_experiment(str(1))
+    experiment = mlflow.get_experiment(str(1))
 
     # Print the contents of deleted Experiment data
-    print("Name={}".format(data.name))
-    print("Artifact Location={}".format(data.artifact_location))
-    print("Tags={}".format(data.tags))
-    print("Lifecycle_stage={}".format(data.lifecycle_stage))
+    print("Name={}".format(experiment.name))
+    print("Artifact Location={}".format(experiment.artifact_location))
+    print("Tags={}".format(experiment.tags))
+    print("Lifecycle_stage={}".format(experiment.lifecycle_stage))

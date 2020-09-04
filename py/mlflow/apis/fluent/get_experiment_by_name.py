@@ -10,13 +10,13 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Case-sensitive name
-    data = mlflow.get_experiment_by_name("Default")
+    experiment = mlflow.get_experiment_by_name("Default")
 
     # Print the contents of Experiment data
-    print("Experiment_id={}".format(data.experiment_id))
-    print("Artifact Location={}".format(data.artifact_location))
-    print("Tags={}".format(data.tags))
-    print("Lifecycle_stage={}".format(data.lifecycle_stage))
+    print("Experiment_id={}".format(experiment.experiment_id))
+    print("Artifact Location={}".format(experiment.artifact_location))
+    print("Tags={}".format(experiment.tags))
+    print("Lifecycle_stage={}".format(experiment.lifecycle_stage))
 
 
 

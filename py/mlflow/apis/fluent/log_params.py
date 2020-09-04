@@ -12,12 +12,5 @@ if __name__ == "__main__":
 
     params = {"learning_rate": 0.01, "n_estimators": 10}
 
-    # Creates a run if one is not active and log two parameters
-    mlflow.log_params(params)
-
-    # end the run above
-    mlflow.end_run()
-
-    # Or use Context Manager to create a new run
-    with mlflow.start_run(run_name="My Runs"):
+    with mlflow.start_run():
         mlflow.log_params(params)

@@ -12,12 +12,6 @@ if __name__ == "__main__":
 
     metrics = {"mse": 2500.00, "rmse": 50.00}
 
-    # Creates a run if one is not active and log two metrics
-    mlflow.log_metrics(metrics)
-
-    # end the run above
-    mlflow.end_run()
-
-    # Or you Context Manager to create a new run
-    with mlflow.start_run(run_name="My Runs"):
+    # Log a batch of metrics
+    with mlflow.start_run():
         mlflow.log_metrics(metrics)

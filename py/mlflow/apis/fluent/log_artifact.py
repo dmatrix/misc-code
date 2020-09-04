@@ -13,16 +13,10 @@ if __name__ == "__main__":
     with open("features.txt", 'w') as f:
         f.write(features)
 
-    # Creates a run if one is not active and write this file
-    # in a directory "features" under the root artifact_uri/features
-    mlflow.log_artifact("features.txt", artifact_path="features")
-
-    # End the run above
-    mlflow.end_run()
-
-    # Or use Context Manager to create a new run
-    with mlflow.start_run(run_name="My Runs"):
-        mlflow.log_artifact("features.txt", artifact_path="features")
+    # With artifact_path=None write all files under
+    # root artifact_uri/artifacts directory
+    with mlflow.start_run():
+        mlflow.log_artifact("features.txt")
 
 
 

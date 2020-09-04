@@ -10,7 +10,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    if (len (sys.argv) !=2):
+    if len(sys.argv) != 2:
         print("usage: need run_id as an argument")
         sys.exit(1)
 

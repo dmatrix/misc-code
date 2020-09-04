@@ -10,13 +10,13 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Convert experiment ID as a string argument
-    data = mlflow.get_experiment(str(0))
+    experiment = mlflow.get_experiment(str(0))
 
     # Print the contents of Experiment data
-    print("Name={}".format(data.name))
-    print("Artifact Location={}".format(data.artifact_location))
-    print("Tags={}".format(data.tags))
-    print("Lifecycle_stage={}".format(data.lifecycle_stage))
+    print("Name={}".format(experiment.name))
+    print("Artifact Location={}".format(experiment.artifact_location))
+    print("Tags={}".format(experiment.tags))
+    print("Lifecycle_stage={}".format(experiment.lifecycle_stage))
 
 
 

@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     # Create some artifacts data tor preserve
     features = "rooms, zipcode, median_price, school_rating, transport"
-    data = [{"state": "TX", "Available": 25, "Type": "Bunglow"},
+    data = [{"state": "TX", "Available": 25, "Type": "Detached"},
             {"state": "OR", "Available": 83, "Type": "Condo"}]
 
     # Create couple of artifact files under the directory "data"
@@ -21,14 +21,7 @@ if __name__ == "__main__":
     with open("data/features.txt", 'w') as f:
         f.write(features)
 
-    # Creates a run if one is not active and write all files
-    # in "data" to root artifact_uri/states
-    mlflow.log_artifacts("data", artifact_path="states")
-
-    # End the run above
-    mlflow.end_run()
-
-    # Or use Context Manager to create a new run
-    with mlflow.start_run(run_name="My Runs"):
+    # Write all files in "data" to root artifact_uri/states
+    with mlflow.start_run():
         mlflow.log_artifacts("data", artifact_path="states")
 
