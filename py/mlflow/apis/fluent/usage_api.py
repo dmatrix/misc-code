@@ -1,6 +1,10 @@
 from random import random, randint
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestRegressor
+
+from random import random, randint
+import mlflow.sklearn
+from sklearn.ensemble import RandomForestRegressor
 import warnings
 
 if __name__ == "__main__":
@@ -8,23 +12,26 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
+    # Define some tags and feature columns
     tags = {"engineering": "ML Platform",
             "release.candidate": "RC1",
             "release.version": "2.2.0"}
-
     features = "rooms, zipcode, median_price, school_rating, transport"
+
+    # Create a feature file
     with open("features.txt", 'w') as f:
         f.write(features)
 
+    # Start an run and log entities
     with mlflow.start_run(run_name="My Runs") as run:
         params = {"n_estimators": 3, "random_state": 42}
         sk_learn_rfr = RandomForestRegressor(params)
 
         # Log params using the MLflow entities
         mlflow.log_params(params)
-        mlflow.log_param("param_1", randint(0, 100))
-        mlflow.log_metric("metric_1", random())
-        mlflow.log_metric("metric_2", random() + 1)
+        mlflow.log_param("num_users", randint(0, 100))
+        mlflow.log_metric("keystrokes", random())
+        mlflow.log_metric("click_rate", random() + 1)
         mlflow.set_tags(tags)
 
         # Log model
@@ -32,3 +39,5 @@ if __name__ == "__main__":
 
         # Log artifact
         mlflow.log_artifact("features.txt", artifact_path="features")
+
+        print("run_id={}".format(run.info.run_id))
