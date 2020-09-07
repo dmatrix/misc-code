@@ -20,11 +20,11 @@ if __name__ == "__main__":
 
         # Fetch the artifact uri
         artifact_uri = mlflow.get_artifact_uri()
-        print("Artifact uri={}".format(artifact_uri))
+        print("Artifact uri: {}".format(artifact_uri))
 
         # Fetch a specific artifact uri
         artifact_uri = mlflow.get_artifact_uri(artifact_path="features/features.txt")
-        print("Artifact uri={}".format(artifact_uri))
+        print("Artifact uri: {}".format(artifact_uri))
 
 
 

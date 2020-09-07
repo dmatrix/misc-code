@@ -10,10 +10,10 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Set existing run_ids
-    run_ids = ["0709f1780b1e4cca8929c31fc53bcc5e", "406e594061b94a43881895cccce56b1f"]
+    run_ids = ["66f723d1f1664cd8aa9ae6920c1fdcb6", "4feca84314bc433bbcbd840a725f18c3"]
 
     # Get run info state for each run
     for run_id in run_ids:
-        (print("run_id={}; lifecycle_stage={}"
-               .format(run_id, mlflow.get_run(run_id).info.lifecycle_stage)))
+        print("run_id: {}; lifecycle_stage: {}"
+               .format(run_id, mlflow.get_run(run_id).info.lifecycle_stage))
 

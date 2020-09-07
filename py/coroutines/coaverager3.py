@@ -18,8 +18,10 @@ def averager():
         total += term
         count += 1
         average = total / count
+        print("total={}; count={}; average={}".format(total, count, average))
         # The returned Result will be the value of the yield from expression in grouper
         return Result(count, average)
+
 
 
 # The delegating generator
@@ -59,8 +61,6 @@ def main(data):
         # and allows grouper to run again, which creates another averager for the next
         # group of values.
         group.send(None)
-
-
     print(results)
     report(results)
 

@@ -19,5 +19,5 @@ if __name__ == "__main__":
 
     model_uri = "runs:/{}".format(sys.argv[1])
     mv = mlflow.register_model(model_uri, "RandomForestRegressionModel")
-    pprint("Registered Model Version Info={}".format(mv))
+    pprint("Registered Model Version Info: {}".format(mv))
 

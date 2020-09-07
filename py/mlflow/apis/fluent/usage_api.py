@@ -37,7 +37,7 @@ if __name__ == "__main__":
         # Log artifact
         mlflow.log_artifact("features.txt", artifact_path="features")
 
-        print("run_id={}".format(run.info.run_id))
+        print("run_id: {}".format(run.info.run_id))
 
         data = mlflow.get_run(mlflow.active_run().info.run_id).data
 

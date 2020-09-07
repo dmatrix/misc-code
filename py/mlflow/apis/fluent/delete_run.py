@@ -16,5 +16,5 @@ if __name__ == "__main__":
     # Note that runs are not actually delete, only lifecycle stage is set to "deleted"
     for run_id in run_ids:
         mlflow.delete_run(run_id)
-        (print("run_id={}; lifecycle_stage={}".format(run_id,
-                mlflow.get_run(run_id).info.lifecycle_stage)))
+        print("run_id: {}; lifecycle_stage: {}".format(run_id,
+                mlflow.get_run(run_id).info.lifecycle_stage))

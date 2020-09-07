@@ -11,5 +11,5 @@ if __name__ == "__main__":
 
     # Get the current tracking uri
     tracking_uri = mlflow.get_tracking_uri()
-    print("Current run's tracking uri={}".format(tracking_uri))
+    print("Current run's tracking uri: {}".format(tracking_uri))
 

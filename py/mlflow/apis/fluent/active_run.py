@@ -25,12 +25,10 @@ if __name__ == "__main__":
     data = client.get_run(mlflow.active_run().info.run_id).data
 
     tags = {k: v for k, v in data.tags.items() if not k.startswith("mlflow.")}
-    metrics = {k: v for k, v in data.metrics.items()}
-    params = {k: v for k, v in data.params.items()}
 
     print("-" * 50)
-    pprint(params)
-    pprint(metrics)
+    pprint(data.params)
+    pprint(data.metrics)
     pprint(tags)
 
 

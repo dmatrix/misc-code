@@ -17,7 +17,7 @@ if __name__ == "__main__":
     data = mlflow.get_experiment_by_name("Social NLP Experiments")
 
     # Print the contents of Experiment data
-    print("Experiment_id={}".format(data.experiment_id))
-    print("Artifact Location={}".format(data.artifact_location))
-    print("Tags={}".format(data.tags))
-    print("Lifecycle_stage={}".format(data.lifecycle_stage))
+    print("Experiment_id: {}".format(data.experiment_id))
+    print("Artifact Location: {}".format(data.artifact_location))
+    print("Tags: {}".format(data.tags))
+    print("Lifecycle_stage: {}".format(data.lifecycle_stage))

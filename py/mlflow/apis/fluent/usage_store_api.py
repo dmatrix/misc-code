@@ -1,7 +1,9 @@
 from random import random, randint
+from pprint import pprint
+import warnings
+
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestRegressor
-import warnings
 
 if __name__ == "__main__":
 
@@ -39,4 +41,8 @@ if __name__ == "__main__":
         # Log artifact
         mlflow.log_artifact("features.txt", artifact_path="features")
 
-        print("run_id={}".format(run.info.run_id))
+        print("run_id: {}".format(run.info.run_id))
+
+        data = mlflow.get_run(mlflow.active_run().info.run_id).data
+        tags = {k: v for k, v in data.tags.items() if k.startswith("mlflow.source.")}
+        pprint(tags)
