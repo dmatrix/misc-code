@@ -11,9 +11,7 @@ if __name__ == "__main__":
 
     # Create an experiment name, which must be unique and case sensitve
     experiment_id = mlflow.create_experiment("Social NLP Experiments")
-
-    # Convert experiment ID as a string argument and fetch its data
-    experiment = mlflow.get_experiment(str(experiment_id))
+    experiment = mlflow.get_experiment(experiment_id)
 
     # Print the contents of Experiment data
     print("Name:{}".format(experiment.name))

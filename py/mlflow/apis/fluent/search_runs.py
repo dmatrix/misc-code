@@ -10,17 +10,23 @@ if __name__ == "__main__":
 
     # Search with default arguments returning a pandas DataFrame
     df = mlflow.search_runs()
-    print(df.iloc[:2, 0:3])
 
-    print("-" * 70)
+    # Print pandas DataFrame's two rows and two columns
+    print(df.iloc[:2, 0:1])
+
+    print("-" * 35)
 
     # Search with order_by arguments
     df = mlflow.search_runs(order_by=["metrics.click_rate DESC"])
-    print(df.loc[:2, ["metrics.click_rate", "run_id", "status"]])
 
-    print("-" * 70)
+    # Print pandas DataFrame's two rows and one column
+    print(df.loc[:2, ["metrics.click_rate"]])
+
+    print("-" * 35)
 
     # Search using a filter_string with tag that has a case insensitive pattern
     filter_string = "tags.release.candidate ILIKE '%rc%'"
-    df = mlflow.search_runs(filter_string=filter_string)
-    print(df.loc[:2, ["tags.release.candidate", "run_id", "status"]])
+    df = mlflow.search_runs(["0"], filter_string=filter_string)
+
+    # Print pandas DataFrame's two rows and one column
+    print(df.loc[:2, ["tags.release.candidate"]])

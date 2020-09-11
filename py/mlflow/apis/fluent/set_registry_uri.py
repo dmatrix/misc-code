@@ -14,4 +14,4 @@ if __name__ == "__main__":
     tracking_uri = mlflow.get_tracking_uri()
     print("Current tracking uri: {}".format(tracking_uri))
 
-    assert(tracking_uri != mr_uri)
+    assert tracking_uri != mr_uri

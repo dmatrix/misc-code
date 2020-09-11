@@ -11,13 +11,12 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     tags = {"engineering": "ML Platform",
-            "engineering_remote": "ML Platform",
-            "release.candidate": "RC1",
-            "release.version": "2.2.0"}
+            "engineering_remote": "ML Platform"}
 
-    with mlflow.start_run():
-        for key, value in tags.items():
-            mlflow.set_tag(key, value)
+    with mlflow.start_run() as run:
+        mlflow.set_tags(tags)
+
+    with mlflow.start_run(run_id=run.info.run_id):
         mlflow.delete_tag("engineering_remote")
 
 

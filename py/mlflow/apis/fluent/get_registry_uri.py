@@ -18,4 +18,4 @@ if __name__ == "__main__":
     print("Current tracking uri: {}".format(tracking_uri))
 
     # They should be the same
-    assert(mr_uri == tracking_uri)
+    assert mr_uri == tracking_uri
