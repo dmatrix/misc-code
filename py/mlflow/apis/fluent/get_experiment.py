@@ -10,7 +10,7 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Convert experiment ID as a string argument
-    experiment = mlflow.get_experiment(str(0))
+    experiment = mlflow.get_experiment("0")
 
     # Print the contents of Experiment data
     print("Name: {}".format(experiment.name))
