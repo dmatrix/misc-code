@@ -24,7 +24,7 @@ if __name__ == "__main__":
     mlflow.set_tracking_uri(local_store_uri)
 
     # Start an run and log entities
-    with mlflow.start_run(run_name="My Runs") as run:
+    with mlflow.start_run() as run:
         params = {"n_estimators": 3, "random_state": 42}
         sk_learn_rfr = RandomForestRegressor(params)
 

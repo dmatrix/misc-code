@@ -14,7 +14,7 @@ if __name__ == "__main__":
             "release.candidate": "RC1",
             "release.version": "2.2.0"}
 
-    # Use Context Manager to create a new run
+    # Set a batch of tags
     with mlflow.start_run(run_name="My Runs"):
         mlflow.set_tags(tags)
 
