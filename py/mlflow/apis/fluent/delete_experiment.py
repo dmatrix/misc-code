@@ -9,11 +9,11 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    experiment_id = mlflow.create_experiment("New Experiment3")
+    experiment_id = mlflow.create_experiment("New Experiment")
     mlflow.delete_experiment(experiment_id)
 
     # Examine the deleted experiment details. Deleted experiments
-    # are moved to a .thrash folder under the artifact location top
+    # are moved to a .thrash folder under the artifact URI location top
     # level directory.
     experiment = mlflow.get_experiment(experiment_id)
 

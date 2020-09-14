@@ -8,7 +8,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    mlflow.set_registry_uri("sqlite:///tmp/registry.db")
+    mlflow.set_registry_uri("sqlite:////tmp/registry.db")
     mr_uri = mlflow.get_registry_uri()
     print("Current registry uri={}".format(mr_uri))
     tracking_uri = mlflow.get_tracking_uri()

@@ -19,12 +19,8 @@ if __name__ == "__main__":
         mlflow.log_param("p", 0)
         mlflow.log_metric("click_rate", 2.50)
 
-    with mlflow.start_run() as run3:
-        mlflow.log_param("p", 1)
-        mlflow.log_metric("click_rate", 0.50)
-
     # Delete the last run
-    mlflow.delete_run(run3.info.run_id)
+    mlflow.delete_run(run2.info.run_id)
 
     def print_run_infos(run_infos):
         for r in run_infos:

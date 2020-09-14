@@ -10,25 +10,22 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    params = {"learning_rate": 0.01, "n_estimators": 10}
-    metrics = {"mse": 2500.00, "rmse": 50.00}
-    tags = {"engineering": "ML Platform",
-            "release.candidate": "RC1",
-            "release.version": "2.2.0"}
+    mlflow.start_run()
 
-    # Creates a run if one is not active and log two parameters
-    mlflow.log_params(params)
-    mlflow.log_metrics(metrics)
-    mlflow.set_tags(tags)
+    mlflow.log_param("p", 0)
+    mlflow.log_metric("m", 1)
+    mlflow.set_tag("t", 2)
 
     client = mlflow.tracking.MlflowClient()
     data = client.get_run(mlflow.active_run().info.run_id).data
 
+    # Extract only user defined tags; skip System tags starting with "mlflow."
     tags = {k: v for k, v in data.tags.items() if not k.startswith("mlflow.")}
 
-    print("-" * 50)
     pprint(data.params)
     pprint(data.metrics)
     pprint(tags)
+
+    mlflow.end_run()
 
 

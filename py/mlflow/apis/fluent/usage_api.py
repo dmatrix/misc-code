@@ -22,7 +22,7 @@ if __name__ == "__main__":
     # Start an run and log entities
     with mlflow.start_run() as run:
         params = {"n_estimators": 3, "random_state": 42}
-        sk_learn_rfr = RandomForestRegressor(params)
+        sk_learn_rfr = RandomForestRegressor(**params)
 
         # Log params using the MLflow entities
         mlflow.log_params(params)
