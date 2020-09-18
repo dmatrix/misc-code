@@ -8,25 +8,26 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Search with default arguments returning a pandas DataFrame
-    df = mlflow.search_runs()
+    # Create an experiment and log two runs under it
+    experiment_id = mlflow.create_experiment("Social NLP Experiments")
+    with mlflow.start_run(experiment_id=experiment_id):
+        mlflow.log_metric("m", 1.55)
+        mlflow.set_tag("s.release", "1.1.0-RC")
+    with mlflow.start_run(experiment_id=experiment_id):
+        mlflow.log_metric("m", 2.50)
+        mlflow.set_tag("s.release", "1.2.0-GA")
 
-    # Print pandas DataFrame's two rows and two columns
-    print(df.iloc[:2, 0:1])
+    # Search all runs in experiment_id
+    df = mlflow.search_runs([experiment_id], order_by=["metrics.m DESC"])
 
-    print("-" * 35)
+    # Print pandas DataFrame's rows and columns
+    print(df.loc[:, ["metrics.m", "tags.s.release", "run_id"]].to_string())
+    print("--")
 
-    # Search with order_by arguments
-    df = mlflow.search_runs(order_by=["metrics.click_rate DESC"])
+    # Search the experiment_id using a filter_string with tag
+    # that has a case insensitive pattern
+    filter_string = "tags.s.release ILIKE '%rc%'"
+    df = mlflow.search_runs([experiment_id], filter_string=filter_string)
 
-    # Print pandas DataFrame's two rows and one column
-    print(df.loc[:2, ["metrics.click_rate"]])
-
-    print("-" * 35)
-
-    # Search using a filter_string with tag that has a case insensitive pattern
-    filter_string = "tags.release.candidate ILIKE '%rc%'"
-    df = mlflow.search_runs(["0"], filter_string=filter_string)
-
-    # Print pandas DataFrame's two rows and one column
-    print(df.loc[:2, ["tags.release.candidate"]])
+    # Print pandas DataFrame's rows and columns
+    print(df.loc[:, ["metrics.m", "tags.s.release", "run_id"]].to_string())

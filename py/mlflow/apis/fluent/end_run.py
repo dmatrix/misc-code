@@ -9,15 +9,13 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Start run and get its run_id and status
+    # Start run and get status
     mlflow.start_run()
-    run_id = mlflow.active_run().info.run_id
-    status = mlflow.get_run(run_id).info.status
-    print("run_id: {}; status: {}".format(run_id, status))
-    # End the run
-    mlflow.end_run()
+    run = mlflow.active_run()
+    print("run_id: {}; status: {}".format(run.info.run_id, run.info.status))
 
-    # Get final status after the end run
-    status = mlflow.get_run(run_id).info.status
-    print("run_id: {}; status: {}".format(run_id, status))
+    # End the run and get status
+    mlflow.end_run()
+    run = mlflow.get_run(run.info.run_id)
+    print("run_id: {}; status: {}".format(run.info.run_id, run.info.status))
 
