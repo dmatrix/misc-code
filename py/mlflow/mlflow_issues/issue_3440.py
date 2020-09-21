@@ -6,6 +6,7 @@ if __name__ == '__main__':
     x_data = torch.Tensor([[1.0], [2.0], [3.0]])
     # Y data with its expected value: labels
     y_data = torch.Tensor([[2.0], [4.0], [6.0]])
+    
     # Partial Model example modified from Sung Kim
     # https://github.com/hunkim/PyTorchZeroToAll
 
@@ -21,6 +22,7 @@ if __name__ == '__main__':
     model = Model()
     criterion = torch.nn.MSELoss(size_average=False)
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
     # Training loop
     for epoch in range(500):
         # Forward pass: Compute predicted y by passing x to the model
@@ -39,6 +41,7 @@ if __name__ == '__main__':
         hour_var = torch.Tensor([[hv]])
         y_pred = model(hour_var)
         print("predict (after training)",  hv, model(hour_var).data[0][0])
+
     # log the model
     with mlflow.start_run() as run:
         mlflow.log_param("epochs", 500)
