@@ -9,7 +9,7 @@ if __name__ == "__main__":
     print(mlflow.__version__)
 
     # Create nested runs
-    with mlflow.start_run(run_name='PARENT_RUN', nested=True) as parent_run:
+    with mlflow.start_run(run_name='PARENT_RUN') as parent_run:
         mlflow.log_param("parent", "yes")
         with mlflow.start_run(run_name='CHILD_RUN', nested=True) as child_run:
             mlflow.log_param("child", "yes")
@@ -23,4 +23,4 @@ if __name__ == "__main__":
     results = mlflow.search_runs(filter_string=query)
 
     # Print the pandas DataFrame columns
-    print(results.loc[:, ["run_id", "params.child", "tags.mlflow.runName"]].to_string())
+    print(results[["run_id", "params.child", "tags.mlflow.runName"]])

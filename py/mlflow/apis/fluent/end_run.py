@@ -18,4 +18,7 @@ if __name__ == "__main__":
     mlflow.end_run()
     run = mlflow.get_run(run.info.run_id)
     print("run_id: {}; status: {}".format(run.info.run_id, run.info.status))
+    print("--")
 
+    # Check for any active runs
+    print("Active runs: {}".format(mlflow.active_run()))

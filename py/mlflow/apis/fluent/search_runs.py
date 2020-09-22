@@ -21,7 +21,7 @@ if __name__ == "__main__":
     df = mlflow.search_runs([experiment_id], order_by=["metrics.m DESC"])
 
     # Print pandas DataFrame's rows and columns
-    print(df.loc[:, ["metrics.m", "tags.s.release", "run_id"]].to_string())
+    print(df[["metrics.m", "tags.s.release", "run_id"]])
     print("--")
 
     # Search the experiment_id using a filter_string with tag
@@ -30,4 +30,4 @@ if __name__ == "__main__":
     df = mlflow.search_runs([experiment_id], filter_string=filter_string)
 
     # Print pandas DataFrame's rows and columns
-    print(df.loc[:, ["metrics.m", "tags.s.release", "run_id"]].to_string())
+    print(df[["metrics.m", "tags.s.release", "run_id"]])
