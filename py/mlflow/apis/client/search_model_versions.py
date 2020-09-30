@@ -2,11 +2,13 @@ import warnings
 import os
 import sys
 import mlflow
+from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
+
     if len(sys.argv) != 3:
         print("usage: {} <model_name> <runid>".format(os.path.basename(__file__)))
         sys.exit(1)
@@ -17,7 +19,7 @@ if __name__ == "__main__":
     run_id = sys.argv[2]
 
     mlflow.set_tracking_uri(local_registry)
-    client = mlflow.tracking.MlflowClient()
+    client = MlflowClient()
 
     # Get all versions of the model filtered by name
     model_name = sys.argv[1]

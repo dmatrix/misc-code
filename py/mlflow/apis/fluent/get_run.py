@@ -2,7 +2,6 @@
 # Code snippet for https://mlflow.org/docs/latest/python_api/mlflow.html#get_run
 #
 import warnings
-from pprint import pprint
 import mlflow
 
 if __name__ == "__main__":
@@ -14,6 +13,7 @@ if __name__ == "__main__":
         mlflow.log_param("p", 0)
 
     run_id = run.info.run_id
-    run_data = mlflow.get_run(run_id).data
-    print("run_id: {}; lifecycle_stage: {}".format(run_id, mlflow.get_run(run_id).info.lifecycle_stage))
-    pprint(run_data.params)
+    run = mlflow.get_run(run_id)
+    print("run_id: {}".format(run_id))
+    print("lifecycle_stage: {}".format(run.info.lifecycle_stage))
+    print("params: {}".format(run.data.params))
