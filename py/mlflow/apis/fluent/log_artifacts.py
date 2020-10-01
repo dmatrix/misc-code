@@ -11,7 +11,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Create some artifacts data tor preserve
+    # Create some artifacts data to preserve
     features = "rooms, zipcode, median_price, school_rating, transport"
     data = {"state": "TX", "Available": 25, "Type": "Detached"}
 
