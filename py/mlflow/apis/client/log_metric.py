@@ -15,15 +15,10 @@ if __name__ == "__main__":
     print_run_info(run)
     print("--")
 
-    # Terminate the run and fetch updated status
-    client.set_terminated(run.info.run_id)
-    run = client.get_run(run.info.run_id)
-    print_run_info(run)
-    print("--")
-
     # Log the metric. Unlike mlflow.log_metric this method
     # does not start a run if one does not exists. It will log
     # the metric for the run id in the backend store
     client.log_metric(run.info.run_id, "m", 1.5)
+    client.set_terminated(run.info.run_id)
     run = client.get_run(run.info.run_id)
     print_run_info(run)

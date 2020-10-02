@@ -5,6 +5,11 @@ if __name__ == "__main__":
 
     warnings.filterwarnings("ignore")
 
+    def print_experiment_info(experiment):
+        print("Name: {}".format(experiment.name))
+        print("Experiment Id: {}".format(experiment.experiment_id))
+        print("Lifecycle_stage: {}".format(experiment.lifecycle_stage))
+
     # Create and and delete an experiment
     client = MlflowClient()
     experiment_id = client.create_experiment("New Experiment")
@@ -14,14 +19,10 @@ if __name__ == "__main__":
     # are moved to a .thrash folder under the artifact URI location top
     # level directory.
     experiment = client.get_experiment(experiment_id)
-    print("Name: {}".format(experiment.name))
-    print("Artifact Location: {}".format(experiment.artifact_location))
-    print("Lifecycle_stage: {}".format(experiment.lifecycle_stage))
+    print_experiment_info(experiment)
     print("--")
 
     # Restore the experiment from the .trash folder and fetch its info
     client.restore_experiment(experiment_id)
     experiment = client.get_experiment(experiment_id)
-    print("Name: {}".format(experiment.name))
-    print("Artifact Location: {}".format(experiment.artifact_location))
-    print("Lifecycle_stage: {}".format(experiment.lifecycle_stage))
+    print_experiment_info(experiment)

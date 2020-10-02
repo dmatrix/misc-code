@@ -15,15 +15,10 @@ if __name__ == "__main__":
     print_run_info(run)
     print("--")
 
-    # Terminate the run and fetch updated status
-    client.set_terminated(run.info.run_id)
-    run = client.get_run(run.info.run_id)
-    print_run_info(run)
-    print("--")
-
     # Log the parameter. Unlike mlflow.log_param this method
     # does not start a run if one does not exists. It will log
     # the parameter in the backend store
     client.log_param(run.info.run_id, "p", 1)
+    client.set_terminated(run.info.run_id)
     run = client.get_run(run.info.run_id)
     print_run_info(run)
