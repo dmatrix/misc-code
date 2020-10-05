@@ -9,10 +9,13 @@ if __name__ == "__main__":
 
     features = "rooms zipcode, median_price, school_rating, transport"
     labels = "price"
-    client = MlflowClient()
-    run = client.create_run("0")
 
-    # Create some artifacts to preserve
+    # Create a run under the default experiment id "0".
+    client = MlflowClient()
+    experiment_id = "0"
+    run = client.create_run(experiment_id)
+
+    # Create some artifacts and log under the above run
     for file in ["features", "labels"]:
         with open("{}.txt".format(file), 'w') as f:
             f.write(features) if file == "features" else f.write(labels)

@@ -12,13 +12,14 @@ if __name__ == "__main__":
         print("run_id: {}".format(run.info.run_id))
         print("Tags: {}".format(run.data.tags))
 
-    # Create a run under the default experiment 0
+    # Create a run under the default experiment ID "0"
     client = MlflowClient()
-    run = client.create_run("0")
+    experiment_id = "0"
+    run = client.create_run(experiment_id)
     print_run_info(run)
     print("--")
 
-    # Set a tag and fetch new info
+    # Set a tag and fetch update run info
     client.set_tag(run.info.run_id, "nlp.framework", "Spark NLP")
     run = client.get_run(run.info.run_id)
     print_run_info(run)

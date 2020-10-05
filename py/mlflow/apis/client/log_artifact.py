@@ -12,8 +12,10 @@ if __name__ == "__main__":
     with open("features.txt", 'w') as f:
         f.write(features)
 
+    # Create a run under the default experiment id "0"
     client = MlflowClient()
-    run = client.create_run("0")
+    expermient_id = "0"
+    run = client.create_run(expermient_id)
 
     # log and fetch the list of artifacts
     client.log_artifact(run.info.run_id, "features.txt")

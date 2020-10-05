@@ -16,9 +16,11 @@ if __name__ == "__main__":
     with open("data/features.txt", 'w') as f:
         f.write(features)
 
-    # Create a run, and log all files in "data" to root artifact_uri/states
+    # Create a run under the default experiment id "0", and log
+    # all files in "data" to root artifact_uri/states
     client = MlflowClient()
-    run = client.create_run("0")
+    expermient_id = "0"
+    run = client.create_run(expermient_id)
     client.log_artifacts(run.info.run_id, "data", artifact_path="states")
     artifacts = client.list_artifacts(run.info.run_id)
     for artifact in artifacts:

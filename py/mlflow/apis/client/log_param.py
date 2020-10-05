@@ -7,16 +7,17 @@ if __name__ == "__main__":
         print("params: {}".format(r.data.params))
         print("status: {}".format(r.info.status))
 
-    # Create a run without any tags. Since these are low-level CRUD operations,
-    # this method will create a run. To end the run, you'll have to
-    # explicitly end it.
+    # Create a run under the default experiment id "0". Since these are low-level
+    # CRUD operations, this method will create a run. To end the run, you'll have
+    # to explicitly end it.
     client = MlflowClient()
-    run = client.create_run("0")
+    experiment_id = "0"
+    run = client.create_run(experiment_id)
     print_run_info(run)
     print("--")
 
     # Log the parameter. Unlike mlflow.log_param this method
-    # does not start a run if one does not exists. It will log
+    # does not start a run if one does not exist. It will log
     # the parameter in the backend store
     client.log_param(run.info.run_id, "p", 1)
     client.set_terminated(run.info.run_id)

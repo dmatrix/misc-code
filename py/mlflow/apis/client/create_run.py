@@ -8,9 +8,12 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
+    # Create a run with tag under an experiment ID "0", which is
+    # the "Default" name of the experiment
     tags = {"engineering": "ML Platform"}
     client = MlflowClient()
-    run = client.create_run("0", tags=tags)
+    expirement_id = "0"
+    run = client.create_run(expirement_id, tags=tags)
 
     # Show newly created run metadata and info
     print("Run tags: {}".format(run.data.tags))

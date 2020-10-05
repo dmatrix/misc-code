@@ -14,20 +14,24 @@ if __name__ == "__main__":
         print("status: {}".format(r.info.status))
 
 
-    # Create MLflow entities and a run.
+    # Create MLflow entities and a run under the default experiment ID "0"
     timestamp = int(time.time() * 1000)
     metrics = [Metric('m', 1.5, timestamp, 1)]
     params = [Param("p", 'p')]
     tags = [RunTag("t", "t")]
+    failed = False
+    experiment_id = "0"
     client = MlflowClient()
-    run = client.create_run("0")
+    run = client.create_run(experiment_id)
 
     # Log entities, terminate the run, and fetch run status
     try:
         client.log_batch(run.info.run_id, metrics=metrics, params=params, tags=tags)
     except MlflowException as ex:
+        failed = True
         print(ex.message)
     finally:
-        client.set_terminated(run.info.run_id)
+        client.set_terminated(run.info.run_id) if not failed \
+            else client.set_terminated(run.info.run_id, status="FAILED")
         run = client.get_run(run.info.run_id)
         print_run_info(run)

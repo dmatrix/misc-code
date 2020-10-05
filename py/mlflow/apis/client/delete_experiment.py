@@ -11,7 +11,7 @@ if __name__ == "__main__":
     client.delete_experiment(experiment_id)
 
     # Examine the deleted experiment details. Deleted experiments
-    # are moved to a .thrash folder under the artifact URI location top
+    # are moved to a .trash folder under the artifact URI location top
     # level directory.
     experiment = client.get_experiment(experiment_id)
     print("Name: {}".format(experiment.name))
