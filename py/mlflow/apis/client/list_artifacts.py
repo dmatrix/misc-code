@@ -16,9 +16,9 @@ if __name__ == "__main__":
     run = client.create_run(experiment_id)
 
     # Create some artifacts and log under the above run
-    for file in ["features", "labels"]:
+    for file, content in [("features", features), ("labels", labels)]:
         with open("{}.txt".format(file), 'w') as f:
-            f.write(features) if file == "features" else f.write(labels)
+            f.write(content)
         client.log_artifact(run.info.run_id, "{}.txt".format(file))
 
     # Fetch the logged artifacts

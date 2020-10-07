@@ -19,19 +19,12 @@ if __name__ == "__main__":
     metrics = [Metric('m', 1.5, timestamp, 1)]
     params = [Param("p", 'p')]
     tags = [RunTag("t", "t")]
-    failed = False
     experiment_id = "0"
     client = MlflowClient()
     run = client.create_run(experiment_id)
 
     # Log entities, terminate the run, and fetch run status
-    try:
-        client.log_batch(run.info.run_id, metrics=metrics, params=params, tags=tags)
-    except MlflowException as ex:
-        failed = True
-        print(ex.message)
-    finally:
-        client.set_terminated(run.info.run_id) if not failed \
-            else client.set_terminated(run.info.run_id, status="FAILED")
-        run = client.get_run(run.info.run_id)
-        print_run_info(run)
+    client.log_batch(run.info.run_id, metrics=metrics, params=params, tags=tags)
+    client.set_terminated(run.info.run_id)
+    run = client.get_run(run.info.run_id)
+    print_run_info(run)
