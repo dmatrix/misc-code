@@ -9,13 +9,13 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Create an experiment name, which must be unique and case sensitve
-    experiment_id = mlflow.create_experiment("Social NLP Experiments")
-    experiment = mlflow.get_experiment(experiment_id)
+    def print_experiement_info(experiment):
+        print("Name:{}".format(experiment.name))
+        print("Experiment_id:{}".format(experiment.experiment_id))
+        print("Lifecycle_stage:{}".format(experiment.lifecycle_stage))
 
-    # Print the contents of Experiment data
-    print("Name:{}".format(experiment.name))
-    print("Experiment_id:{}".format(experiment.experiment_id))
-    print("Artifact Location:{}".format(experiment.artifact_location))
-    print("Tags:{}".format(experiment.tags))
-    print("Lifecycle_stage:{}".format(experiment.lifecycle_stage))
+    # Create experiments. Use names which are unique and case sensitive
+    for e in ["E", "e"]:
+        experiment_id = mlflow.create_experiment(e)
+        experiment = mlflow.get_experiment(experiment_id)
+        print_experiement_info(experiment)
