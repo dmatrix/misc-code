@@ -6,8 +6,7 @@ if __name__ == '__main__':
 
     warnings.filterwarnings("ignore")
 
-    # Create a run under an experiment ID "0", which is
-    # the "Default" name of the experiment
+    # Create a run under an experiment whose default ID is "0".
     client = MlflowClient()
     expirement_id = "0"
     run = client.create_run(expirement_id)
