@@ -2,6 +2,7 @@ import warnings
 import sys
 import os
 import mlflow
+from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
@@ -14,7 +15,7 @@ if __name__ == "__main__":
     local_registry = "sqlite:///mlruns.db"
     print(f"Running local model registry={local_registry}")
     mlflow.set_tracking_uri(local_registry)
-    client = mlflow.tracking.MlflowClient()
+    client = MlflowClient()
 
     # Get search results filtered by the registered model name
     model_name = sys.argv[1]

@@ -12,7 +12,7 @@ if __name__ == "__main__":
     with open("features.txt", 'w') as f:
         f.write(features)
 
-    # Create a run under the default experiment id "0"
+    # Create a run under the default experiment (whose id is "0").
     client = MlflowClient()
     expermient_id = "0"
     run = client.create_run(expermient_id)

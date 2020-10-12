@@ -10,7 +10,7 @@ if __name__ == "__main__":
     features = "rooms zipcode, median_price, school_rating, transport"
     labels = "price"
 
-    # Create a run under the default experiment id "0".
+    # Create a run under the default experiment (whose id is "0").
     client = MlflowClient()
     experiment_id = "0"
     run = client.create_run(experiment_id)

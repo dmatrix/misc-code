@@ -7,8 +7,8 @@ if __name__ == "__main__":
         print("params: {}".format(r.data.params))
         print("status: {}".format(r.info.status))
 
-    # Create a run under the default experiment id "0". Since these are low-level
-    # CRUD operations, this method will create a run. To end the run, you'll have
+    # Create a run under the default experiment (whose id is "0"). Since this aisre low-level
+    # CRUD operation, this method will create a run. To end the run, you'll have
     # to explicitly end it.
     client = MlflowClient()
     experiment_id = "0"

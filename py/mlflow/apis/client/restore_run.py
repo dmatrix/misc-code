@@ -6,10 +6,10 @@ if __name__ == '__main__':
 
     warnings.filterwarnings("ignore")
 
-    # Create a run under the default experiment id "0"
+    # Create a run under the default experiment (whose id is "0"
     client = MlflowClient()
-    expermient_id = "0"
-    run = client.create_run(expermient_id)
+    experiment_id = "0"
+    run = client.create_run(experiment_id)
     run_id = run.info.run_id
     print("run_id: {}; lifecycle_stage: {}".format(run_id, run.info.lifecycle_stage))
     client.delete_run(run_id)

@@ -12,7 +12,7 @@ if __name__ == "__main__":
         print("run_id: {}".format(run.info.run_id))
         print("Tags: {}".format(run.data.tags))
 
-    # Create a run under the default experiment ID "0"
+    # Create a run under the default experiment (whose id is "0").
     client = MlflowClient()
     experiment_id = "0"
     run = client.create_run(experiment_id)

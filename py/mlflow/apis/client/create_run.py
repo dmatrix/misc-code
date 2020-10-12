@@ -8,8 +8,7 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    # Create a run with tag under an experiment ID "0", which is
-    # the "Default" name of the experiment
+    # Create a run with tag under the default experiment (whose ID is "0").
     tags = {"engineering": "ML Platform"}
     client = MlflowClient()
     expirement_id = "0"

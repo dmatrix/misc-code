@@ -2,7 +2,7 @@ from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
-    # The run has finished since we have existed the with block
+    # The run has finished since we have exited the with block
     # Fetch the run
     client = MlflowClient()
     client.log_param("ca6197a6dbb14417a0321c1f7fef7ed3", "p", 1)

@@ -14,7 +14,7 @@ if __name__ == "__main__":
         print("status: {}".format(r.info.status))
 
 
-    # Create MLflow entities and a run under the default experiment ID "0"
+    # Create MLflow entities and a run under the default experiment (whose id is "0").
     timestamp = int(time.time() * 1000)
     metrics = [Metric('m', 1.5, timestamp, 1)]
     params = [Param("p", 'p')]

@@ -2,6 +2,7 @@ import warnings
 import os
 import sys
 import mlflow
+from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
     mlflow.set_tracking_uri(local_registry)
 
-    client = mlflow.tracking.MlflowClient()
+    client = MlflowClient()
     # Get all versions of the model filtered by name
     results = client.search_runs(exp_id, filter_runid)
     print("-" * 80)
