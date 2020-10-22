@@ -46,6 +46,6 @@ if __name__ == "__main__":
 
     # Delete the latest model version 2
     print("Deleting model version {}\n".format(mv.version))
-    client.delete_model_version(name, int(mv.version))
+    client.delete_model_version(name, mv.version)
     models = client.get_latest_versions(name, stages=["None"])
     print_models_info(models)

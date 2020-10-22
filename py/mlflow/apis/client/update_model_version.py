@@ -32,5 +32,5 @@ if __name__ == "__main__":
 
     # Update model version's description
     desc = "A new version of the model using Ensemble Trees"
-    mv = client.update_model_version(name, int(mv.version), desc)
+    mv = client.update_model_version(name, mv.version, desc)
     print_model_version_info(mv)

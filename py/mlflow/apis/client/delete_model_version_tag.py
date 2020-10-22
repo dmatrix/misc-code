@@ -31,6 +31,6 @@ if __name__ == "__main__":
     mv = client.create_model_version(name, model_uri, run.info.run_id, tags=tags)
     print_model_version_info(mv)
     print("--")
-    client.delete_model_version_tag(name, int(mv.version), "t")
-    mv = client.get_model_version(name, int(mv.version))
+    client.delete_model_version_tag(name, mv.version, "t")
+    mv = client.get_model_version(name, mv.version)
     print_model_version_info(mv)

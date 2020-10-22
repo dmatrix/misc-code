@@ -37,5 +37,5 @@ if __name__ == "__main__":
     print("--")
 
     # Fetch the last version; this will be version 2
-    mv = client.get_model_version(name, int(mv.version))
+    mv = client.get_model_version(name, mv.version)
     print_model_version_info(mv)

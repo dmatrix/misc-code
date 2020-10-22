@@ -22,5 +22,5 @@ if __name__ == "__main__":
     # Create a new version of the rfr model under the registered model name
     model_uri = "runs:/{}/models/sklearn-model".format(run.info.run_id)
     mv = client.create_model_version(name, model_uri, run.info.run_id)
-    artifact_uri = client.get_model_version_download_uri(name, int(mv.version))
+    artifact_uri = client.get_model_version_download_uri(name, mv.version)
     print("Download URI: {}".format(artifact_uri))

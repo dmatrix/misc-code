@@ -33,5 +33,5 @@ if __name__ == "__main__":
     print("--")
 
     # transition model version from None -> staging
-    mv = client.transition_model_version_stage(name, int(mv.version), "staging")
+    mv = client.transition_model_version_stage(name, mv.version, "staging")
     print_model_version_info(mv)
