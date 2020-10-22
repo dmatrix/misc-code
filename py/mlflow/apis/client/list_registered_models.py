@@ -3,11 +3,12 @@ from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
-    def print_model_info(m):
-        print("--")
-        print("name: {}".format(m.name))
-        print("tags: {}".format(m.tags))
-        print("description: {}".format(m.description))
+    def print_model_info(models):
+        for m in models:
+            print("--")
+            print("name: {}".format(m.name))
+            print("tags: {}".format(m.tags))
+            print("description: {}".format(m.description))
 
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
     client = MlflowClient()
@@ -18,6 +19,4 @@ if __name__ == "__main__":
         client.create_registered_model(name, tags, desc)
 
     # Fetch all registered models
-    models = client.list_registered_models()
-    for m in models:
-        print_model_info(m)
+    print_model_info(client.list_registered_models())

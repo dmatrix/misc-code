@@ -2,10 +2,12 @@ from mlflow.tracking import MlflowClient
 
 if __name__ == "__main__":
 
-    def print_metric_info(m):
-        print("name: {}".format(m.key))
-        print("value: {}".format(m.value))
-        print("timestamp: {}".format(m.timestamp))
+    def print_metric_info(history):
+        for m in history:
+            print("name: {}".format(m.key))
+            print("value: {}".format(m.value))
+            print("timestamp: {}".format(m.timestamp))
+            print("--")
 
     # Create a run under the default experiment (whose id is "0"). Since this is low-level
     # CRUD operation, the method will create a run. To end the run, you'll have
@@ -21,8 +23,5 @@ if __name__ == "__main__":
     for k, v in [("m1", 1.5), ("m2", 2.5)]:
         client.log_metric(run.info.run_id, k, v)
         client.log_metric(run.info.run_id, k, v+1)
-        history = client.get_metric_history(run.info.run_id, k)
-        for m in history:
-            print_metric_info(m)
-            print("--")
+        print_metric_info(client.get_metric_history(run.info.run_id, k))
     client.set_terminated(run.info.run_id)

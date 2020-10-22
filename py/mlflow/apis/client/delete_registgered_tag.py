@@ -13,14 +13,12 @@ if __name__ == "__main__":
     client = MlflowClient()
 
     # Register a couple of models with respective names and tags
-    for name, tags in [("name1", {"t1": "t1"}),("name2", {"t2": "t2"})]:
+    for name, tags in [("name1", {"t1": "t1"}), ("name2", {"t2": "t2"})]:
         client.create_registered_model(name, tags)
 
     # Fetch all registered models
-    models = client.list_registered_models()
-    print_registered_models_info(models)
+    print_registered_models_info(client.list_registered_models())
 
     # Delete a tag from model `name2`
     client.delete_registered_model_tag("name2", 't2')
-    models = client.list_registered_models()
-    print_registered_models_info(models)
+    print_registered_models_info(client.list_registered_models())

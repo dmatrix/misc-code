@@ -8,7 +8,7 @@ if __name__ == "__main__":
         print("tags: {}".format(rm.tags))
         print("description: {}".format(rm.description))
 
-    name = "SocialMediaTextAnalyzer"
+    name = "SocialTextAnalyzer"
     tags = {"nlp.framework": "Spark NLP"}
     desc = "This sentiment analysis model classifies the tone-happy, sad, angry."
 
@@ -16,3 +16,9 @@ if __name__ == "__main__":
     client = MlflowClient()
     client.create_registered_model(name, tags, desc)
     print_registered_model_info(client.get_registered_model(name))
+    print("--")
+
+    # rename the model
+    new_name = "SocialMediaTextAnalyzer"
+    client.rename_registered_model(name, new_name)
+    print_registered_model_info(client.get_registered_model(new_name))

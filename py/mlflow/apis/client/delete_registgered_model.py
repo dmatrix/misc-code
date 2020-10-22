@@ -19,10 +19,8 @@ if __name__ == "__main__":
         client.create_registered_model(name, tags, desc)
 
     # Fetch all registered models
-    models = client.list_registered_models()
-    print_registered_models_info(models)
+    print_registered_models_info(client.list_registered_models())
 
     # Delete one registered model
     client.delete_registered_model("name1")
-    models = client.list_registered_models()
-    print_registered_models_info(models)
+    print_registered_models_info(client.list_registered_models())

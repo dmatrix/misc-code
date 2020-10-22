@@ -16,3 +16,9 @@ if __name__ == "__main__":
     client = MlflowClient()
     client.create_registered_model(name, tags, desc)
     print_registered_model_info(client.get_registered_model(name))
+    print("--")
+
+    # Update the model's description
+    desc = "This sentiment analysis model classifies tweets' tone: happy, sad, angry."
+    client.update_registered_model(name, desc)
+    print_registered_model_info(client.get_registered_model(name))
