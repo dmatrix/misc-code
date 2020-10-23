@@ -6,6 +6,7 @@ if __name__ == "__main__":
         for m in history:
             print("name: {}".format(m.key))
             print("value: {}".format(m.value))
+            print("step: {}".format(m.step))
             print("timestamp: {}".format(m.timestamp))
             print("--")
 
