@@ -8,8 +8,15 @@ from sklearn.ensemble import RandomForestRegressor
 
 if __name__ == "__main__":
 
+    def print_model_version_info(mv):
+        print("Name: {}".format(mv.name))
+        print("Version: {}".format(mv.version))
+        print("Description: {}".format(mv.description))
+        print("Status: {}".format(mv.status))
+        print("Stage: {}".format(mv.current_stage))
+
     class PyTorchModel(nn.Module):
-        def __init__(self, n_input_features):
+        def __init__(self, n_input_features=10):
             super(PyTorchModel, self).__init__()
             self._n_input_features = n_input_features
             self._linear = nn.Linear(n_input_features, 1)
@@ -24,8 +31,7 @@ if __name__ == "__main__":
 
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
     name = "PyTorchLinearModel"
-    model = PyTorchModel(10)
-
+    model = PyTorchModel()
     # Log MLflow entities
     with mlflow.start_run() as run:
         mlflow.log_param("input_features", 10)
@@ -39,8 +45,4 @@ if __name__ == "__main__":
     desc = "A new version of the PyTorch model"
     model_uri = "runs:/{}/models/pytorch-model".format(run.info.run_id)
     mv = client.create_model_version(name, model_uri, run.info.run_id, description=desc)
-    print("Name: {}".format(mv.name))
-    print("Version: {}".format(mv.version))
-    print("Description: {}".format(mv.description))
-    print("Status: {}".format(mv.status))
-    print("Stage: {}".format(mv.current_stage))
+    print_model_version_info(mv)
