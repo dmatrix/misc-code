@@ -15,7 +15,7 @@ if __name__ == "__main__":
     params = {"n_estimators": 3, "random_state": 42}
     name = "RandomForestRegression"
     desc = "A new version of the model using ensemble trees"
-    rfr = RandomForestRegressor(**params)
+    rfr = RandomForestRegressor(**params).fit([[0, 1]], [1])
 
     # Log MLflow entities
     with mlflow.start_run() as run:
