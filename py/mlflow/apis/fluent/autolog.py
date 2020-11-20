@@ -30,4 +30,4 @@ if __name__ == "__main__":
         model.fit(X, y)
 
     # fetch the auto logged parameters and metrics
-    print_autologged_info(run)
+    print_autologged_info(mlflow.get_run(run_id=run.info.run_id))
