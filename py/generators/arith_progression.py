@@ -19,7 +19,7 @@ class ArithmethicProgression:
    def __iter__(self):
       # Produce a result coerced type of the self.begin
       result = type(self.begin + self.step)(self.begin)
-      # Set to True if this is going to be an infinte series
+      # Set to True if this is going to be an infinite series
       forever = self.end is None
       index = 0
       # when this loop exits so will __iter__ with the yielded list

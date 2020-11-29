@@ -10,7 +10,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     print(mlflow.__version__)
 
-    def print_autologged_info(r):
+    def print_auto_logged_info(r):
         tags = {k: v for k, v in r.data.tags.items() if not k.startswith("mlflow.")}
         artifacts = [f.path for f in MlflowClient().list_artifacts(r.info.run_id, "model")]
         print("run_id: {}".format(r.info.run_id))
@@ -30,4 +30,4 @@ if __name__ == "__main__":
         model.fit(X, y)
 
     # fetch the auto logged parameters and metrics
-    print_autologged_info(mlflow.get_run(run_id=run.info.run_id))
+    print_auto_logged_info(mlflow.get_run(run_id=run.info.run_id))
