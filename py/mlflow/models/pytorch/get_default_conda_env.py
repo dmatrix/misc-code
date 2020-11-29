@@ -4,7 +4,6 @@ import os
 import numpy as np
 import torch
 import mlflow.pytorch
-from mlflow.tracking import MlflowClient
 
 
 class LinearNNModel(torch.nn.Module):
@@ -56,20 +55,15 @@ if __name__ == '__main__':
         if (epoch + 1) % 50 == 0:
             print('Epoch: {}/{}, loss: {:.4f}'.format(epoch + 1., epochs, loss.data.item()))
 
-    # log PyTorch model
+    # Log PyTorch model
     with mlflow.start_run() as run:
         mlflow.pytorch.log_model(model, "models_pth")
 
-        # logging scripted module
-        scripted_pytorch_model = torch.jit.script(model)
-        mlflow.pytorch.log_model(scripted_pytorch_model, "scripted_models_pth")
-
-    # fetch the logged model artifacts
+    # Fetch the associated conda environment
     print("--")
     print("run_id: {}".format(run.info.run_id))
-    for artifact_path in ["models_pth/data", "scripted_models_pth/data"]:
-        artifacts = [f.path for f in MlflowClient().list_artifacts(run.info.run_id, artifact_path)]
-        print("artifacts: {}".format(artifacts))
+    env = mlflow.pytorch.get_default_conda_env()
+    print("conda environment: {}".format(env))
 
 
 
