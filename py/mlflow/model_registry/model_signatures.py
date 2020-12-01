@@ -5,7 +5,6 @@ import mlflow.sklearn
 from sklearn.datasets import load_iris
 from sklearn import tree
 from mlflow.models.signature import infer_signature
-from mlflow.tracking import MlflowClient
 
 
 def main(name):
@@ -14,7 +13,6 @@ def main(name):
    sk_model = sk_model.fit(iris.data, iris.target)
    predictions = sk_model.predict(iris.data[0:5])
    signature = infer_signature(iris.data, predictions)
-   # Set the artifact_path to location where experiment artifacts will be saved
 
    # Log model params
    mlflow.log_param("criterion", sk_model.criterion)
@@ -25,6 +23,7 @@ def main(name):
                             artifact_path="sklearn-cls-model",
                             registered_model_name=name,
                             signature=signature)
+
 
 if __name__ == '__main__':
    warnings.filterwarnings("ignore")

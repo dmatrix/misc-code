@@ -7,6 +7,7 @@ import argparse
 from fastai.vision import *
 import mlflow.fastai
 
+
 def parse_args():
    parser = argparse.ArgumentParser(description='Fastai example')
    parser.add_argument('--lr', type=float, default=0.01,
@@ -14,6 +15,7 @@ def parse_args():
    parser.add_argument('--epochs', type=int, default=5,
                        help='number of epochs (default: 5). Note it takes about 1 min per epoch')
    return parser.parse_args()
+
 
 def main():
 
@@ -37,6 +39,7 @@ def main():
    with mlflow.start_run():
       # train and fit with default or supplied command line arguments
       learn.fit(args.epochs, args.lr)
+
 
 if __name__ == '__main__':
    main()

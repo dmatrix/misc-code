@@ -3,6 +3,7 @@ import pandas as pd
 import fastai.text as ftxt
 import mlflow.fastai
 
+
 def main():
     path = ftxt.untar_data(ftxt.URLs.IMDB_SAMPLE)
     df = pd.read_csv(path/'texts.csv')
@@ -19,6 +20,7 @@ def main():
     with mlflow.start_run():
         learn.fit_one_cycle(1, 1e-2)
     print(learn.predict("This is a review about", n_words=10))
+
 
 if __name__ == '__main__':
    main()
