@@ -63,7 +63,7 @@ if __name__ == '__main__':
     print("--")
     model_uri = "runs:/{}/models_pth".format(run.info.run_id)
     loaded_model = mlflow.pytorch.load_model(model_uri)
-    for hv in [4.0, 6.0, 30.0]:
-        hour_var = torch.Tensor([[hv]])
+    for x in [4.0, 6.0, 30.0]:
+        hour_var = torch.Tensor([[x]])
         y_pred = loaded_model(hour_var)
-        print("predict X:{}, y_pred: {:.2f}".format(hv, y_pred.data.item()))
+        print("predict X:{}, y_pred: {:.2f}".format(x, y_pred.data.item()))

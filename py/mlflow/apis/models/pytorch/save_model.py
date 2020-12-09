@@ -58,22 +58,22 @@ if __name__ == '__main__':
 
     # Save PyTorch models to current working directory
     with mlflow.start_run() as run:
-        mlflow.pytorch.save_model(model, "models_pth")
+        mlflow.pytorch.save_model(model, "model")
 
         # Convert to a scripted model and save it
         scripted_pytorch_model = torch.jit.script(model)
-        mlflow.pytorch.save_model(scripted_pytorch_model, "scripted_models_pth")
+        mlflow.pytorch.save_model(scripted_pytorch_model, "scripted_model")
 
-    # Load each saved model and inference
+    # Load each saved model for inference
     print("--")
-    for model_path in ["models_pth", "scripted_models_pth"]:
+    for model_path in ["model", "scripted_model"]:
         model_uri = "{}/{}".format(os.getcwd(), model_path)
         loaded_model = mlflow.pytorch.load_model(model_uri)
-        print("model: {}".format(model_path))
-        for hv in [6.0, 8.0, 12.0, 30.0]:
-            hour_var = torch.Tensor([[hv]])
-            y_pred = loaded_model(hour_var)
-            print("predict X:{}, y_pred: {:.2f}".format(hv, y_pred.data.item()))
+        print("Loaded {}:".format(model_path))
+        for x in [6.0, 8.0, 12.0, 30.0]:
+            X = torch.Tensor([[x]])
+            y_pred = loaded_model(X)
+            print("predict X: {}, y_pred: {:.2f}".format(x, y_pred.data.item()))
         print("--")
 
 
