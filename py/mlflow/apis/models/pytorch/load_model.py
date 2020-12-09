@@ -57,13 +57,13 @@ if __name__ == '__main__':
 
     # log the model
     with mlflow.start_run() as run:
-        mlflow.pytorch.log_model(model, "models_pth")
+        mlflow.pytorch.log_model(model, "model")
 
     # Inference after loading the logged model
     print("--")
-    model_uri = "runs:/{}/models_pth".format(run.info.run_id)
+    model_uri = "runs:/{}/model".format(run.info.run_id)
     loaded_model = mlflow.pytorch.load_model(model_uri)
     for x in [4.0, 6.0, 30.0]:
         hour_var = torch.Tensor([[x]])
         y_pred = loaded_model(hour_var)
-        print("predict X:{}, y_pred: {:.2f}".format(x, y_pred.data.item()))
+        print("predict X: {}, y_pred: {:.2f}".format(x, y_pred.data.item()))

@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     # Log PyTorch model
     with mlflow.start_run() as run:
-        mlflow.pytorch.log_model(model, "models_pth")
+        mlflow.pytorch.log_model(model, "model")
 
     # Fetch the associated conda environment
     print("--")

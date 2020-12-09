@@ -58,16 +58,16 @@ if __name__ == '__main__':
 
     # log PyTorch model
     with mlflow.start_run() as run:
-        mlflow.pytorch.log_model(model, "models_pth")
+        mlflow.pytorch.log_model(model, "model")
 
         # logging scripted module
         scripted_pytorch_model = torch.jit.script(model)
-        mlflow.pytorch.log_model(scripted_pytorch_model, "scripted_models_pth")
+        mlflow.pytorch.log_model(scripted_pytorch_model, "scripted_model")
 
     # fetch the logged model artifacts
     print("--")
     print("run_id: {}".format(run.info.run_id))
-    for artifact_path in ["models_pth/data", "scripted_models_pth/data"]:
+    for artifact_path in ["model/data", "scripted_model/data"]:
         artifacts = [f.path for f in MlflowClient().list_artifacts(run.info.run_id, artifact_path)]
         print("artifacts: {}".format(artifacts))
 
