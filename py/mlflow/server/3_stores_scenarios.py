@@ -9,12 +9,12 @@ uses the FileStore for saving artifacts and MLflow entities (runs, params, metri
 2. Client will use REST calls to talk to tracking server at port 5000 for the APIs calls
 
 Artifacts: 
-part 1: MLflow Client APIs --> RestStore --> REST API Call --> Tracking Server (fetch artifact store URI)
-part 2: Tracking Server --> REST API Response with artifact store URI --> MLflow Client
-part 3: MLflow Client --> LocalArtifactFileStore (store artifacts)
+part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server (fetch artifact store URI)
+part 2: Tracking Server --> REST Response with artifact store URI --> MLflow Client
+part 3: MLflow Client --> instance of LocalArtifactFileStore (store artifacts)
 
 MLflow Entities:
-part 1: MLflow Client --> LocalFileStore (for MLflow entities, params, runs, metrics, etc)
+part 1: MLflow Client --> instance of FileStore (for MLflow entities, params, runs, metrics, etc)
 
 Run tcpdump -Xlv -i lo0 -vv dst port 5000 to see the traffic to port 5000
 
