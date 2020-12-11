@@ -7,6 +7,9 @@ Scenario 2: No tracking server, but an SQLAlchemy compatible backend store.
 2. SQLAlchemy compatible backend store used for MLflow entities.
 3. No REST calls; clients interact directly via the APIs to FileStore and backend store.
 
+MLflowClient APIs --> FileStore
+MLflowClient APIs -->SQLAlchemyStore
+
 To launch the UI, use `mlfow ui --backend-store-uri sqlite:///mlruns.db`
 
 Then connect to http://127.0.0.1:5000 in the browser to view the UI
