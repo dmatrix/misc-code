@@ -8,8 +8,8 @@ as: mlflow server --backend-store-uri file:/Users/julesdamji/examples/py/mlflow/
 uses the FileStore for saving artifacts and MLflow entities (runs, params, metrics, tags, etc).
 2. Client will use REST calls to talk to tracking server at port 5000 for the APIs calls
 
-MLflowClient APIs -->REST--> TrackingServer --> LocalArtifactFileStore
-MLflowClient APIs --> -->REST--> TrackingServer --> SQLAlchemyStore
+MLflowClient APIs --> REST --> TrackingServer --> LocalArtifactFileStore
+MLflowClient APIs --> REST --> TrackingServer --> LocalFileStore
 
 Run tcpdump -Xlv -i lo0 -vv dst port 5000 to see the traffic to port 5000
 

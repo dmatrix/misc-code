@@ -7,10 +7,10 @@ Launch mlflow server as: mlflow server --backend-store-uri sqlite:///my_mlruns.d
 --default-artifact-root {file:/tmp/my_artifacts, s3, sftb, gc, wasb, dbfs, hdfs...}
 
 1. Backend store is at sqlite:///my_mlruns.db
-2. uri scheme based ArtifactStore is at file:/tmp/my_artifacts
+2. Uri scheme based concrete class of ArtifactStore, e.g., file:/tmp/my_artifacts, s3:/bucket_name, etc.
 
-MLflowClient APIs -->REST--> TrackingServer --> [Scheme]ArtifactStore
-MLflowClient APIs -->REST--> TrackingServer --> SQLAlchemyStore
+MLflowClient APIs --> REST--> TrackingServer --> [Scheme]ArtifactStore
+MLflowClient APIs --> REST--> TrackingServer --> SQLAlchemyStore
 
 This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) for saving artifacts and 
 backend SQLAlchemyStore (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
