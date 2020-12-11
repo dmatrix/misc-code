@@ -12,8 +12,8 @@ Launch mlflow server as: mlflow server --backend-store-uri sqlite:///my_mlruns.d
 MLflowClient APIs -->REST--> TrackingServer --> [Scheme]ArtifactStore
 MLflowClient APIs -->REST--> TrackingServer --> SQLAlchemyStore
 
-This will use the FileStore (file:/tmp/my_artifacts) for saving artifacts and 
-backend store (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
+This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) for saving artifacts and 
+backend SQLAlchemyStore (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
 
 There will be REST calls to port 5000 where the Tracking Service respectively with the 
 FileStore and the SQLAlchemy compatible backend store.

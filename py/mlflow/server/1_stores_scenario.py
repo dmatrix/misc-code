@@ -6,7 +6,7 @@ and backend stores under the ./mlruns directory
 
 You can then launch the UI with mlflow ui from the same directory where ./mlruns resides.
 
-MlflowClient APIs --> FileStore
+MlflowClient APIs --> LocalArtifactFileStore
 """
 if __name__ == '__main__':
     features = "rooms, zipcode, median_price, school_rating, transport"
