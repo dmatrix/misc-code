@@ -18,6 +18,10 @@ part 3: MLflowClient --> instance of [scheme]ArtifactStore --> S3/ftp/wasb/gc et
 MLflow Entities:
 part 1: MLflow Client --> instance of SQLAlchemyStore (for MLflow entities, params, runs, metrics, etc)
 
+This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) for saving artifacts and 
+backend SQLAlchemyStore (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
+
+
 Case 2:
 mlflow server --backend-store-uri postgresql://URI --default-artifact-root s3:/bucket_name -h hostname
 
@@ -32,8 +36,8 @@ part 3: MLflowClient --> instance of S3ArtifactStore --> S3(store artifacts)
 MLflow Entities:
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server --> instance of SQLAlchemyStore (for MLflow entities, params, runs, metrics, etc)
 
-This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) for saving artifacts and 
-backend SQLAlchemyStore (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
+This will use the S3ArtifactFileStore (s3:/bucket_name/) for saving artifacts and 
+backend SQLAlchemyStore (postresql://URI) for saving MLflow entities (runs, params, metrics, tags, etc).
 
 There will be REST calls to port 5000 where the Tracking Service is running.
 
