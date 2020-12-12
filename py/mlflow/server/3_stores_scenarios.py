@@ -1,7 +1,7 @@
 import mlflow
 
 """
-Scenario 3: Tracking server launched at localhost or some host (default port 5000)
+Scenario 3: Tracking server launched at localhost (default port 5000)
 as: mlflow server --backend-store-uri file:/Users/julesdamji/examples/py/mlflow/server/my_mlruns
 
 1. Backend store and Artifact Store are both used local FileStore at ./my_runs. That is, it 
