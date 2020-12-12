@@ -2,11 +2,11 @@ import mlflow
 
 """
 Scenario 3: Tracking server launched at localhost (default port 5000)
-as: mlflow server --backend-store-uri file:/Users/julesdamji/examples/py/mlflow/server/my_mlruns
+as: mlflow server --backend-store-uri file:/path/my_mlruns
 
-1. Backend store and Artifact Store are both used local FileStore at ./my_runs. That is, it 
+1. Backend store and Artifact Store are both use local FileStore at file:/path/my_mlruns. That is, it 
 uses the FileStore for saving artifacts and MLflow entities (runs, params, metrics, tags, etc).
-2. Client will use REST calls to talk to tracking server at port 5000 for the APIs calls
+2. Client will use an instance of RESTStore and make REST APIs calls to the tracking server at port 5000 
 
 Artifacts: 
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server (fetch artifact store URI)

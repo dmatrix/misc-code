@@ -4,11 +4,11 @@ import mlflow
 Scenario 4: Tracking server launched at a remote host along with an artifact location and an SQLAlchemy compatible backend store.
 This scenarios can have two cases:
 
-Case 1. Launch mlflow server as: mlflow server --backend-store-uri sqlite:///my_mlruns.db -h hostname 
+Case 1. Launch mlflow server as: mlflow server --backend-store-uri sqlite:///my_mlruns.db --host hostname 
 --default-artifact-root {file:/tmp/my_artifacts, s3, sftb, gc, wasb, dbfs, hdfs...}
 
 1. Backend store is at local sqlite:///my_mlruns.db
-2. Uri scheme based concrete class of ArtifactStore, e.g., file:/tmp/my_artifacts, s3:/bucket_name, etc.
+2. URI scheme-based concrete class of ArtifactStore, e.g., file:/tmp/my_artifacts, s3:/bucket_name, etc.
 
 Artifacts: 
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server (fetch artifact store URI)
@@ -17,17 +17,17 @@ part 3: MLflowClient --> instance of [scheme]ArtifactStore --> S3/ftp/wasb/gc et
 
 MLflow Entities:
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server --> instance of SQLAlchemyStore 
-(for MLflow entities, params, runs, metrics, etc) and write to sqlite file
+(for MLflow entities, params, runs, metrics, etc) and writes to the sqlite file
 
-This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) for saving artifacts and 
-backend SQLAlchemyStore (sqlite:///my_mlruns.db) for saving MLflow entities (runs, params, metrics, tags, etc).
+This will use the LocalArtifactFileStore (file:/tmp/my_artifacts) on the hostanme for saving artifacts and 
+backend SQLAlchemyStore (sqlite:///my_mlruns.db) on the hostname for saving MLflow entities (runs, params, metrics, tags, etc).
 
 
 Case 2:
-mlflow server --backend-store-uri postgresql://URI --default-artifact-root s3:/bucket_name -h hostname
+mlflow server --backend-store-uri postgresql://URI --default-artifact-root s3:/bucket_name --host hostname
 
 1. Backend store is at SQL server at postresql://URI
-2. Uri scheme based concrete class of S3ArtifactStore, e.g., s3:/bucket_name, etc.
+2. URI scheme-based concrete class of S3ArtifactStore, e.g., s3:/bucket_name, etc.
 
 Artifacts: 
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server (fetch artifact store URI)
@@ -38,7 +38,7 @@ MLflow Entities:
 part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server --> instance of SQLAlchemyStore 
 (for MLflow entities, params, runs, metrics, etc) writes to Postgres DB
 
-This will use the S3ArtifactFileStore (s3:/bucket_name/) for saving artifacts and 
+This will use the S3ArtifactFileStore (s3:/bucket_name/) for saving artifacts on the S3 bucket and 
 backend SQLAlchemyStore (postresql://URI) for saving MLflow entities (runs, params, metrics, tags, etc).
 
 There will be REST calls to port 5000 where the Tracking Service is running.

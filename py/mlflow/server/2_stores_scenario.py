@@ -8,8 +8,8 @@ Scenario 2: No tracking server, but an SQLAlchemy compatible backend store.
 3. No REST calls; clients interact directly via the APIs to LocalArtifactFileStore and 
 SQLAlchemy backend store.
 
-MLflowClient APIs --> LocalArtifactFileStore
-MLflowClient APIs --> SQLAlchemyStore
+MLflowClient APIs --> creates an instance of LocalArtifactFileStore (for artifacts)
+MLflowClient APIs --> creates an instance of SQLAlchemyStore (for MLflow entities written to sqlite file mlruns.db)
 
 To launch the UI, use `mlfow ui --backend-store-uri sqlite:///mlruns.db`
 
