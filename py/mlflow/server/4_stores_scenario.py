@@ -35,11 +35,12 @@ part 2: Tracking Server --> REST Response Response with artifact store URI --> M
 part 3: MLflowClient --> instance of S3ArtifactRepository --> S3(to store artifacts)
 
 MLflow Entities:
-part 1: MLflow Client APIs --> RestStore --> REST Request API Call --> Tracking Server --> creates an
+part 1: MLflowClient --> RestStore --> REST Request API Call --> Tracking Server --> creates an
         instance of SQLAlchemyStore (to store MLflow entities, params, runs, metrics, etc) connects to Postgres DB
 
-The client will use the S3ArtifactRepository (s3:/bucket_name/) tp save artifacts on the S3 bucket and 
-tracking server will use an instance of SQLAlchemyStore (postresql://URI) to save MLflow entities (runs, params, metrics, tags, etc).
+The MLflowClient will use the S3ArtifactRepository (s3:/bucket_name/) to save artifacts on the 
+S3 bucket, and the Tracking Server will use an instance of SQLAlchemyStore (postresql://URI) to save 
+MLflow entities (runs, params, metrics, tags, etc), for each MLflow REST request.
 
 There will be REST calls to port 5000 where the Tracking Service is running.
 
