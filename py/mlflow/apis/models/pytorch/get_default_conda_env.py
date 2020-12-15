@@ -60,7 +60,6 @@ if __name__ == '__main__':
         mlflow.pytorch.log_model(model, "model")
 
     # Fetch the associated conda environment
-    print("--")
     print("run_id: {}".format(run.info.run_id))
     env = mlflow.pytorch.get_default_conda_env()
     print("conda environment: {}".format(env))

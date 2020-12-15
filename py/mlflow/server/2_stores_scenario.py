@@ -3,13 +3,16 @@ import mlflow
 """
 Scenario 2: No tracking server, but an SQLAlchemy compatible backend store.
 
-1. LocalArtifactFileStore used directly via the client to store artifacts
-2. SQLAlchemy compatible backend store is used for MLflow entities.
-3. No REST calls; clients interact directly via the APIs to LocalArtifactFileStore and 
-SQLAlchemy backend store.
+1. LocalArtifactRepository is used directly via the client to store artifacts
+2. SQLAlchemy compatible backend store is used to store MLflow entities.
+3. No REST calls; clients interact directly via the APIs through an instance
+ of LocalArtifactRepository and an instance SqlAlchemyStore backend store.
 
-MLflowClient APIs --> creates an instance of LocalArtifactFileStore (for artifacts)
-MLflowClient APIs --> creates an instance of SQLAlchemyStore (for MLflow entities written to sqlite file mlruns.db)
+Interaction and Flow:
+
+1. MLflowClient APIs --> creates an instance of LocalArtifactRepository (to store artifacts)
+2. MLflowClient APIs --> creates an instance of SQLAlchemyStore (to store MLflow entities,
+   written to sqlite file mlruns.db)
 
 To launch the UI, use `mlfow ui --backend-store-uri sqlite:///mlruns.db`
 

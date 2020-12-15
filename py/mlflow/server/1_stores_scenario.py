@@ -7,8 +7,12 @@ both for artifact store and backend store under the ./mlruns directory.
 That is, the artifacts and MLflow entities (runs, params, metrics, tags, etc) are store under
 ./mlruns local directory. You can then launch the UI with mlflow ui from the same directory where ./mlruns resides.
 
-MlflowClient APIs --> instance LocalArtifactFileStore (store artifacts)
-MLflowClient APIs --> instance of FileStore (store MLflow entities)
+Interaction and Flow:
+
+1. MLflowClient APIs --> creates an instance of LocalArtifactRepository (to store artifacts)
+2. MLflowClient APIs --> creates an instance of FileStore (backend store to store MLflow entities)
+3. Both artifacts and MLflow entities are store on the local disk under ./mlruns/….
+
 
 """
 if __name__ == '__main__':
