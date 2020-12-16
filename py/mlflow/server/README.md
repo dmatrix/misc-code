@@ -1,4 +1,4 @@
-### MLflow Backend and Artifact Stores
+## MLflow Backend and Artifact Stores
 
 The MLflow platform uses two stores, a backend store and an artifact store.
 While the backend store persists MLflow entities—runs, parameters, metrics, 
@@ -22,19 +22,19 @@ abstract class: `AbstractStore` and `ArtifactRepository`.
 The Abstract and concrete classes for all supported artifact stores are defined
 [here](https://github.com/mlflow/mlflow/tree/master/mlflow/store/artifact).
 
-##### Scenario 1
+### Scenario 1
 
 MLflow on the localhost 
 
 ![](./images/scenario_1.png)
 
-#### Scenario 2 
+### Scenario 2 
 
 MLflow on the localhost with backstore as SQLAlchemy
 
 ![](./images/scenario_2.png)
 
-#### Scenario 3
+### Scenario 3
 
 Tracking server launched at localhost (default port 5000):
 
@@ -42,7 +42,7 @@ Tracking server launched at localhost (default port 5000):
 
 ![](./images/scenario_3.png)
 
-#### Scenario 4
+### Scenario 4
 
 Tracking server launched at a remote host along with an artifact location 
 and SQLAlchemy compatible backend store. This scenario can have two cases:
