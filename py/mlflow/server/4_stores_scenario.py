@@ -16,8 +16,9 @@ part 2: Tracking Server --> REST Response Response with artifact store URI --> M
 part 3: MLflowClient --> instance of [scheme]ArtifactRepository --> S3/ftp/wasb/gc etc( to store artifacts)
 
 MLflow Entities:
-part 1: MLflowClient --> RestStore --> REST Request API Call --> Tracking Server --> instance of SQLAlchemyStore 
-(to store MLflow entities, params, runs, metrics, etc) and writes to the sqlite file
+part 4 & 5: MLflowClient --> RestStore --> REST Request API Call --> Tracking Server --> instance of SQLAlchemyStore (to store MLflow entities, params, runs, metrics, etc) 
+           and writes to the sqlite file, after each REST request to log MLflow entities
+
 
 The client will use the LocalArtifactFileRepository (file:/mnt/my_artifacts) to save artifacts and the tracking server
 will use an instance SQLAlchemyStore (sqlite:///my_mlruns.db) to save MLflow entities (runs, params, metrics, tags, etc).
@@ -35,12 +36,13 @@ part 2: Tracking Server --> REST Response Response with artifact store URI --> M
 part 3: MLflowClient --> instance of S3ArtifactRepository --> S3(to store artifacts)
 
 MLflow Entities:
-part 1: MLflowClient --> RestStore --> REST Request API Call --> Tracking Server --> creates an
-        instance of SQLAlchemyStore (to store MLflow entities, params, runs, metrics, etc) connects to Postgres DB
+part 4 & 5: MLflowClient --> RestStore --> REST Request API Call --> Tracking Server --> creates an  instance of 
+          SQLAlchemyStore (to store MLflow entities, params, runs, metrics, etc) connects to Postgres DB
 
-The MLflowClient will use the S3ArtifactRepository (s3:/bucket_name/) to save artifacts on the 
-S3 bucket, and the Tracking Server will use an instance of SQLAlchemyStore (postresql://URI) to save 
-MLflow entities (runs, params, metrics, tags, etc), for each MLflow REST request.
+The MLflowClient  will use the S3ArtifactRepository (s3:/bucket_name/) to save artifacts on the S3 bucket, and 
+the  Tracking Server will use an existing instance of SQLAlchemyStore (postresql://URI) to save MLflow entities 
+(runs, params, metrics, tags, etc), after each REST request to log MLflow entities
+
 
 There will be REST calls to port 5000 where the Tracking Service is running.
 
