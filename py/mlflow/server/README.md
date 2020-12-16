@@ -9,11 +9,9 @@ scenarios. What's more, under each scenario, the relevant code will instantiate 
 instance of a concrete class. The diagram below shows the class hierarchy of each
 abstract class: `AbstractStore` and `ArtifactRepository`.
 
-#### Backend Store Class Hierarchy
 
 ![](./images/backend_store_classes.png)
 
-#### Artifact Store Class Hierarchy
 
 ![](./images/artifact_store_classes.png)
 
@@ -31,7 +29,8 @@ MLflow on the localhost with backstore as SQLAlchemy
 
 #### Scenario 3
 
-Tracking server launched at localhost (default port 5000): 
+Tracking server launched at localhost (default port 5000):
+
 `mlflow server --backend-store-uri file:/path/my_mlruns`
 
 ![](./images/scenario_3.png)
