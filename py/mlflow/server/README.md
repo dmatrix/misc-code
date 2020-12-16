@@ -12,8 +12,15 @@ abstract class: `AbstractStore` and `ArtifactRepository`.
 
 ![](./images/backend_store_classes.png)
 
+ * [AbstractStore](https://github.com/mlflow/mlflow/blob/master/mlflow/store/tracking/abstract_store.py)
+ * [FileStore](https://github.com/mlflow/mlflow/blob/master/mlflow/store/tracking/file_store.py)
+ * [RestStore](https://github.com/mlflow/mlflow/blob/master/mlflow/store/tracking/rest_store.py)
+ * [SQLAlchmeyStore](https://github.com/mlflow/mlflow/blob/master/mlflow/store/tracking/sqlalchemy_store.py)
 
 ![](./images/artifact_store_classes.png)
+
+The Abstract and concrete classes for all supported artifact stores are defined
+[here](https://github.com/mlflow/mlflow/tree/master/mlflow/store/artifact).
 
 ##### Scenario 1
 
