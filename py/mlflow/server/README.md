@@ -1,13 +1,14 @@
 ## MLflow Backend and Artifact Stores
 
-The MLflow platform uses two stores, a backend store and an artifact store.
+The MLflow platform uses two stores: a backend store and an artifact store.
 While the backend store persists MLflow entities—runs, parameters, metrics, 
-tags, etc—, the artifact store saves all artifacts–models, images, summary, etc.
+tags, etc—, the artifact store saves all artifacts–models, images, model summary, etc.
 
-What backend store or artifact store is used and by whom depends on four different 
-scenarios. What's more, under each scenario, the relevant code will instantiate an
-instance of a concrete class. The diagram below shows the class hierarchy of each
-abstract class: `AbstractStore` and `ArtifactRepository`.
+Which backend store or artifact store is used, and by a client or tracking server, 
+depends on four different scenarios. What's more, under each scenario, the relevant 
+component code will instantiate an instance of a concrete class to interface with the 
+target store. The diagram below shows the two class hierarchies: abstract class: 
+`AbstractStore` and `ArtifactRepository`.
 
 
 ![](./images/backend_store_classes.png)
