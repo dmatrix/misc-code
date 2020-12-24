@@ -31,7 +31,8 @@ MLflow on the localhost
 
 ### Scenario 2 
 
-MLflow on the localhost with backstore as SQLAlchemy
+MLflow on the localhost with backend store as an SQLAlchemy compatible database
+sqlite
 
 ![](./images/scenario_2.png)
 
@@ -47,15 +48,6 @@ Tracking server launched at localhost (default port 5000):
 
 Tracking server launched at a remote host along with an artifact location 
 and SQLAlchemy compatible backend store. This scenario can have two cases:
-
-Case 1: 
-
-`mlflow server --backend-store-uri sqlite:///my_mlruns.db --host hostname
---default-artifact-root file:/mnt/my_artifacts`
-
-![](./images/scenario_4_case_1.png)
-
-Case 2:
 
 `mlflow server --backend-store-uri postgresql://URI --default-artifact-root S3:/bucket_name --host hostname`
 
