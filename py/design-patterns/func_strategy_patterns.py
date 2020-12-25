@@ -16,6 +16,7 @@ from collections import namedtuple
 
 Customer = namedtuple('Customer', 'name fidelity')
 
+
 class LineItem:
 
     def __init__(self, product, quantity, price):
@@ -25,10 +26,12 @@ class LineItem:
 
     def total(self):
         return self.price * self.quantity
-#
-# The Context for the Strategy
-#
+
+
 class Order:
+    """
+    The Context for the Strategy
+    """
 
     def __init__(self, customer, cart, promotion=None):
         self.customer = customer
@@ -60,6 +63,8 @@ class Order:
 # define a meta-strategy that computes the best promotion for each
 # Order
 #
+
+
 import inspect
 import promotions
 
@@ -67,6 +72,7 @@ import promotions
 
 promos = [func for name, func in
           inspect.getmembers(promotions, inspect.isfunction)]
+
 
 def best_promo(order):
     """Select the best discount available"""
@@ -77,6 +83,8 @@ def best_promo(order):
 #
 # driver to test our stratgies
 #
+
+
 if __name__ == "__main__":
     # two customers John (fidelity points 0) and Ann (fidelity points 1,100)
     joe = Customer('John Doe', 0)

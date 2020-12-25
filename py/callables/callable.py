@@ -67,7 +67,7 @@ if __name__ == "__main__":
     [print(bingo()) for n in range(3)]
     print(bingo.items)
     print(dir(bingo))
-    print ("=" * 80)
+    print("=" * 80)
     avg = Averager("DBX")
     print(f"Stats for Stock Symbol {avg.stock_sym}")
     [print(avg(num)) for num in range(10, 25, 2)]
