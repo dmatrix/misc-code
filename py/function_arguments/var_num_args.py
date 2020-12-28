@@ -5,9 +5,7 @@ def greet(*persons, greeting_word="Hi Merry X'Mas!"):
 
     Parameters
     ----------
-
     persons: tuple
-
         Packed as a tuple
 
     greeting_word: str
@@ -27,12 +25,31 @@ def mean_grade(**grades):
     Parameters
     ----------
     grades: dictionary
+        key word arguments
     """
     print("Grades for the total:", grades)
     print("Type of grades:", type(grades))
     total_grade = sum(grades.values())
     average_grade = total_grade / len(grades)
     print("Mean Grade:", average_grade)
+
+
+def func(*args, **kwargs):
+    """
+    Define a function for which its number of arguments are not predetermined
+
+    Parameters
+    ----------
+    args: tuple
+        packed positional arguments
+
+    kwargs: dict
+        dictionary of keyword arugments
+    """
+    a = [arg for arg in args]
+    print(a)
+    kw = [(k, v) for k, v in kwargs.items()]
+    print(kw)
 
 
 def append_score(score, scores=[]):
@@ -57,3 +74,11 @@ if __name__ == '__main__':
     print(f"Scores: {res}\nres id: {id(res)}")
     res = append_score(92, [100, 95, 56])
     print(f"Scores: {res}\nres id: {id(res)}")
+
+    func("Naz", "Rabiah", "Jehan", 'Sarah', Jules=5, Brownie=5, Zico=2, Nyope=1)
+    func('Naz', Jules=5)
+
+    # unpack a list into firt item, followed by the rest
+    n, *rest = ['Naz', 'Rabiah', 'Jehan', 'Sarah']
+    print(n)
+    print(f"rest={rest}")
