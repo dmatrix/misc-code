@@ -9,7 +9,7 @@ def func_args(a='a', b='b', c='c', d=None):
 
     Parameters
     ----------
-    a : str
+    a: str
         optional, default is 'a'
     b: str, optional
         optional, default is 'b'

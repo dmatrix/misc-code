@@ -16,6 +16,11 @@ class MyClass(object):
             self._hooks(self.pre_hooks, *args, **kwargs)
             self.n_hooks += len(self.pre_hooks)
 
+        #
+        # your callable logic here
+        #
+        self._do_stuff(self, *args, **kwargs)
+
         if self.post_hooks:
             self._hooks(self.post_hooks, *args, **kwargs)
             self.n_hooks += len(self.post_hooks)
@@ -33,6 +38,10 @@ class MyClass(object):
     def _hooks(self, callbacks, *args, **kwargs):
         for callback in callbacks:
             callback(*args, **kwargs)
+
+    def _do_stuff(self, *args, **kwargs):
+        print('Inside function: {}'.format(sys._getframe().f_code.co_name))
+        print('--' * 5)
 
 
 def pre_hook_callback(*args, **kwargs):
@@ -59,4 +68,5 @@ if __name__ == '__main__':
     print('Total hooks executed: {}'.format(res))
     print('--' * 5)
     res = c("xgboost", 'svm', l_rate=5, n_iter=5, n_fold=2, lr2=0.05)
+    print('Total hooks executed: {}'.format(res))
 
