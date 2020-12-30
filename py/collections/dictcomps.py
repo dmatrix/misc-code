@@ -23,7 +23,7 @@ if __name__ == '__main__':
     pp(country_code, indent=4)
     # Build reverse code-> uppercase(country) using dictcomp
     print("-" * 25)
-    pp({code:country.upper() for country, code in country_code.items()},
+    pp({code: country.upper() for country, code in country_code.items()},
        indent=4)
     print("-" * 65)
     # Build reverse code-> uppercase(country) using dictcom
