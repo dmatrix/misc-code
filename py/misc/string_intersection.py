@@ -1,3 +1,5 @@
+import collections
+
 
 def intersect(s1, s2):
     res = ''
@@ -10,8 +12,6 @@ def intersect(s1, s2):
                     res += i
     return res
 
-
-import collections
 
 def intersect2(s, t):
     s = s.replace(' ', '')
@@ -26,10 +26,11 @@ def intersect2(s, t):
             count[i] = count[i] - 1
     return res
 
+
 if __name__ == '__main__':
     s1 = "Databricks and Apache Spark".replace(" ", "")
     s2 = "Developer Advocates".replace(" ", "")
-    print(intersect(s1,s2))
+    print(intersect(s1, s2))
     ss1 = set(s1)
     ss2 = set(s2)
     print(ss1.intersection(ss2))
