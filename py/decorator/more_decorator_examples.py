@@ -4,7 +4,12 @@ import time
 
 def decorator_func_logger(target_func):
     """
-    Our decorator function that extends the target_func's functionality
+    Our decorator function that extends the target_func's functionality.
+    Decorator pattern allows you as a developer to extend your existing utility of functions
+    or classes. That is, in a case where you want to use all these existing functions but need
+    some additional custom logic, you can decorate an existing function, implement your custom
+    logic without having the need repeat the code
+    
     Usage1 : No arguments and no multiple decorators
     Parameters
     ----------
