@@ -63,9 +63,9 @@ def decorator_func_logger_2(target_func):
         wrapper: function
             Returns a wrapper function
         """
-        print(f'Before calling the target function: {target_func.__name__}')
-        target_func(*args, **kwargs)
-        print(f'After calling the target function: {target_func.__name__}')
+        print(f"Before calling the target function: {target_func.__name__}")
+        res = target_func(*args, **kwargs)
+        print(f"After calling the target function: {target_func.__name__}, Target function executed {res} times")
 
     return wrapper_func
 
@@ -76,9 +76,11 @@ def decorator_func_timeit(target_func):
     """
     def wrapper_func(*args, **kwargs):
         ts = time.time()
-        target_func(*args, **kwargs)
+        res = target_func(*args, **kwargs)
         te = time.time()
-        print(f'Time elapsed in {target_func.__name__}: {(te-ts) * 1000}')
+        elapsed = (te - ts) * 1000
+        print(f'Time elapsed in {target_func.__name__}: {elapsed}')
+        return res
 
     return wrapper_func
 
@@ -95,6 +97,7 @@ def target_loop(*args, **kwargs):
         count += num
     if kwargs:
         print(f'kwargs: {kwargs}')
+    return count
 
 
 if __name__ == '__main__':
