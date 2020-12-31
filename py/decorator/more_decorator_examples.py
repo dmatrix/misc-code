@@ -80,17 +80,19 @@ def decorator_func_timeit(target_func):
 
 @decorator_func_logger_2
 @decorator_func_timeit
-def target_loop(loop):
+def target_loop(*args, **kwargs):
     """
     Function decorated with multiple decorators.
     """
     count = 0
     print(f'Inside the decorated target function w/ arguments: {sys._getframe().f_code.co_name} being decorated')
-    for num in range(loop):
+    for num in range(*args):
         count += num
+    if kwargs:
+        print(f'kwargs: {kwargs}')
 
 
 if __name__ == '__main__':
     target()
     print("--" * 10)
-    target_loop(100)
+    target_loop(100, 200, times=2, name='Jules')
