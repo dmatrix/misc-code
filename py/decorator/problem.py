@@ -23,6 +23,7 @@ class MeanMaxMinMetrics(object):
     def __str__(self):
       return f"{self.name} Metric:\n(Max: {self.max}, Min: {self.min}, Mean: {self.mean})"
 
+
 if __name__ == '__main__':
    arr = list(range(10))
    metrics = MeanMaxMinMetrics("RMSE")

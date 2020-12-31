@@ -1,6 +1,6 @@
 def func_args(f_name, l_name=None, initial=None):
     """
-    Positional and keyword arugmentws format
+    Positional and keyword arguments format
 
     Parameters
     ----------

@@ -19,15 +19,19 @@ DIAL_CODES = [
 if __name__ == '__main__':
     # Build a country->code dictionary using dictcomps
     country_code = {country: code for code, country in DIAL_CODES}
+
+    # build a reverse dictionary using dict constructor from the list of tuples
+    country_code_2 = dict(DIAL_CODES)
+    pp(country_code, indent=2)
     print("-" * 25)
-    pp(country_code, indent=4)
+    pp(country_code_2, indent=2)
     # Build reverse code-> uppercase(country) using dictcomp
     print("-" * 25)
     pp({code: country.upper() for country, code in country_code.items()},
-       indent=4)
+       indent=2)
     print("-" * 65)
     # Build reverse code-> uppercase(country) using dictcom
     # Filter code < 66
     pp({code:country.upper() for country, code in country_code.items() if code < 66},
-       indent=4)
+       indent=2)
 

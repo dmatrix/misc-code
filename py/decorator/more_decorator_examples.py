@@ -1,0 +1,96 @@
+import sys
+import time
+
+
+def decorator_func_logger(target_func):
+    """
+    Our decorator function that extends the target_func's functionality
+    Usage1 : No arguments and no multiple decorators
+    Parameters
+    ----------
+    target_func: function
+        The target function object that needs decoration and extention
+
+    Returns
+    -------
+        wrapper: function
+            Returns a wrapper function
+    """
+    def wrapper_func():
+        print(f'Before calling the target function: {target_func.__name__}')
+        target_func()
+        print(f'After calling the target function: {target_func.__name__}')
+
+    return wrapper_func
+
+
+@decorator_func_logger
+def target():
+    """
+    Our target function that is decorated
+    """
+    print(f'Inside the decorated target function: {sys._getframe().f_code.co_name} being decorated')
+
+
+def decorator_func_logger_2(target_func):
+    """
+    Usage 2: Multiple decorators and arguments to decorators functions
+    Parameters
+    ----------
+    target_func: function
+        The target function object that needs decoration and extention
+
+    Returns
+    -------
+        wrapper: function
+            Returns a wrapper function
+    """
+    def wrapper_func(*args, **kwargs):
+        """
+        Parameters
+        ----------
+        args: tuple
+            Packed unplaced tuple of positional arguments
+        kwargs: dict
+            Keyword arguments
+        Returns
+        -------
+        wrapper: function
+            Returns a wrapper function
+        """
+        print(f'Before calling the target function: {target_func.__name__}')
+        target_func(*args, **kwargs)
+        print(f'After calling the target function: {target_func.__name__}')
+
+    return wrapper_func
+
+
+def decorator_func_timeit(target_func):
+    """
+    Decorators times the target_func. That is, it extends its functionality
+    """
+    def wrapper_func(*args, **kwargs):
+        ts = time.time()
+        target_func(*args, **kwargs)
+        te = time.time()
+        print(f'Time elapsed in {target_func.__name__}: {(te-ts) * 1000}')
+
+    return wrapper_func
+
+
+@decorator_func_logger_2
+@decorator_func_timeit
+def target_loop(loop):
+    """
+    Function decorated with multiple decorators.
+    """
+    count = 0
+    print(f'Inside the decorated target function w/ arguments: {sys._getframe().f_code.co_name} being decorated')
+    for num in range(loop):
+        count += num
+
+
+if __name__ == '__main__':
+    target()
+    print("--" * 10)
+    target_loop(100)

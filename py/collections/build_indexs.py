@@ -19,8 +19,10 @@ if __name__ == '__main__':
                 word = match.group()
                 column_no = match.start()+1
                 location = (line_no, column_no)
-                # Use defaul item if item not in the dict
+
+                # Use default item if item not in the dict
                 index[word].append(location)
+
     # Print in alphabetical order
     for word in sorted(index, key=str.upper):
         print(word, index[word])
