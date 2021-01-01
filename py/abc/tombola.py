@@ -1,6 +1,7 @@
 import abc
 from abc import ABC
 
+
 class Tombola(ABC):
    """
    Define an ABC subclass

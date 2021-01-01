@@ -2,9 +2,11 @@ import random
 
 from tombola import Tombola
 
+
 class LotteryBlower(Tombola):
 
    def __init__(self, iterable):
+      super(LotteryBlower, self).__init__()
       self._balls = list(iterable)
 
    def load(self, iterable):

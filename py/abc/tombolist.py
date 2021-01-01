@@ -4,6 +4,8 @@ from tombola import Tombola
 #
 # Register as a virtual sublclass of Tombola
 #
+
+
 @Tombola.register
 class TomboList(list):
    """Extends as the sublcass of list"""
@@ -26,6 +28,7 @@ class TomboList(list):
 
    def inspect(self):
       return tuple(sorted(self))
+
 
 if __name__ == '__main__':
    tl = TomboList(list(range(10)))
