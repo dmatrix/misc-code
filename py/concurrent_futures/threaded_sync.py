@@ -18,14 +18,17 @@ class ThreadedDownloader(AbstractDownloader):
 
     def download_many(self, cc_list):
         workers = min(MAX_WORKERS, len(cc_list))
-        with futures.ThreadPoolExecutor(workers) as executor:
+        with futures.ThreadPoolExecutor(max_workers=workers) as executor:
             # Map over the list of countries, downloading each flag separately in
             # thread from the tread pool
             res = executor.map(self.download_one, sorted(cc_list))
             return len(list(res))
 
+    def main_thr(self):
+        self.main(self.download_many)
+
 
 if __name__ == '__main__':
 
     threaded_downloader = ThreadedDownloader()
-    threaded_downloader.main(threaded_downloader.download_many)
+    threaded_downloader.main_thr()

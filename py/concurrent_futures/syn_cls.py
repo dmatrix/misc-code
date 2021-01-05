@@ -13,8 +13,11 @@ class SyncDownloader(AbstractDownloader):
 
         return len(cc_list)
 
+    def main_thr(self):
+        self.main(self.download_many)
+
 
 if __name__ == '__main__':
 
     sync_downloader = SyncDownloader()
-    sync_downloader.main(sync_downloader.download_many)
+    sync_downloader.main_thr()
