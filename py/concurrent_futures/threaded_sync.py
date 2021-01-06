@@ -24,9 +24,6 @@ class ThreadedDownloader(AbstractDownloader):
             res = executor.map(self.download_one, sorted(cc_list))
             return len(list(res))
 
-    def main_thr(self):
-        self.main(self.download_many)
-
 
 if __name__ == '__main__':
 

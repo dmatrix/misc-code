@@ -40,6 +40,9 @@ class AbstractDownloader:
         msg = '\n{} flags downloaded in {:.2f}s'
         print(msg.format(count, elapsed))
 
+    def main_thr(self):
+        self.main(self.download_many)
+
     @abstractmethod
     def download_many(self, cc_list):
         pass

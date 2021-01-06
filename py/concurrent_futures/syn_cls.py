@@ -13,9 +13,6 @@ class SyncDownloader(AbstractDownloader):
 
         return len(cc_list)
 
-    def main_thr(self):
-        self.main(self.download_many)
-
 
 if __name__ == '__main__':
 
