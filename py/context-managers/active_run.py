@@ -26,6 +26,7 @@ def active_run():
         if (msg):
             print(msg)
 
+
 if __name__ == '__main__':
 
     # run as a class

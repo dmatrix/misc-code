@@ -5,6 +5,7 @@
 from fractions import Fraction
 import itertools
 
+
 class ArithmethicProgression:
    """
    Class demonstrating how to create a generator by implementing
@@ -29,7 +30,8 @@ class ArithmethicProgression:
          index += 1
          result = self.begin + self.step * index
 
-# No need for class. We can achieve the same effect with a generator function
+# Another way to achieve this. We can achieve the same effect with a generator function
+
 
 def arithprog_gen(begin, step, end=None):
    # Produce a result coerced type of the self.begin
@@ -44,6 +46,7 @@ def arithprog_gen(begin, step, end=None):
       index += 1
       result = begin + step * index
 
+
 # Use itertools to write the same function
 def artihprog_gen_iter_tools(begin, step, end=None):
    first = type(begin + step)(begin)
@@ -52,10 +55,13 @@ def artihprog_gen_iter_tools(begin, step, end=None):
       ap_gen = itertools.takewhile(lambda n: n < end, ap_gen)
 
    return ap_gen
+
+
 if __name__ == '__main__':
 
    print(list(ArithmethicProgression(0, 1, 3)))
    print(list(ArithmethicProgression(0, 1/3, 1)))
+
    # Use Fractions
    print(list(ArithmethicProgression(0, Fraction(1,3),1)))
    print("-" * 50)
