@@ -7,6 +7,8 @@ Also, iterators save memory space as they lazily evaluate or process the
 next item, only when __next__ is invoked.
 
 They only compute it when you ask for it. This is known as lazy evaluation.
+
+source: https://medium.com/free-code-camp/how-and-why-you-should-use-python-generators-f6fb56650888
 """
 
 

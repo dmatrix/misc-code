@@ -3,6 +3,18 @@ Generator functions allow you create simple iterators.
 These functions use yield statement to produce or generate
 the next computed value, and suspend, saving the current
 state of the function.
+
+source: https://medium.com/free-code-camp/how-and-why-you-should-use-python-generators-f6fb56650888
+
+Summary:
+
+1. Use generators to create iterators in a pythonic way
+2. Iterators allow lazy evaluation, by only generating the next element of an iterable object
+   when requested. This is useful for very large data sets.
+3. Iterators and generators, once inialized, can only be used once.
+4. Generally, generator functions are better than iterators
+5. For simple cases, generator expressions are better than iterators
+
 """
 
 
