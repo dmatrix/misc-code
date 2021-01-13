@@ -9,7 +9,7 @@ from datetime import datetime
 
 async def custom_sleep(n):
     """
-    Custom sleep that uses synchronous sleep
+    Custom sleep that uses asynchronous sleep
 
     Parameters
     ----------
@@ -53,7 +53,8 @@ if __name__ == '__main__':
     ]
 
     # loop until all tasks within the coroutines have been
-    # scheduled and completed
+    # scheduled and completed. These will be executed
+    # asynchronously because of using asynchronous sleep
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
 
