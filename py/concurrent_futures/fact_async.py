@@ -22,7 +22,7 @@ async def custom_sleep(n):
 
 async def factorial(name, number):
     """
-    A courtine to compute a factorial
+    A coroutine to compute a factorial
 
     Parameters
     ----------
