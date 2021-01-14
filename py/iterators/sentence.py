@@ -37,6 +37,7 @@ class Sentence:
    def __iter__(self):
       return SentenceIterator(self.words)
 
+
 class SentenceIterator:
 
    def __init__(self, words):
