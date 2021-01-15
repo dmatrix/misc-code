@@ -5,7 +5,7 @@ def func_args(a='a', b='b', c='c', d=None):
     Args can be supplied in order of signature without named keyword
     Args can be supplied with out-of-order but with named keyword and value
 
-    Positional and keyword arugment format
+    Positional and keyword argument format
 
     Parameters
     ----------
@@ -24,6 +24,29 @@ def func_args(a='a', b='b', c='c', d=None):
         a list of arguments in the signature order
     """
     return [a, b, c, d]
+
+def func_args_1(*, a, b):
+    """
+    Keyword only arguments
+    Two things to note:
+    Args can be supplied in order of signature without named keyword
+    Args can be supplied with out-of-order but with named keyword and value
+
+    Positional and keyword argument format
+
+    Parameters
+    ----------
+    a: str
+        first argument
+    b: str, optional
+        second argument
+
+    Returns
+    -------
+    list
+        a list of arguments in the signature order
+    """
+    return [a, b]
 
 
 def func_args_2(a, *, mult1=1, mult_2=2):
@@ -55,7 +78,11 @@ if __name__ == '__main__':
     print(func_args(d='J', a='Jules', b='Damji', c='S'))
     print(func_args(a='Jules', b='Damji', c='S'))
 
-    # this enforces to
+    # this enforces keyword argument only
+    print(func_args_1(a="Jules", b='Damji'))
+    print(func_args_1(b="Damji", a="Jules"))
+
+    # this enforces to only one positoinal argument
     print(func_args_2(4, mult_2=5, mult1=3))
 
     # generates an error if more than one positional argusment

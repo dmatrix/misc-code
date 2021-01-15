@@ -1,6 +1,6 @@
 #
 # Function to demonstrate various argument types
-# to a funciton: positional, variable, and keyword-named.
+# to a function: positional, variable, and keyword-named.
 
 def tag(name, *content, cls=None, **attrs):
     """Generate one or more HTML Tags. This function could be used for other purposes too"""
@@ -17,14 +17,17 @@ def tag(name, *content, cls=None, **attrs):
     else:
         return '<%s%s />' % (name, attr_str)
 
+
 def f(a, *, b):
-    '''
+    """
     :param a: regular argument
     :param b: keyword-only argument
     :return: tuple of arugments
-    '''
+    """
 
     return a, b
+
+
 if __name__ == '__main__':
     print(tag('br'))
     print(tag('p', 'hello'))
