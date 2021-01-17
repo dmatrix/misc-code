@@ -1,5 +1,7 @@
 from array import array
 import math
+
+
 class Vector2D:
    # class wide attribute to convert this instances into bytes
    typecode = 'd'
@@ -70,6 +72,7 @@ class Vector2D:
       tc = octets[0]
       memv = memoryview(octets[1:]).cast(tc)
       return cls(*memv)
+
 
 if __name__ == "__main__":
    v1 = Vector2D(3, 4)

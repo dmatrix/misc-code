@@ -7,6 +7,7 @@ import operator
 
 # A Python class to illustrate a User-defined Sequence Type
 
+
 class Vector:
    typecode = 'd'
    short_names = 'xyzt'
@@ -15,7 +16,7 @@ class Vector:
       '''
       Constructor
       '''
-      # Proctected components that holds array with Vector components
+      # Protected components that holds array with Vector components
       self._components = array(self.typecode, components)
 
    def __iter__(self):
@@ -56,7 +57,7 @@ class Vector:
       return len(self._components)
 
    def __getitem__(self, index):
-      # Get the class of the instace (i.e., Vector)
+      # Get the class of the instance (i.e., Vector)
       cls = type(self)
       # check in the index is of type slice
       if isinstance(index, slice):
@@ -99,6 +100,7 @@ class Vector:
       typecode = chr(octets[0])
       memv = memoryview(octets[1:]).cast(typecode)
       return cls(memv)
+
 
 if __name__ == "__main__":
 
