@@ -19,10 +19,6 @@ def is_prime(n):
     return True
 
 
-def compute_primes(n):
-    return [n for n in range(num) if is_prime(n)]
-
-
 if __name__ == '__main__':
 
     # A CPU bound task
@@ -37,7 +33,7 @@ if __name__ == '__main__':
     with mt.ThreadPoolExecutor(get_cpu_count()) as executor:
         prime_numbers = executor.map(is_prime, list(range(num)))
     end = time.time()
-    print(f"Multi-threaded access: Time elapsed: {end - start:4.2f} sec to compute all primes in {num} are {sum(list(prime_numbers))}")
+    print(f"Multi Threaded access: Time elapsed: {end - start:4.2f} sec to compute all primes in {num} are {sum(list(prime_numbers))}")
 
     # Let's try multiprocess for each core
     # Since this is CPU I/O bound task, we should get better performance
@@ -47,4 +43,4 @@ if __name__ == '__main__':
     with mp.Pool(get_cpu_count()) as p:
         prime_numbers = p.map(is_prime, list(range(num)))
     end = time.time()
-    print(f"Multi-process access: Time elapsed: {end - start:4.2f} sec to compute all primes in {num} are {sum(list(prime_numbers))}")
+    print(f"Multi Process access: Time elapsed: {end - start:4.2f} sec to compute all primes in {num} are {sum(list(prime_numbers))}")
