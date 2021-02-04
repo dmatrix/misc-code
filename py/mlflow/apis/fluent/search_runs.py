@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     # Create an experiment and log two runs under it
     experiment_id = mlflow.create_experiment("Social NLP Experiments")
-    with mlflow.start_run(experiment_id=experiment_id):
+    with mlflow.start_run(experiment_id=experiment_id) as run:
         mlflow.log_metric("m", 1.55)
         mlflow.set_tag("s.release", "1.1.0-RC")
     with mlflow.start_run(experiment_id=experiment_id):
@@ -31,3 +31,11 @@ if __name__ == "__main__":
 
     # Print pandas DataFrame's rows and columns
     print(df[["metrics.m", "tags.s.release", "run_id"]])
+
+
+    # Search for particular run_id using the attribute.artifact_uri
+    run_id = run.info.run_id
+    filter_string = f"attribute.artifact_uri ILIKE '%{run_id}%'"
+    print("searching with filter: {}".format(filter_string))
+    df = mlflow.search_runs([experiment_id], filter_string=filter_string)
+    print(df)
