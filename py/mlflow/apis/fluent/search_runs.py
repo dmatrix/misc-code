@@ -32,11 +32,9 @@ if __name__ == "__main__":
     # Print pandas DataFrame's rows and columns
     print(df[["metrics.m", "tags.s.release", "run_id"]])
 
-
     # Search for particular run_id using the attribute.artifact_uri
     run_id = run.info.run_id
     filter_string = f"attribute.artifact_uri ILIKE '%{run_id}%'"
     print("searching with filter: {}".format(filter_string))
     df = mlflow.search_runs([experiment_id], filter_string=filter_string)
     print(df[["metrics.m", "tags.s.release", "run_id"]])
-
