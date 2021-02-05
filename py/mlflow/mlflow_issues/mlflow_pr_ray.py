@@ -1,13 +1,24 @@
 import numpy as np
+from pathlib import Path
+
 import mlflow
+from mlflow.models import Model
 
 from sklearn.datasets import load_iris
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import mean_squared_error
+from mlflow.tracking.artifact_utils import _download_artifact_from_uri
+
+
+def print_model_info(m_uri, x):
+    loaded_model = mlflow.sklearn.load_model(m_uri)
+    res = loaded_model.predict(x)
+    print("model_uri: {}".format(m_uri))
+    print("model predictions: {}".format(res))
 
 
 if __name__ == "__main__":
-    # Enable autologging
+    # Enable auto-logging
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
     mlflow.sklearn.autolog()
 
@@ -43,6 +54,17 @@ if __name__ == "__main__":
     print("Version: {}".format(mv.version))
 
     # load the model with runs://URI
-    load_model = mlflow.sklearn.load_model(model_uri)
-    res = load_model.predict(val_x)
-    print(res)
+    print_model_info(model_uri, val_x)
+    print("--" * 20)
+    # load the model using models:URI
+    model_uri = "models:/{}/1".format(registered_model_name)
+    print_model_info(model_uri, val_x)
+    print("--" * 20)
+
+    # Use plugin code to load the model config
+    path = Path(_download_artifact_from_uri(model_uri))
+    model_config = path / 'MLmodel'
+    model_config = Model.load(model_config)
+    print("model_uri: {}".format(model_uri))
+    print("model_config: {}".format(model_config))
+    print(model_config)
