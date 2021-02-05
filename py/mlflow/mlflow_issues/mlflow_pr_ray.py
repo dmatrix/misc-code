@@ -46,14 +46,15 @@ if __name__ == "__main__":
     print("Target names: ", target_names)
     print("run_id: {}".format(run.info.run_id))
 
-    # Registered the auto-logged model.
+    # Registered the auto-logged model and
+    # load the model with runs://URI
     model_uri = "runs:/{}/model".format(run.info.run_id)
     registered_model_name = "RayMLflowIntegration"
     mv = mlflow.register_model(model_uri, registered_model_name)
     print("Name: {}".format(mv.name))
     print("Version: {}".format(mv.version))
 
-    # load the model with runs://URI
+    # load the model with models://URI
     print_model_info(model_uri, val_x)
     print("--" * 20)
     # load the model using models:URI
