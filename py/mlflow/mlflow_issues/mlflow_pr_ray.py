@@ -61,7 +61,7 @@ if __name__ == "__main__":
     print_model_info(model_uri, val_x)
     print("--" * 20)
 
-    # Use plugin code to load the model config
+    # Use plugin side of the code to load the model config
     path = Path(_download_artifact_from_uri(model_uri))
     model_config = path / 'MLmodel'
     model_config = Model.load(model_config)
