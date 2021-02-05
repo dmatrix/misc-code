@@ -66,5 +66,4 @@ if __name__ == "__main__":
     model_config = path / 'MLmodel'
     model_config = Model.load(model_config)
     print("model_uri: {}".format(model_uri))
-    print("model_config: {}".format(model_config))
-    print(model_config)
+    print("model_config->\n{}".format(model_config))
