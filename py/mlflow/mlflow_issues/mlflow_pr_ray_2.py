@@ -7,8 +7,7 @@ from sklearn.metrics import mean_squared_error
 
 
 if __name__ == "__main__":
-    # Enable autologging
-    mlflow.set_tracking_uri("sqlite:///mlruns.db")
+    # Enable auto-logging
     mlflow.sklearn.autolog()
 
     # Load data
@@ -35,14 +34,8 @@ if __name__ == "__main__":
     print("Target names: ", target_names)
     print("run_id: {}".format(run.info.run_id))
 
-    # Registered the auto-logged model.
-    model_uri = "runs:/{}/model".format(run.info.run_id)
-    registered_model_name = "RayMLflowIntegration"
-    mv = mlflow.register_model(model_uri, registered_model_name)
-    print("Name: {}".format(mv.name))
-    print("Version: {}".format(mv.version))
-
     # load the model with runs://URI
+    model_uri = "runs:/{}/model".format(run.info.run_id)
     load_model = mlflow.sklearn.load_model(model_uri)
     res = load_model.predict(val_x)
     print(res)
