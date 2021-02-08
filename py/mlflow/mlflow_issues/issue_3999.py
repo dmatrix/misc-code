@@ -17,10 +17,9 @@ if __name__ == '__main__':
     # This ends this run
     run = mlflow.get_run(run.info.run_id)
     print_run_info(run)
-
+    print("--" * 2)
 
     # Now update the ended run using the CRUD MLFlowClient APIs
     client = MlflowClient()
     client.log_param(run.info.run_id, "m1", 2)
-    print("--" * 2)
     print_run_info(run)
