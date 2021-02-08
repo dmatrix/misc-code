@@ -5,6 +5,7 @@ from mlflow.tracking import MlflowClient
 def print_run_info(r):
     print("run_id: {}".format(r.info.run_id))
     print("lifecycle_stage: {}".format(r.info.lifecycle_stage))
+    print("status: {}".format(run.info.status))
     print("params: {}".format(r.data.params))
 
 
