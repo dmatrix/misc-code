@@ -34,6 +34,7 @@ class Calc(metaclass=MetaClassDebug):
 
 
 if __name__ == '__main__':
+
     calc = Calc()
     print(calc.add(4, 2))
     print(calc.sub(4, 2))

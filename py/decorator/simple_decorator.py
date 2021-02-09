@@ -2,6 +2,7 @@ import warnings
 
 registry = []
 
+
 def deco(func):
     def inner():
         print('running inner()')
