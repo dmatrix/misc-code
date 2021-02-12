@@ -1,6 +1,7 @@
 """
 A factory generic function to create named tuples. Using metaprogramming,
 you can create named numples on the fly, without using dataclasses
+Example from Fluent Python, pg 683 (Class metaprogramming)
 """
 
 
