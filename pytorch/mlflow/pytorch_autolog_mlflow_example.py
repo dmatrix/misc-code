@@ -53,28 +53,34 @@ class LightningMNISTClassifier(pl.LightningModule):
 
         return x
 
+    @staticmethod
+    def add_model_specific_args(parent_parser):
+
+        parser = ArgumentParser(parents=[parent_parser], add_help=False)
+
+        # Add trainer specific arguments
+        parser.add_argument(
+            "--tracking_uri", type=str, default="http://localhost:5000/", help="mlflow tracking uri"
+        )
+        parser.add_argument(
+            "--max_epochs", type=int, default=20, help="number of epochs to run (default: 20)"
+        )
+        parser.add_argument(
+            "--gpus", type=int, default=0, help="Number of gpus - by default runs on CPU"
+        )
+        parser.add_argument(
+            "--accelerator",
+            type=str,
+            default=None,
+            help="accelerator - (default: None)",
+        )
+        return parser
+
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="PyTorch Autolog Mnist Example")
+    parent_parser = ArgumentParser(description="PyTorch Autolog Mnist Example")
 
-    # Add trainer specific arguments
-
-    parser.add_argument(
-        "--tracking_uri", type=str, default="http://localhost:5000/", help="mlflow tracking uri"
-    )
-    parser.add_argument(
-        "--max_epochs", type=int, default=20, help="number of epochs to run (default: 20)"
-    )
-    parser.add_argument(
-        "--gpus", type=int, default=0, help="Number of gpus - by default runs on CPU"
-    )
-    parser.add_argument(
-        "--accelerator",
-        type=str,
-        default=None,
-        help="accelerator - (default: None)",
-    )
-    parser = LightningMNISTClassifier.add_model_specific_args(parent_parser=parser)
+    parser = LightningMNISTClassifier.add_model_specific_args(parent_parser=parent_parser)
 
     mlflow.pytorch.autolog()  # just add this line and your Autologging should work!
 
@@ -82,7 +88,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     dict_args = vars(args)
-    #mlflow.set_tracking_uri(dict_args['tracking_uri'])
+
+    # mlflow.set_tracking_uri(dict_args['tracking_uri'])
 
     model = LightningMNISTClassifier(**dict_args)
     early_stopping = EarlyStopping(monitor="val_loss", mode="min", verbose=True)
@@ -93,7 +100,7 @@ if __name__ == "__main__":
         verbose=True,
         monitor="val_loss",
         mode="min",
-        prefix="",
+        prefix=""
     )
     lr_logger = LearningRateMonitor()
 
@@ -101,7 +108,7 @@ if __name__ == "__main__":
         args,
         callbacks=[lr_logger, early_stopping],
         checkpoint_callback=checkpoint_callback,
-        train_percent_check=0.1,
+        # train_percent_check=0.1,
     )
     trainer.fit(model)
     trainer.test()
