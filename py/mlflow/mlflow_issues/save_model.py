@@ -15,7 +15,7 @@ if __name__ == '__main__':
         mlflow.sklearn.save_model(sk_model, sk_path)
 
     # Register model
-    model_uri = "runs:/{}/model".format(run.info.run_id)
+    model_uri = "runs:/{}/saved_models".format(run.info.run_id)
     registered_model_name = "RegisterSavedModel"
     mv = mlflow.register_model(model_uri, registered_model_name)
     print("Name: {}".format(mv.name))
