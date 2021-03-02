@@ -1,5 +1,6 @@
 from functools import wraps
 
+
 def coroutine(func):
     """Decorator: primes 'func' by advancing to first yield"""
     @wraps(func)
@@ -11,6 +12,7 @@ def coroutine(func):
         next(gen)
         return gen
     return primer
+
 
 @coroutine
 def averager():
@@ -24,6 +26,7 @@ def averager():
         total += term
         count += 1
         average = total / count
+
 
 if __name__ == "__main__":
 
