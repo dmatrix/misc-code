@@ -5,7 +5,7 @@ import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchvision.datasets import MNIST
+from torchvision.datasets import FashionMNIST
 from pytorch_lightning.metrics.functional import accuracy
 
 import mlflow.pytorch
@@ -14,7 +14,7 @@ from mlflow.tracking import MlflowClient
 # Here's the simplest most minimal example with just a training loop
 # (no validation, no testing). It illustrates how you can use MLflow
 # to auto log parameters, metrics, and models.
-# Explore the PyTorch MNIST example for an expansive example with all the
+# Explore the PyTorch FashionMNIST example for an expansive example with all the
 # lightening hooks as the next step.
 
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     mnist_model = MNISTModel()
 
     # Init DataLoader from MNIST Dataset
-    train_ds = MNIST(os.getcwd(), train=True, download=True, transform=transforms.ToTensor())
+    train_ds = FashionMNIST(os.getcwd(), train=True, download=True, transform=transforms.ToTensor())
     train_loader = DataLoader(train_ds, batch_size=32)
 
     # Initialize a trainer
