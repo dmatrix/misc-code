@@ -6,6 +6,10 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig()
+    logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
 
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
     params = {"n_estimators": 3, "random_state": 42}

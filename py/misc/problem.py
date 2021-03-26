@@ -25,7 +25,7 @@ class MeanMaxMinMetrics(object):
 
 
 if __name__ == '__main__':
-   arr = list(range(10))
+   arr = list(range(15))
    metrics = MeanMaxMinMetrics("RMSE")
    for x in arr:
       print(metrics(x))
