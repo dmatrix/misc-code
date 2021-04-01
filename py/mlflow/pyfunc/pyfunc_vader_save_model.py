@@ -68,8 +68,7 @@ if __name__ == "__main__":
 
     # load back the saved model, log and register into the model registry
     loaded_model = mlflow.pyfunc.load_model(model_path)
-    with mlflow.start_run():
-       mlflow.pyfunc.log_model(artifact_path=model_path, python_model=vader_model, registered_model_name=reg_model_name)
+    mlflow.pyfunc.log_model(artifact_path=model_path, python_model=vader_model, registered_model_name=reg_model_name)
 
     # Load the model from the model registry and score
     model_uri = f"models:/{reg_model_name}/1"
