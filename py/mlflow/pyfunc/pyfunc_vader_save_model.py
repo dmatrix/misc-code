@@ -6,6 +6,16 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 #
 # Good and readable paper from the authors of this package
 # http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf
+#
+# This examples shows how a way to take PyFunc saved models and register them as logged models. In particular
+# for ML libraries that MLflow does not support, use custom PyFunc model to wrap the non-supported ML libary model.
+# In this example, we use vaderSentiment as an unsupported MLflow model
+# 1. Wrap the model as a PyFunc Model. That is implement that as a
+#    Custom PyFunc Model
+# 2. Save the model with PyFunc API
+# 3. Load back the saved model
+# 4. Log and register the model in the model registry
+# 5. Load back from the model registry and score the model.
 
 INPUT_TEXTS = [{'text': "This is a bad movie. You don't want to see it! :-)"},
                {'text': "Ricky Gervais is smart, witty, and creative!!!!!! :D"},
@@ -22,6 +32,7 @@ def score_model(model):
         m_input = pd.DataFrame([text])
         scores = loaded_model.predict(m_input)
         print(f"<{text}> -- {str(scores[0])}")
+
 
 class SocialMediaAnalyserModel(mlflow.pyfunc.PythonModel):
 

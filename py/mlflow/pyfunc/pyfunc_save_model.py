@@ -2,6 +2,7 @@ import pandas as pd
 
 import mlflow.pyfunc
 
+
 def assert_and_score_model(model):
    # Use inference to predict output from the model
    model_input = pd.DataFrame([range(10)])
