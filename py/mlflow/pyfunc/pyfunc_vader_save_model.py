@@ -66,8 +66,7 @@ if __name__ == "__main__":
         mlflow.log_param("total_sentiments", len(INPUT_TEXTS))
         mlflow.pyfunc.save_model(path=model_path, python_model=vader_model)
 
-    # load back the saved model, log and register into the model registry
-    loaded_model = mlflow.pyfunc.load_model(model_path)
+    # Use the saved model path to log and register into the model registry
     mlflow.pyfunc.log_model(artifact_path=model_path, python_model=vader_model, registered_model_name=reg_model_name)
 
     # Load the model from the model registry and score
