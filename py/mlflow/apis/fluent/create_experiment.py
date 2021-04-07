@@ -15,7 +15,10 @@ if __name__ == "__main__":
         print("Lifecycle_stage:{}".format(experiment.lifecycle_stage))
 
     # Create experiments. Use names which are unique and case sensitive
-    for e in ["E", "e"]:
-        experiment_id = mlflow.create_experiment(e)
-        experiment = mlflow.get_experiment(experiment_id)
-        print_experiement_info(experiment)
+    for e in ["E/2=","@/F", "-+~.", "", "Jules Experiments"]:
+        if e:
+            experiment_id = mlflow.create_experiment(e)
+            experiment = mlflow.get_experiment(experiment_id)
+            print_experiement_info(experiment)
+        else:
+            print(f"WARNING: {'empty string'} is an invalid experiment name")

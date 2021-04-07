@@ -1,5 +1,7 @@
-import pandas as pd
+from sys import version_info
 
+import pandas as pd
+import cloudpickle
 import mlflow.pyfunc
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -23,6 +25,10 @@ INPUT_TEXTS = [{'text': "This is a bad movie. You don't want to see it! :-)"},
                {'text': "Men shoots himself while trying to steal a dog, OMG"},
                {'text': "Yay!! Another good phone interview. I nailed it!!"},
                {'text': "This is INSANE! I can't believe it. How could you do such a horrible thing?"}]
+
+PYTHON_VERSION = "{major}.{minor}.{micro}".format(major=version_info.major,
+                                                  minor=version_info.minor,
+                                                  micro=version_info.micro)
 
 
 def score_model(model):
@@ -60,14 +66,32 @@ if __name__ == "__main__":
     # Set the tracking URI to use local SQLAlchemy db file and start the run
     # Log MLflow entities and save the model
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
+
+    # Save the conda environment for this model.
+    conda_env = {
+        'channels': ['defaults', 'conda-forge'],
+        'dependencies': [
+            'python={}'.format(PYTHON_VERSION),
+            'pip'],
+        'pip': [
+            'mlflow',
+            'cloudpickle=={}'.format(cloudpickle.__version__),
+            'vaderSentiment==3.3.2'
+        ],
+        'name': 'mlflow-env'
+    }
+    # Save the model
     with mlflow.start_run(run_name="Vader Sentiment Analysis") as run:
         model_path = f"{model_path}-{run.info.run_uuid}"
         mlflow.log_param("algorithm", "VADER")
         mlflow.log_param("total_sentiments", len(INPUT_TEXTS))
-        mlflow.pyfunc.save_model(path=model_path, python_model=vader_model)
+        mlflow.pyfunc.save_model(path=model_path, python_model=vader_model, conda_env=conda_env)
 
     # Use the saved model path to log and register into the model registry
-    mlflow.pyfunc.log_model(artifact_path=model_path, python_model=vader_model, registered_model_name=reg_model_name)
+    mlflow.pyfunc.log_model(artifact_path=model_path,
+                            python_model=vader_model,
+                            registered_model_name=reg_model_name,
+                            conda_env=conda_env)
 
     # Load the model from the model registry and score
     model_uri = f"models:/{reg_model_name}/1"

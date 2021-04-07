@@ -63,8 +63,8 @@ if __name__ == '__main__':
     # log and register the model using MLflow scikit-learn API
     mlflow.set_tracking_uri("sqlite:///mlruns.db")
     reg_model_name = "SklearnLinearRegression"
-    with mlflow.start_run():
-        mlflow.sklearn.log_model(loaded_model, "sk_learn",
+    print("--")
+    mlflow.sklearn.log_model(loaded_model, "sk_learn",
                                  serialization_format="cloudpickle",
                                  registered_model_name=reg_model_name)
 
