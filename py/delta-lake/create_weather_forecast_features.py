@@ -26,7 +26,7 @@ INGEST_DATA_REPO_PATHS = {
 
 }
 if __name__ == "__main__":
-    spark = pyspark.sql.SparkSession.builder.appName("MyApp") \
+    spark = pyspark.sql.SparkSession.builder.appName("DeltaLakeToFeast") \
         .config("spark.jars.packages", "io.delta:delta-core_2.12:0.8.0") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
@@ -56,6 +56,10 @@ if __name__ == "__main__":
         print("Delta Table: {}".format(t))
         print("--")
         df.show(5)
+
+    # How to create Feast features from Delta Lake tables
+    # TBD...
+    ...
 
 
 
