@@ -10,5 +10,5 @@ if __name__ == "__main__":
     data = spark.range(0, 5)
     data.write.format("delta")\
         .mode("overwrite")\
-        .save("./five-delta-table")
+        .save("five-delta-table")
 

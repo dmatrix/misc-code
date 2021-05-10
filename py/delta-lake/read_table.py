@@ -7,5 +7,5 @@ if __name__ == "__main__":
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
         .getOrCreate()
 
-    df = spark.read.format("delta").load("./five-delta-table")
+    df = spark.read.format("delta").load("five-delta-table")
     df.show()

@@ -1,4 +1,4 @@
-project: delta-to-feast
+project: wine_fs
 registry: data/registry.db
 provider: local
 online_store:

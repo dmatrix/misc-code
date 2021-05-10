@@ -2,7 +2,7 @@
 # Code snippet for https://mlflow.org/docs/latest/python_api/mlflow.html#create_experement
 #
 import warnings
-import mlflow
+import mlflow.cli
 
 if __name__ == "__main__":
 
@@ -22,3 +22,5 @@ if __name__ == "__main__":
             print_experiement_info(experiment)
         else:
             print(f"WARNING: {'empty string'} is an invalid experiment name")
+
+    #mlflow.cli.ui()
