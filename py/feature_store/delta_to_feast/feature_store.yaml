@@ -1,0 +1,5 @@
+project: delta_to_feast
+registry: data/registry.db
+provider: local
+online_store:
+    path: data/online_store.db
