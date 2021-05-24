@@ -14,7 +14,7 @@ if __name__ == "__main__":
     wine_data = pd.read_csv(wine_data_path, delimiter=";")
 
     # Convert to Parquet DataFrames
-    wine_data.to_parquet("/Users/julesdamji/examples/py/delta-lake/wine_features.parquet")
+    wine_data.to_parquet("/Users/julesdamji/examples/py/feature_store/data/wine_features.parquet")
 
     # Read the Parquet features back
     df = pd.read_parquet("../delta_to_feast/wine_features.parquet")
