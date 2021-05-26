@@ -1,48 +1,5 @@
 import pyspark
-import pandas as pd
-from datetime import datetime
-
-
-class Utils:
-    @staticmethod
-    def load_csv_data(path: str) -> pd.DataFrame:
-      csv_df = pd.read_csv(path)
-      csv_df.rename(columns={'Unnamed: 0': 'year_month_day'}, inplace=True)
-      return csv_df
-
-    @staticmethod
-    def to_feast_fmt(df: pd.DataFrame) -> pd.DataFrame:
-        df['datetime'] = pd.to_datetime(df['year_month_day']).apply(lambda d: d.replace(tzinfo=None))
-        for _, r in df.iterrows():
-            df['created'] = datetime.now()
-        return df
-
-    @staticmethod
-    def load_parquet_data(path: str) -> pd.DataFrame:
-       parquet_df = pd.read_parquet(path)
-       return parquet_df
-
-    @staticmethod
-    def create_spark_df(s: str, p_df: pd.DataFrame) -> pyspark.sql.DataFrame:
-       return s.createDataFrame(p_df)
-
-    @staticmethod
-    def create_delta_table(data: pyspark.sql.DataFrame, feature_name: str) -> None:
-       data.write.format("delta") \
-           .mode("overwrite") \
-           .save(feature_name)
-
-    @staticmethod
-    def save_data(data: str, fname: str, fmt: str) -> None:
-       data.write\
-           .format(fmt)\
-           .mode("overwrite")\
-           .save(fname)
-
-    @staticmethod
-    def read_data(source: str, fmt: str) -> pyspark.sql.DataFrame:
-       return spark.read.format(fmt).load(t)
-
+from utils import Utils
 
 INGEST_DATA_REPO_PATHS = {
     'weather_data_path': "https://raw.githubusercontent.com/dmatrix/olt-mlflow/master/model_registery/notebooks/data/windfarm_data.csv",
@@ -64,26 +21,24 @@ if __name__ == "__main__":
     weather_data = Utils.load_csv_data(weather_data_path)
     serve_data = Utils.load_csv_data(serve_data_path)
 
-    # convert to Feast Format
+    # Add datetime and created for the offline table for Feast to
+    # ingest from and convert to Feast format
     weather_data = Utils.to_feast_fmt(weather_data)
     serve_data = Utils.to_feast_fmt(serve_data)
 
     # Convert to Spark DataFrames
     spark_weather_data = Utils.create_spark_df(spark, weather_data)
     spark_score_data = Utils.create_spark_df(spark, serve_data)
-    
-    # Add datetime and created_time for the offline table for Feast to
-    # ingest from.
-    
+
     # Create each dataframe as delta table feature set
     table_names = ["data/weather_forecast_features", "data/serve_weather_forecast_features"]
     parquet_files = ["data/weather_forecast_features_parquet", "data/serve_weather_forecast_features_parquet"]
     data_frames = [spark_weather_data, spark_score_data]
     [Utils.create_delta_table(f, t) for t, f in zip(table_names, data_frames)]
 
-    # Read the table features back into a Spark DataFrame
+    # Read the Delta table features back into a Spark DataFrame
     for t in table_names:
-        df = Utils.read_data(t, "delta")
+        df = Utils.read_data(spark, t, "delta")
         print("Delta Table: {}".format(t))
         print("--")
         df.show(5)
@@ -94,7 +49,7 @@ if __name__ == "__main__":
 
     # Read the Parquet features back into a Spark DataFrame
     for t in parquet_files:
-        df = Utils.read_data(t, "parquet")
+        df = Utils.read_data(spark, t, "parquet")
         print("Parquet DataFrame: {}".format(t))
         print("--")
         df.show(5)
