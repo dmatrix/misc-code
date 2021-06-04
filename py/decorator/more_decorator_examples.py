@@ -67,6 +67,7 @@ def decorator_func_logger_2(target_func):
         res = target_func(*args, **kwargs)
         print(f"After calling the target function: {target_func.__name__}, Target function executed {res} times")
 
+        return res
     return wrapper_func
 
 
