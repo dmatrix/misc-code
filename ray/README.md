@@ -23,7 +23,7 @@ python3 -m pip install -r requirements.txt
 conda install ipykernel --name Python3
 ```
 
-jupyter-lab
+```jupyter-lab 01_intro_to_ray.ipyb```
 
 		
 ## Other Recommended Reading
