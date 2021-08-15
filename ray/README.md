@@ -1,14 +1,13 @@
 
 ![](images/ray_header_logo.png)
-# An Introduction to Ray: Getting Started with Concepts and Programming Patterns
+# An Introduction to Ray: Getting Started with Concepts and Parallel Primitives
 
-A hands-on tutorial about using [Ray](https://docs.ray.io/)
-core features and API to implement distributed Python applications.
+A hands-on tutorial about using [Ray](https://docs.ray.io/) core features and API to implement distributed Python applications.
 
-## Getting Started
+## Getting Started 
 
 
-Then use `pip` to install the required dependencies:
+Use `pip` to install the required dependencies:
 ```
 python3 -m pip install -U pip
 python3 -m pip install -r requirements.txt
@@ -22,8 +21,9 @@ conda activate ray
 python3 -m pip install -r requirements.txt
 conda install ipykernel --name Python3
 ```
+Launch the Jupyter
 
-```jupyter-lab 01_intro_to_ray.ipyb```
+```jupyter lab```
 
 		
 ## Other Recommended Reading
