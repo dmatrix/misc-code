@@ -1,6 +1,7 @@
 import ray
 #
-# Create a Stateful Actor service that maintains state
+# Ray converts an instances of a decorated class into stateful actor service.
+# Create a Stateful Actor service for an instance of this actor class that maintains state
 # This service will be deployed onto one the ray worker in
 # the cluster. It maintains the state in the object store shared
 # by other workers

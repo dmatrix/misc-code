@@ -2,6 +2,11 @@ import numpy as np
 from numpy import loadtxt
 import ray
 
+#
+# Ray converts decorated functions into stateless tasks, scheduled
+# anywhere onto a ray worker in the cluster
+#
+
 
 @ray.remote
 def read_array(fn: str) -> np.array:
@@ -17,6 +22,7 @@ def add_array(a1: np.array, a2:np.array) -> np.array:
 if __name__ == '__main__':
 
     # Ray executes immediately and returns a future
+    # Futures in Ray enable parallelism
     obj_ref_arr1 = read_array.remote("input/file_1.txt")
     print(f"array 1: {obj_ref_arr1}")
     obj_ref_arr2 = read_array.remote("input/file_2.txt")
