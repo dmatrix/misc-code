@@ -11,11 +11,11 @@ import ray
 @ray.remote
 def read_array(fn: str) -> np.array:
     arr = loadtxt(fn, comments="#", delimiter=",", unpack=False)
-    return arr
+    return arr.astype('int')
 
 
 @ray.remote
-def add_array(a1: np.array, a2:np.array) -> np.array:
+def add_array(a1: np.array, a2: np.array) -> np.array:
     return np.add(a1, a2)
 
 
