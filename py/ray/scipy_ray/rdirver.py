@@ -19,6 +19,11 @@ def add_array(a1: np.array, a2: np.array) -> np.array:
     return np.add(a1, a2)
 
 
+@ray.remote
+def sum_arr(a1: np.array) -> int:
+    return a1.sum()
+
+
 if __name__ == '__main__':
 
     # Ray executes immediately and returns a future
@@ -34,6 +39,13 @@ if __name__ == '__main__':
     # Fetch the result: this will block if not finished
     result = ray.get(result_obj_ref)
     print(f"Result: add arr1 + arr2: {result}")
+
+    # Add the array elements and get the sum
+    sum_1 = ray.get(sum_arr.remote(obj_ref_arr1))
+    sum_2 = ray.get(sum_arr.remote(obj_ref_arr2))
+
+    print(f'Sum of arr1: {sum_1}')
+    print(f'Sum of arr2: {sum_2}')
 
 
 
