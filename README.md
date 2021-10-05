@@ -29,6 +29,7 @@ in Python 3
  * Delta Lake Offline Store and Feast Example
 
 ### Ray Sample Code
+ * Tutorials & Gettibng Started
 
 __
 
