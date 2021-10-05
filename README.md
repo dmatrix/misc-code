@@ -28,6 +28,8 @@ in Python 3
  * Feast + MLflow
  * Delta Lake Offline Store and Feast Example
 
+### Ray Sample Code
+
 __
 
 Cheers
