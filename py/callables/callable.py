@@ -30,6 +30,7 @@ class BingoCage():
     def __call__(self):
         return self.pick()
 
+
 class Averager():
     """"
     Python class that keeps a running metrics of min, max, and mean.
@@ -66,7 +67,6 @@ if __name__ == "__main__":
     print(bingo.pick())
     [print(bingo()) for n in range(3)]
     print(bingo.items)
-    print(dir(bingo))
     print("=" * 80)
     avg = Averager("DBX")
     print(f"Stats for Stock Symbol {avg.stock_sym}")

@@ -6,12 +6,11 @@ import numpy as np
 import ray
 
 # Explain the behavior of this example
-# 1. Actor invoking a remote task
-# 2. What's the expected behavior: Are the tasks going to be distributed?
-# 3. slow_method will be distributed across cores
+# 1. Actor invoking a local task
+# 2. What's the expected behavior: are tasks being executed serially?
+# 3. Everything is serialized, nothing is distributed
 
 
-@ray.remote
 def slow_method(num: int, dims=10) -> List[numpy.array]:
     dot_products = []
     for _ in range(num):
@@ -26,10 +25,8 @@ def slow_method(num: int, dims=10) -> List[numpy.array]:
 @ray.remote
 class SlowActor(object):
 
-    # Actor method invokes a Ray remote task
     def method(self, num, dims) -> None:
-        res = [slow_method.remote(i, 5_000) for i in range(num)]
-        ray.get(res)
+        return slow_method(num, dims)
 
 
 if __name__ == '__main__':
@@ -37,7 +34,7 @@ if __name__ == '__main__':
     # Create an instance of SlowActor
     start = time.time()
     slow_actor = SlowActor.remote()
-    results = slow_actor.method.remote(5, 5_000)
+    results = [slow_actor.method.remote(i, 5_000) for i in range(5)]
     print(ray.get(results))
     elapsed = time.time() - start
     print(f"Time elapsed: {elapsed:.2f}")

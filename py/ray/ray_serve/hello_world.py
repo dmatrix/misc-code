@@ -1,11 +1,10 @@
 import requests
-
 from ray import serve
 
 
 @serve.deployment
 def hello(request):
-    name  = request.query_params["name"]
+    name = request.query_params["name"]
     return f"Hello {name}!"
 
 

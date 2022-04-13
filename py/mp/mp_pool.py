@@ -13,6 +13,6 @@ def f(x):
 if __name__ == '__main__':
     cores = mp.cpu_count()
     print(f"number of cores: {cores}")
-    with mp.Pool(cores) as p:
+    with mp.Pool() as p:
         results = p.map(f, range(20))
         print(results)

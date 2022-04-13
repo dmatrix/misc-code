@@ -42,7 +42,6 @@ if __name__ == '__main__':
 
     [print_pairs(s, e) for s in START_POINTS for e in END_POINTS]
 
-    time.sleep(10000)
 
 
 

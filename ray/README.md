@@ -16,7 +16,7 @@ python -m ipykernel install
 
 If you use `conda` for installing Python packages:
 ```
-conda create -n ray python=3.9
+conda create -n ray python=3.8
 conda activate ray
 python3 -m pip install -r requirements.txt
 conda install ipykernel --name Python3
