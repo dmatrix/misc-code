@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     # Start Ray serve within Ray on the local host
     serve.start()
-    hello.deploy()
+    hello.deploy(detached=True)
 
     # Query our endpoint over HTTP.
     for n in ["Jules", "Secunder", "Damji"]:
