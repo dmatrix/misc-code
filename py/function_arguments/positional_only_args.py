@@ -48,3 +48,6 @@ if __name__ == '__main__':
 
     print(custom_sum_pos([1, 2, 3], start=10))
     print(custom_sum_pos(iterable=[1, 2, 3], start=10))
+    print(custom_sum_pos([], start=10))
+
+

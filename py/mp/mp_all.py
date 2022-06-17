@@ -3,22 +3,12 @@ Another simple example from medium that illustrates the difference
 between threads and processes, and also how to get around GIL
 https://medium.com/towards-artificial-intelligence/the-why-when-and-how-of-using-python-multi-threading-and-multi-processing-afd1b8a8ecca
 """
-import multiprocessing as mp
 import concurrent.futures as mt
+import multiprocessing as mp
 import time
 import ray
 from ray.util.multiprocessing import Pool
-
-
-def get_cpu_count():
-    return mp.cpu_count()
-
-
-def is_prime(n):
-    for divisor in range(2, int(n ** 0.5) + 1):
-        if n % divisor == 0:
-            return 0
-    return 1
+from defs import is_prime, get_cpu_count
 
 
 if __name__ == '__main__':

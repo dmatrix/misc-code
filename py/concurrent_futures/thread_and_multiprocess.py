@@ -36,7 +36,7 @@ def get_cpu_count():
 if __name__ == '__main__':
 
     # Use sequential access to fetch each urls contents
-    # an I/O bound taskl
+    # an I/O bound task
     results = []
     start = time.time()
     for url in URLs:
