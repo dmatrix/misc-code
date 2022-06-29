@@ -23,5 +23,3 @@ if __name__ == '__main__':
     # Do some work
     work = [train.remote(shard) for shard in it.shards()]
     print(ray.get(work))
-
-    ray.util.iter.
