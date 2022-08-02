@@ -1,3 +1,6 @@
+import random
+import numpy as np
+
 def objective(tensor):
     acc = (tensor ** 2 + 2.5)/10e5
     acc *= random.uniform(0,1)
