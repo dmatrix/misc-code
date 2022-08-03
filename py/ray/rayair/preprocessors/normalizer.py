@@ -4,9 +4,9 @@ from ray.data.preprocessors import Normalizer
 from sklearn import preprocessing
 
 if __name__ == "__main__":
-    items = [{"col-1":i + random.randint(25, 2500), 
-              "col-2": i * 2 + random.randint(25, 2500),
-              "col-3": i * 3 + random.randint(25, 2500)} for i in range(100, 300)]
+    items = [{"col-1": i + random.randint(25, 1500), 
+              "col-2": i + random.randint(50, 2500) * 2,
+              "col-3": i + random.randint(75, 3500) * 3 } for i in range(100, 300)]
     ds = ray.data.from_items(items)
     print(ds.take(5))
     
