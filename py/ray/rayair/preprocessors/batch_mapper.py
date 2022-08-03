@@ -1,7 +1,6 @@
 import ray
 import random
 from ray.data.preprocessors import BatchMapper
-from regex import B
 from data_utils import gen_pandas_data
 
 def increment_column(df, name):
@@ -10,9 +9,8 @@ def increment_column(df, name):
 
 if __name__ == "__main__":
 
-    df = gen_pandas_data()
 
-    ds = ray.data.from_pandas(df)
+    ds = ray.data.from_pandas(gen_pandas_data())
     print(ds.show(5))
 
     batch_preproc = BatchMapper(lambda df: increment_column(df, "amount"))
