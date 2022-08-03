@@ -20,7 +20,7 @@ def generate_data(rows=101):
     items = items = [{"id": i,
           "ssn": None,
           "name": None,
-          "amount": i * 1.5, 
+          "amount": i * 1.5 * 100, 
           "interest": random.randint(1,3) * 1.0,
           "state": random.choice(STATES),
           "marital_status": random.choice(M_STATUS),
