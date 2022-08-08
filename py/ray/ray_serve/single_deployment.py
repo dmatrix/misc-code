@@ -1,4 +1,3 @@
-from turtle import clear
 import ray
 from ray import serve
 import requests
@@ -36,8 +35,7 @@ class Predictor:
 
 if __name__ == "__main__":
 
-    # predictor_1 = Predictor.options(name="rep-1", num_replicas=2).bind("/model/model-1.pkl")
-    predictor_1 = Predictor.options(num_replicas=2).bind("/model/model-1.pkl")
+    predictor_1 = Predictor.options(name="rep-1", num_replicas=2).bind("/model/model-1.pkl")
     serve.run(predictor_1)
 
     print(serve.list_deployments())
@@ -49,10 +47,3 @@ if __name__ == "__main__":
         print(f"prediction(via HTTP) : {prediction}")
 
     print("-----" * 5)
-
-    svr_handle = Predictor.get_handle()
-    # svr_handle = Predictor.get_handle("rep-1")
-    print(svr_handle)
-
-    for _ in range(4):
-        print(f"prediction (via ServeHandle) : {ray.get(svr_handle.predict.remote(random()))}")

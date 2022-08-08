@@ -3,6 +3,7 @@ from ray import serve
 import requests
 import os
 from random import random
+import requests
 import starlette
 from starlette.requests import Request
 #
@@ -11,20 +12,12 @@ from starlette.requests import Request
 # Once deployed, you can access deployment via two methods:
 # ServerHandle API and HTTP
 #
-import os
-from random import random
-
-import requests
-import starlette.requests
-from ray import serve
-
 #
 # A simple example model stored in a pickled format at an accessible path
 # that can be reloaded and deserialized into a model instance. Once deployed
 # in Ray Serve, we can use it for prediction. The prediction is a fake condition,
 # based on threshold of weight greater than 0.5.
 #
-
 
 class Model:
     def __init__(self, path):
@@ -75,15 +68,13 @@ class ServeHandleDemo:
         return await self.run_predictors()
 
 if __name__ == "__main__":
-    predictor_1 = Predictor.options(name="rep-1", num_replicas=2).bind("/model/model-1.pkl")
-    predictor_2 = Predictor.options(name="rep-2", num_replicas=2).bind("/model/model-2.pkl")
 
-    # predictor_1 = Predictor.options(num_replicas=2).bind("/model/model-1.pkl")
-    # predictor_2 = Predictor.options(num_replicas=2).bind("/model/model-2.pkl")
+    predictor_1 = Predictor.options(num_replicas=2).bind("/model/model-1.pkl")
+    predictor_2 = Predictor.options(num_replicas=2).bind("/model/model-2.pkl")
 
 
     # Pass in our deployments as arguments.  At runtime, these are resolved to ServeHandles.
-    serve_handle_demo = ServeHandleDemo.bind(predictor_1, predictor_2)
+    serve_handle_demo = ServeHandleDemo.options(name="demo").bind(predictor_1, predictor_2)
 
     # Start a local single-node Ray cluster and start Ray Serve. These will shut down upon
     # exiting this script. 
@@ -96,13 +87,3 @@ if __name__ == "__main__":
     response =  requests.get(url, params={'data': random()})
     prediction = response.text
     print(f"prediction(HTTP) : {prediction}")
-
-# for _ in range(2):
-#     for d_name in ["rep-1", "rep-2"]:
-#         # Get handle to the each deployment and invoke its method.
-#         # Which replica the request is dispatched to is determined
-#         # by the Router actor.
-#         handle = Predictor.get_handle(d_name)
-#         print(f"handle name : {d_name}")
-#         print(f"prediction  : {ray.get(handle.predict.remote(random()))}")
-#         print("-" * 2)    

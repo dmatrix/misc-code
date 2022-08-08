@@ -20,8 +20,7 @@ class HelloClass:
 if __name__ == '__main__':
     import ray
     
-    # hello_cls = HelloClass.options(name="hello").bind()
-    hello_cls = HelloClass.options().bind()
+    hello_cls = HelloClass.options(name="hello").bind()
     serve.run(hello_cls)
 
     print(serve.list_deployments())
@@ -30,12 +29,5 @@ if __name__ == '__main__':
     for n in ["Jules", "Secunder", "Damji"]:
         response = requests.get(f"http://127.0.0.1:8000/HelloClass?data={n}").text
         print(response)
-
-    print("----" * 5)
-    # svr_handle = HelloClass.get_handle("hello")
-    svr_handle = HelloClass.get_handle()
-    print(svr_handle)
-    for n in ["Jules", "Secunder", "Damji"]:
-        print(ray.get(svr_handle.echo.remote(n)))
 
 
