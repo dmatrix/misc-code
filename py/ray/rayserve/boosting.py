@@ -27,8 +27,7 @@ if __name__ == "__main__":
     model.fit(iris_dataset["data"], iris_dataset["target"])
 
     # Deploy model
-    srv_handle = BoostingModel.bind(model)
-    serve.run(srv_handle)
+    serve.run(BoostingModel.bind(model))
 
     # Query model
     sample_request_input = {"vector": [1.2, 1.0, 1.1, 0.9]}
