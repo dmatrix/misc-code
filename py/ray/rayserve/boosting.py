@@ -5,7 +5,6 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 from ray import serve
 
-
 @serve.deployment(route_prefix="/iris")
 class BoostingModel:
     def __init__(self, model):
