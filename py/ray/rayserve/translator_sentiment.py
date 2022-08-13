@@ -4,6 +4,11 @@ import torch
 import requests
 import ray
 from ray import serve
+import warnings, os
+import logging
+
+warnings.filterwarnings("ignore")
+os.environ["PYTHONWARNINGS"] = "ignore"
 
 TWEETS = ["Tonight on my walk, I got mad because mom wouldn't let me play with this dog. We stared at each other...he never blinked!",
           "Sometimes. when i am bored. i will stare at nothing. and try to convince the human. that there is a ghost",
@@ -42,7 +47,7 @@ class SentimentTweet:
 @serve.deployment(num_replicas=2)
 class TranslateTweet:
     def __init__(self):
-         self.tokenizer = AutoTokenizer.from_pretrained("t5-small")
+         self.tokenizer = AutoTokenizer.from_pretrained("t5-small", model_max_length=512)
          self.model = AutoModelWithLMHead.from_pretrained("t5-small")
          self.use_gpu = 0 if torch.cuda.is_available() else -1
          self.pipeline = TranslationPipeline(self.model, self.tokenizer, task="translation_en_to_fr", device=self.use_gpu)
