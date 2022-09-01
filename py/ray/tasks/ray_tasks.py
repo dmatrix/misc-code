@@ -16,7 +16,7 @@ def print_pairs(a: int, b: int) -> None:
     print((a, b))
 
 
-@ray.remote
+@ray.remote(num_cpus=3)
 def ray_task(a: int, b: int) -> int:
     print("pid={}; ppid={}".format(os.getpid(), os.getppid()))
     return math.sqrt(sum(x * x for x in range(a, b)))
@@ -41,8 +41,7 @@ if __name__ == '__main__':
     print("Time elapsed for non Ray task: {:.2f}".format(time.time() - start))
 
     [print_pairs(s, e) for s in START_POINTS for e in END_POINTS]
-
-    time.sleep(10000)
+    time.sleep(10)
 
 
 
