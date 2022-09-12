@@ -9,7 +9,7 @@ ENV_VARIABLES = {"S3_BUCKET": "/bucket/models",                     # public loc
                 
 my_runtime_env = {"pip": ["scipy", "requests", "statsmodels"],      # Python packages dependencies
                   "env_vars": ENV_VARIABLES,                        # environment variables accessible to Ray tasks
-                  "working_dir": "feature_files"                    # local directory to uploaded and accessble to Ray tasks
+                  "working_dir": "feature_files"                    # local directory uploaded and accessble to Ray tasks
 }
 
 @ray.remote
@@ -35,14 +35,7 @@ def model_predictions(bucket_name, name, use_files=False):
         return -1
 
 if __name__ == "__main__":
-    # run it first without the runtme_env key word argument to ray.init()
-    # the Ray tasks will all return -1 since they can't env variables
-    # are not accessible
-    #ray.init()
 
-    # Uncomment and run with runtime_env set
-    # set the working_dir to "." to push the feature_files and other content
-    # that you might want to access.
     ray.init(runtime_env=my_runtime_env)
     PAIRS = (("S3_BUCKET","LR_MODEL"), ("NO_BUCKET","NO_MODEL"))
     restuls = [model_predictions.remote(b, n, True) for b, n in (PAIRS)]
