@@ -2,19 +2,18 @@ import os
 import ray
 import random
 from models import ModelWrapper, load_pickled_model
-from ray.runtime_env import RuntimeEnv
 
-ENV__VARIABLES = {"S3_BUCKET": "/bucket/models",
-                 "LR_MODEL": "lr_model.pkl",
+ENV_VARIABLES = {"S3_BUCKET": "/bucket/models",                     # public location in the cloud 
+                 "LR_MODEL": "lr_model.pkl",                        # name of the model in the bucket
                   }
                 
-my_runtime_env = {"pip": ["scipy", "requests", "statsmodels"],
-                  "env_vars": ENV__VARIABLES,
-                  "working_dir": "feature_files"
+my_runtime_env = {"pip": ["scipy", "requests", "statsmodels"],      # Python packages dependencies
+                  "env_vars": ENV_VARIABLES,                        # environment variables accessible to Ray tasks
+                  "working_dir": "feature_files"                    # local directory to uploaded and accessble to Ray tasks
 }
 
 @ray.remote
-def do_model_predictions(bucket_name, name, use_files=False):
+def model_predictions(bucket_name, name, use_files=False):
     model_name = os.environ.get(name)
     bucket_location = os.environ.get(bucket_name)
     if model_name and bucket_location:
@@ -46,5 +45,5 @@ if __name__ == "__main__":
     # that you might want to access.
     ray.init(runtime_env=my_runtime_env)
     PAIRS = (("S3_BUCKET","LR_MODEL"), ("NO_BUCKET","NO_MODEL"))
-    restuls = [do_model_predictions.remote(b, n, True) for b, n in (PAIRS)]
+    restuls = [model_predictions.remote(b, n, True) for b, n in (PAIRS)]
     [print(f"predicted added value: {result:.2f}") for result in ray.get(restuls)]
