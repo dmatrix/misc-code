@@ -7,16 +7,11 @@ from ray.runtime_env import RuntimeEnv
 ENV__VARIABLES = {"S3_BUCKET": "/bucket/models",
                  "LR_MODEL": "lr_model.pkl",
                   }
-
-my_runtime_env = RuntimeEnv(
-    conda={
-        "dependencies": 
-        ["pip", {
-            "pip": ["numpy"]
-        }]
-    },
-    env_vars=ENV__VARIABLES
-)
+                
+my_runtime_env = {"pip": ["scipy", "requests", "statsmodels"],
+                  "env_vars": ENV__VARIABLES,
+                  "working_dir": "feature_files"
+}
 
 @ray.remote
 def do_model_predictions(bucket_name, name, use_files=False):

@@ -1,4 +1,7 @@
 import os
+import platform
+import os
+from distutils import util
 import random
 
 import ray
@@ -10,18 +13,25 @@ ENV__VARIABLES = {"S3_BUCKET": "/bucket/models",
                   }
 
 my_runtime_env = RuntimeEnv(
-    conda={
-        "dependencies": 
-        ["pip", {
-            "pip": ["scipy"]
-        }]
-    },
+    # conda={
+    #     "dependencies": 
+    #     ["pip", {
+    #         "pip": ["grpcio", "scipy"]
+    #     }]
+    # },
+    pip=[ "scipy"],
     env_vars=ENV__VARIABLES
 )
 
 @ray.remote
 def func(m_name, bucket_name):
     import scipy
+
+    if 'arm64' in platform.machine() and 'mac' in util.get_platform():
+        os.environ["GRPC_PYTHON_BUILD_SYSTEM_OPENSSL"] = "1"
+        os.environ["GRPC_PYTHON_BUILD_SYSTEM_ZLIB"] = "1"
+    else:
+        pass
 
     model_name = os.environ.get(m_name)
     bucket_location = os.environ.get(bucket_name)
