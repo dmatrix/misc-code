@@ -28,7 +28,7 @@ def func(m_name, bucket_name):
     if model_name and bucket_location:
         model_path = os.path.join(bucket_location, model_name)
         print(f"processing model: {model_name} at  {model_path}")
-        return scipy.np_maxversion()
+        return scipy.__version__
     else:
         return -1
 
@@ -37,4 +37,4 @@ if __name__ == "__main__":
     ray.init(runtime_env=my_runtime_env)
     PAIRS = (("S3_BUCKET","LR_MODEL"), ("NO_BUCKET","NO_MODEL"))
     restuls = [func.remote(b, n) for b, n in (PAIRS)]
-    [print(f"predicted added value: {result:.2f}") for result in ray.get(restuls)]
+    [print(f"predicted added value: {result}") for result in ray.get(restuls)]
