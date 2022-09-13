@@ -14,6 +14,7 @@ my_runtime_env = {"pip": ["scipy", "requests", "statsmodels"],      # Python pac
 
 @ray.remote
 def model_predictions(bucket_name, name, use_files=False):
+    # Access the enviroment variables
     model_name = os.environ.get(name)
     bucket_location = os.environ.get(bucket_name)
     if model_name and bucket_location:
@@ -21,9 +22,12 @@ def model_predictions(bucket_name, name, use_files=False):
         print(f"processing model: {model_name}")
         if use_files:
             m_name, _ = os.path.splitext(model_name)
+            # The function will have its working directory changed to its node's
+            # local copy of "feature_files", so the path are relative
             path = f"{m_name}.csv"
             print(f"processing files: {path}")
             model_path = f"{m_name}.pkl"
+            # unpickle the model and invoke its predict function
             model_wrapper = load_pickled_model(model_path)
             model_wrapper.load_features(path)
             return model_wrapper.predict()
