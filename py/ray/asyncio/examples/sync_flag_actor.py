@@ -31,7 +31,6 @@ class SyncFlagActor:
         with open(path, 'wb') as fp:
             fp.write(image)
         resp.close()
-        time.sleep(random.randint(1, 3))
 
         return flag
         

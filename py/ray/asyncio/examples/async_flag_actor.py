@@ -1,10 +1,11 @@
 import random
 import logging
-import re
 import time
-import requests
 import os
 import asyncio
+import aiohttp
+import aiofiles
+from aiohttp_requests import requests
 
 import ray
 
@@ -12,6 +13,11 @@ FLAGS = ['CN', 'IN', 'US', 'ID', 'BR', 'PK', 'NG', 'BD', 'JP', 'MX', 'PH', 'VN',
 FLAGS_URL = "http://flupy.org/data/flags"
 BASE_DIR = "./downloads"
 
+async def main(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            image = await resp.content
+            return image
 
 @ray.remote
 class AsyncFlagActor:
@@ -27,14 +33,12 @@ class AsyncFlagActor:
     async def do_task(self, flag):
         file_name = f"{flag.lower()}.gif"
         url = f"{FLAGS_URL}/{file_name}"
-        resp = requests.get(url)
-        image = resp.content
-        path = os.path.join(BASE_DIR, file_name)
-        with open(path, 'wb') as fp:
-            fp.write(image)
-        resp.close()
-        await asyncio.sleep(random.randint(1, 3))
-
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                path = os.path.join(BASE_DIR, file_name)
+                f = await aiofiles.open(path, mode='wb')
+                await f.write(await resp.read())
+                await f.close()
         return flag
         
 if __name__ == "__main__":
