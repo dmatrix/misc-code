@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # Train the model
     trainer = TorchTrainer(
         train_loop_per_worker=aut.train_loop_per_worker,
-        train_loop_config={"batch_size": 4, "epochs": 50},
+        train_loop_config={"batch_size": 4, "epochs": 50}, # try batch_size, epochs =(8, 75), (10, 100)
         datasets={"train": train_dataset},
         scaling_config=ScalingConfig(num_workers=4) # try mulitples of 2, 4, 6, 8
     )
