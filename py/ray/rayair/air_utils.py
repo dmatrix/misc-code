@@ -31,13 +31,11 @@ def train_dataset_factory():
 def test_dataset_factory():
     return torchvision.datasets.CIFAR10(root="./data", download=True, train=False, transform=transform)
 
-def convert_to_pandas(batch: Tuple[torch.tensor, int] )-> pd.DataFrame:
-    # convert images numpy array and create large TensorArray 
-    images = TensorArray([image.numpy() for image, _ in batch])
+def convert_batch_to_pandas(batch: Tuple[torch.Tensor, int]) -> pd.DataFrame:
+    images = [image.numpy() for image, _ in batch]
     labels = [label for _, label in batch]
-    df = pd.DataFrame({"image": images, "label": labels})
-
-    return df
+    
+    return pd.DataFrame({"image": images, "label": labels})
 
 class Net(nn.Module):
     def __init__(self):
@@ -105,15 +103,18 @@ def train_loop_per_worker(config):
 
     # get the train dataset shard from the session implicity created for the
     # PyTorch Trainer
-    train_dataset_shard = session.get_dataset_shard("train").iter_torch_batches(batch_size=config["batch_size"])
+    train_dataset_shard = session.get_dataset_shard("train")
     
     # train over epoch
     for epoch in range(config["epochs"]):
         running_loss = 0.0
-        # enumerate over each shard and train the model
-        for i, data in enumerate(train_dataset_shard):
+        train_dataset_batches = train_dataset_shard.iter_torch_batches(
+            batch_size=config["batch_size"],
+        )
+        # enumerate over each batch in the shard and train the model
+        for i, batch in enumerate(train_dataset_batches):
             # get the inputs and labels
-            inputs, labels = data["image"], data["label"]
+            inputs, labels = batch["image"], batch["label"]
 
             # zero the parameter gradients
             optimizer.zero_grad()

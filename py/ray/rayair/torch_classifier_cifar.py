@@ -21,19 +21,19 @@ if __name__ == "__main__":
     train_dataset: ray.data.Dataset = ray.data.read_datasource(SimpleTorchDatasource(), dataset_factory=aut.train_dataset_factory)
     test_dataset: ray.data.Dataset = ray.data.read_datasource(SimpleTorchDatasource(), dataset_factory=aut.test_dataset_factory)
    
-    # Transform data into Pandas DataFrame
+    # Transform data into Pandas DataFrame0
     # convert training and testing datasets into Panda DataFrame
     # Use dataset map_batches to convert 
-    train_dataset = train_dataset.map_batches(aut.convert_to_pandas)
-    test_dataset = test_dataset.map_batches(aut.convert_to_pandas)
+    train_dataset = train_dataset.map_batches(aut.convert_batch_to_pandas)
+    test_dataset = test_dataset.map_batches(aut.convert_batch_to_pandas)
 
     print(train_dataset)
     print(test_dataset)
 
     # Train the model
     trainer = TorchTrainer(
-        train_loop_per_worker=at.train_loop_per_worker,
-        train_loop_config={"batch_size": 2, "epochs": 25},
+        train_loop_per_worker=aut.train_loop_per_worker,
+        train_loop_config={"batch_size": 4, "epochs": 50},
         datasets={"train": train_dataset},
         scaling_config=ScalingConfig(num_workers=4) # try mulitples of 2, 4, 6, 8
     )
@@ -79,9 +79,9 @@ if __name__ == "__main__":
         payload  = {"array": array.tolist()}
         response = requests.post(deployment.url, json=payload)
         result = response.json()[0]
-        idx, cls = at.to_prediction_cls(result)
+        idx, cls = aut.to_prediction_cls(result)
         matched = idx == label
-        print(f"prediction: {idx}; class: {cls}; matched: {matched}")
         aut.img_show(batch[i]["image"])
+        print(f"prediction: {idx}; class: {cls}; matched: {matched}")
     serve.shutdown()
 
