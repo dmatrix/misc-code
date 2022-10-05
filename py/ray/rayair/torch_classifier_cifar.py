@@ -16,12 +16,21 @@ import numpy as np
 import pandas as pd
 import requests
 
+my_runtime_env = {"pip": ["ray[serve]"],      # Python packages dependencies
+                  "working_dir": "."          # local directory uploaded and accessble to Ray tasks
+}
+
 if __name__ == "__main__":
+
+    if ray.is_initialized():
+        ray.shutdown()
+    ray.init(runtime_env=my_runtime_env)
+
     # Fetch data
     train_dataset: ray.data.Dataset = ray.data.read_datasource(SimpleTorchDatasource(), dataset_factory=aut.train_dataset_factory)
     test_dataset: ray.data.Dataset = ray.data.read_datasource(SimpleTorchDatasource(), dataset_factory=aut.test_dataset_factory)
    
-    # Transform data into Pandas DataFrame0
+    # Transform data into Pandas DataFrame
     # convert training and testing datasets into Panda DataFrame
     # Use dataset map_batches to convert 
     train_dataset = train_dataset.map_batches(aut.convert_batch_to_pandas)
@@ -33,9 +42,9 @@ if __name__ == "__main__":
     # Train the model
     trainer = TorchTrainer(
         train_loop_per_worker=aut.train_loop_per_worker,
-        train_loop_config={"batch_size": 4, "epochs": 50}, # try batch_size, epochs =(8, 75), (10, 100)
+        train_loop_config={"batch_size": 3, "epochs": 50}, # try batch_size, epochs =(4, 75), (5, 100)
         datasets={"train": train_dataset},
-        scaling_config=ScalingConfig(num_workers=4) # try mulitples of 2, 4, 6, 8
+        scaling_config=ScalingConfig(num_workers=4) # try mulitples of 4, 6
     )
     result = trainer.fit()
     latest_checkpoint = result.checkpoint
