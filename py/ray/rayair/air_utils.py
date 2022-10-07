@@ -12,7 +12,8 @@ import torchvision.transforms as transforms
 
 from ray import train
 from ray.data.extensions import TensorArray
-from ray.air import session, Checkpoint
+from ray.air import session
+from ray.train.torch import TorchCheckpoint
 from ray.serve.http_adapters import NdArray
 import matplotlib.pyplot as plt
 
@@ -95,27 +96,28 @@ class Net2(nn.Module):
 # Regular PyTorch training loop wrapped with some AIR code
 # The training function will run on each worker
 def train_loop_per_worker(config):
+   
    # prepare the model for distributed training
     model = train.torch.prepare_model(Net())
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(model.parameters(), config.get("lr", 0.001), momentum=0.9)
 
     # get the train dataset shard from the session implicity created for the
     # PyTorch Trainer
     train_dataset_shard = session.get_dataset_shard("train")
     
     # train over epoch
-    for epoch in range(config["epochs"]):
+    print(f"configs to the trainer={config}")
+    for epoch in range(config.get("epochs", 25)):
         running_loss = 0.0
         train_dataset_batches = train_dataset_shard.iter_torch_batches(
-            batch_size=config["batch_size"],
+            batch_size=config.get("batch_size", 2)
         )
         # enumerate over each batch in the shard and train the model
         for i, batch in enumerate(train_dataset_batches):
             # get the inputs and labels
             inputs, labels = batch["image"], batch["label"]
-
             # zero the parameter gradients
             optimizer.zero_grad()
 
@@ -134,9 +136,10 @@ def train_loop_per_worker(config):
                 running_loss = 0.0
 
         # Use the session to report loss and save the state dict
-        session.report({"running_loss":running_loss},
-            checkpoint=Checkpoint.from_dict(dict(model=model.module.state_dict())),
-        )
+        run_loss_metrics = dict(train_loss=running_loss)
+        torch_checkpoint = TorchCheckpoint.from_state_dict(model.module.state_dict())
+        print(f"training_loop_per_work's running_loss dict:{run_loss_metrics}")
+        session.report(metrics=run_loss_metrics, checkpoint=torch_checkpoint)
 
 def convert_logits_to_classes(df):
     best_class = df["predictions"].map(lambda x: x.argmax())
