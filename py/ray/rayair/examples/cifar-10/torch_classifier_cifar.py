@@ -23,8 +23,7 @@ import torch
 
 
 my_runtime_env = {"pip": ["ray[serve]"],      # Python packages dependencies
-                  "working_dir": ".", "excludes":["data", 
-                  "data", "datasets", "preprocessors", "images", "ingest"] # local directory uploaded and accessble to Ray tasks
+                  "working_dir": ".", "excludes":[ "datasets", "images"] # local directory uploaded and accessble to Ray tasks
 }
 
 if __name__ == "__main__":
@@ -60,8 +59,8 @@ if __name__ == "__main__":
         param_space={
             "train_loop_config": {
                 "lr": ray.tune.grid_search([0.001]),
-                "batch_size": ray.tune.grid_search([2, 4]),
-                "epochs": ray.tune.grid_search([25, 50]),
+                "batch_size": ray.tune.grid_search([16, 32]),
+                "epochs": ray.tune.grid_search([75, 100]),
             }
         },
         # specific tune metrics to collect and checkpoint

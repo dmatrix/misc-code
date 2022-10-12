@@ -109,10 +109,10 @@ def train_loop_per_worker(config):
     
     # train over epoch
     print(f"configs to the trainer={config}")
-    for epoch in range(config.get("epochs", 25)):
+    for epoch in range(config.get("epochs", 50)):
         running_loss = 0.0
         train_dataset_batches = train_dataset_shard.iter_torch_batches(
-            batch_size=config.get("batch_size", 2)
+            batch_size=config.get("batch_size", 16)
         )
         # enumerate over each batch in the shard and train the model
         for i, batch in enumerate(train_dataset_batches):
@@ -138,7 +138,6 @@ def train_loop_per_worker(config):
         # Use the session to report loss and save the state dict
         run_loss_metrics = dict(train_loss=running_loss)
         torch_checkpoint = TorchCheckpoint.from_state_dict(model.module.state_dict())
-        print(f"training_loop_per_work's running_loss dict:{run_loss_metrics}")
         session.report(metrics=run_loss_metrics, checkpoint=torch_checkpoint)
 
 def convert_logits_to_classes(df):
