@@ -23,7 +23,7 @@ import torch
 
 
 my_runtime_env = {"pip": ["ray[serve]"],      # Python packages dependencies
-                  "working_dir": ".", "excludes":[ "datasets", "images"] # local directory uploaded and accessble to Ray tasks
+                  "working_dir": ".", "excludes":["images"] # local directory uploaded and accessble to Ray tasks
 }
 
 if __name__ == "__main__":
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     trainer = TorchTrainer(
         train_loop_per_worker=aut.train_loop_per_worker,
         datasets={"train": train_dataset},
-        scaling_config=ScalingConfig(num_workers=2), 
+        scaling_config=ScalingConfig(num_workers=3), 
     )
     # Step 3: Create the Tuner and the relevant tune configuration
     # such as lr, batch_size, epochs. 
@@ -59,14 +59,14 @@ if __name__ == "__main__":
         param_space={
             "train_loop_config": {
                 "lr": ray.tune.grid_search([0.001]),
-                "batch_size": ray.tune.grid_search([16, 32]),
-                "epochs": ray.tune.grid_search([75, 100]),
+                "batch_size": ray.tune.grid_search([32]),
+                "epochs": ray.tune.grid_search([100]),
             }
         },
         # specific tune metrics to collect and checkpoint
         # during trials
         tune_config=TuneConfig(metric="train_loss", mode="min"),
-        run_config=RunConfig(checkpoint_config=CheckpointConfig(num_to_keep=1, 
+        run_config=RunConfig(checkpoint_config=CheckpointConfig(num_to_keep=2, 
                         checkpoint_score_attribute="train_loss", 
                         checkpoint_score_order="min")
         )
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     batch_predictor = BatchPredictor.from_checkpoint(
         checkpoint=best_checkpoint,
         predictor_cls=TorchPredictor,
-        model=aut.Net()
+        model=aut.Net2()
     )
     output: ray.data.Dataset = batch_predictor.predict(
         data=test_dataset, dtype=torch.float, 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     # Deploy to the network for online prediction
     serve.start(detached=True)
     deployment = PredictorDeployment.options(name="cifar-10-deployment")
-    deployment.deploy(TorchPredictor, best_checkpoint, batching_params=False, model=aut.Net(), 
+    deployment.deploy(TorchPredictor, best_checkpoint, batching_params=False, model=aut.Net2(), 
                             http_adapter=aut.json_to_numpy)
 
     # Test online deployment

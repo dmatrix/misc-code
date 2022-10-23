@@ -1,4 +1,5 @@
 
+from tkinter import N
 from typing import Tuple
 import pandas as pd
 import numpy as np
@@ -98,7 +99,7 @@ class Net2(nn.Module):
 def train_loop_per_worker(config):
    
    # prepare the model for distributed training
-    model = train.torch.prepare_model(Net())
+    model = train.torch.prepare_model(Net2())
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), config.get("lr", 0.001), momentum=0.9)
@@ -109,10 +110,10 @@ def train_loop_per_worker(config):
     
     # train over epoch
     print(f"configs to the trainer={config}")
-    for epoch in range(config.get("epochs", 50)):
+    for epoch in range(config.get("epochs", 200)):
         running_loss = 0.0
         train_dataset_batches = train_dataset_shard.iter_torch_batches(
-            batch_size=config.get("batch_size", 16)
+            batch_size=config.get("batch_size", 64)
         )
         # enumerate over each batch in the shard and train the model
         for i, batch in enumerate(train_dataset_batches):
@@ -123,13 +124,15 @@ def train_loop_per_worker(config):
 
             # forward + backward + optimize
             outputs = model(inputs)
+
             # compute the loss
             loss = criterion(outputs, labels)
+
+            # do the backward pass propogation and step for gradient descent
             loss.backward()
             optimizer.step()
 
             # print some statistics along the way
-            # print statistics
             running_loss += loss.item()
             if i % 2000 == 1999:  # print every 2000 mini-batches
                 print(f"[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}")
@@ -166,3 +169,14 @@ def img_show(img):
     # npimg = img.numpy()
     plt.imshow(np.transpose(img, (1, 2, 0)))
     plt.show()
+
+if __name__ == "__main__":
+    import pickle
+
+    # model = Net2()
+    # print(f"Model state dictionary:{model.state_dict()}")
+
+    chkpoint_pkl_path = "/Users/jules/ray_results/TorchTrainer_2022-10-17_16-35-20/TorchTrainer_5ce66_00000_0_batch_size=64,epochs=200,lr=0.0010_2022-10-17_16-35-20/checkpoint_000010/dict_checkpoint.pkl"
+    with open(chkpoint_pkl_path, 'rb') as f:
+        chkt_point_obj = pickle.load(f)
+        print(chkt_point_obj)
