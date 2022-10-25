@@ -56,8 +56,7 @@ if __name__ == "__main__":
 
     # Let's check prediction output size.
     for r in results:
-        print(f"Predictions : {r.head(0)}")
-        print(f"size: {len(r)}")
+        print(f"Predictions dataframe size: {len(r)}")
 
 ray.shutdown()
         
