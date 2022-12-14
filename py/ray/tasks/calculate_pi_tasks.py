@@ -15,13 +15,14 @@ def sampling_task(num_samples: int, task_id: int) -> int:
     num_inside = 0
     for i in range(num_samples):
         x, y = random.uniform(-1, 1), random.uniform(-1, 1)
+        # check if the point is inside the circle
         if math.hypot(x, y) <= 1:
             num_inside += 1
     print(f"Task id: {task_id} | Samples in the circle: {num_inside}")
     return num_inside
 
 @ray.remote
-def sample_task_distribute(sample_size, i) -> List[object]:
+def sample_task_distribute(sample_size, i) -> object:
     return sampling_task(sample_size, i)
 
 def run_serial(sample_size) -> List[int]:
@@ -42,16 +43,16 @@ def calculate_pi(results: List[float]) -> float:
 
 
 if __name__ == "__main__":
-    print("Running serially....")
+    print(f"Running {NUM_SAMPLING_TASKS} tasks serially....")
     start = time.time()
     results = run_serial(NUM_SAMPLES_PER_TASK)
     end = time.time()
     pi = calculate_pi(results)
-    print(f"Estimated value of π is: {pi:4f} | estimated local time: {end-start:.2f} sec")  
+    print(f"Estimated value of π is: {pi:5f} | estimated local time: {end-start:.2f} sec")  
 
     # Run remote
     print("--" * 10)
-    print("Running distributed....")
+    print(f"Running {NUM_SAMPLING_TASKS} tasks distributed....")
     if  ray.is_initialized():
         ray.shutdown()
     ray.init()
@@ -60,4 +61,4 @@ if __name__ == "__main__":
     results = run_disributed(NUM_SAMPLES_PER_TASK)
     end = time.time()
     pi = calculate_pi(results)
-    print(f"Estimated value of π is: {pi:4f} | estimated distributed time: {end-start:.2f} sec")  
+    print(f"Estimated value of π is: {pi:5f} | estimated distributed time: {end-start:.2f} sec")  
