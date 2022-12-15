@@ -36,7 +36,7 @@ def run_disributed(sample_size) -> List[int]:
     return results
 
 
-def calculate_pi(results: List[float]) -> float:
+def calculate_pi(results: List[int]) -> float:
     total_num_inside = sum(results)
     pi = (total_num_inside * 4) / TOTAL_NUM_SAMPLES
     return pi
