@@ -73,7 +73,7 @@ def transform_image(img_name, verbose=True):
     img.thumbnail(THUMB_SIZE)
     after_shape = img.size
     if verbose:
-        print(f"{img_name} was augmented...shape:{img.size}, tensor shape:{tensor.size()}")
+        print(f"{os.path.basename(img_name)} augmented: shape:{img.size}|original image tensor shape:{tensor.size()}")
 
     return before_shape, after_shape
 
@@ -102,8 +102,8 @@ print(f"Running {len(image_list)} tasks serially....")
 start = time.perf_counter()
 serial_results = run_serially(image_list)
 end = time.perf_counter()
-print(f"Serial time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
-print(f"Original and transformed shapes: {serial_results}")
+print(f"\nSerial time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
+# print(f"Original and transformed shapes: {serial_results}")
 
 # Run distributed
 print("--" * 10)
@@ -111,7 +111,7 @@ print(f"Running {len(image_list)} tasks distributed....")
 start = time.perf_counter()
 distributed_results = run_distributed(image_list)
 end = time.perf_counter()
-print(f"Distributed time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
-print(f"Original and transformed shapes: {distributed_results}")
+print(f"\nDistributed time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
+# print(f"Original and transformed shapes: {distributed_results}")
 
 assert serial_results == distributed_results
