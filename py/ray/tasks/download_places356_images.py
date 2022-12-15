@@ -1,6 +1,7 @@
 import requests
 from pathlib import Path
 from PIL import Image, ImageFilter
+from torchvision import transforms as T 
 import time
 import os
 
@@ -44,6 +45,8 @@ def transform_image(img_name, verbose=True):
     before_shape = img.size
     # Make the image blur with specified intensigy
     img = img.filter(ImageFilter.GaussianBlur(radius=20))
+    augmentor = T.TrivialAugmentWide(num_magnitude_bins=31)
+    img = augmentor(img)
     # Resize to a thumbnail
     img.thumbnail(SIZE)
     after_shape = img.size
