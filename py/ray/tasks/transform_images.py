@@ -1,6 +1,8 @@
 import requests
 from pathlib import Path
 from PIL import Image, ImageFilter
+import torch
+import numpy as np
 from torchvision import transforms as T 
 import time
 import os
@@ -25,10 +27,25 @@ URLS = [
      'https://images.pexels.com/photos/911254/pexels-photo-911254.jpeg',
      'https://images.pexels.com/photos/1001990/pexels-photo-1001990.jpeg',
      'https://images.pexels.com/photos/3518623/pexels-photo-3518623.jpeg',
-     'https://images.pexels.com/photos/916044/pexels-photo-916044.jpeg'
- ]
+     'https://images.pexels.com/photos/916044/pexels-photo-916044.jpeg',
+     'https://images.pexels.com/photos/2253879/pexels-photo-2253879.jpeg',
+     'https://images.pexels.com/photos/3316918/pexels-photo-3316918.jpeg',
+     'https://images.pexels.com/photos/942317/pexels-photo-942317.jpeg',
+     'https://images.pexels.com/photos/1090638/pexels-photo-1090638.jpeg',
+     'https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg',
+     'https://images.pexels.com/photos/434645/pexels-photo-434645.jpeg',
+     'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg',
+     'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg',
+     'https://images.pexels.com/photos/271816/pexels-photo-271816.jpeg',
+     'https://images.pexels.com/photos/421927/pexels-photo-421927.jpeg',
+     'https://images.pexels.com/photos/302428/pexels-photo-302428.jpeg',
+     'https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg',
+     'https://images.pexels.com/photos/3685175/pexels-photo-3685175.jpeg',
+     'https://images.pexels.com/photos/2885578/pexels-photo-2885578.jpeg',
+     'https://images.pexels.com/photos/3530116/pexels-photo-3530116.jpeg?'
+]
 
-SIZE = (512, 512)
+THUMB_SIZE = (64, 64)
 DATA_DIR = Path(os.getcwd() + "/task_images")
 
 def download_images(url, data_dir, verbose=True):
@@ -43,15 +60,20 @@ def download_images(url, data_dir, verbose=True):
 def transform_image(img_name, verbose=True):
     img = Image.open(img_name)
     before_shape = img.size
+
     # Make the image blur with specified intensigy
     img = img.filter(ImageFilter.GaussianBlur(radius=20))
     augmentor = T.TrivialAugmentWide(num_magnitude_bins=31)
     img = augmentor(img)
+
+    # Convert to tensor
+    tensor = torch.tensor(np.asarray(img))
+
     # Resize to a thumbnail
-    img.thumbnail(SIZE)
+    img.thumbnail(THUMB_SIZE)
     after_shape = img.size
     if verbose:
-        print(f'{img_name} was augmented...')
+        print(f"{img_name} was augmented...shape:{img.size}, tensor shape:{tensor.size()}")
 
     return before_shape, after_shape
 
