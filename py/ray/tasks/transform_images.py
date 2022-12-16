@@ -146,6 +146,19 @@ def plot_times(batches, s_lst, d_lst):
     plt.xlabel('Number of Batches of Images', fontsize=12)
     plt.grid(False)
     plt.show()
+
+def display_random_images(image_list, n=3):
+    random_samples_idx = random.sample(range(len(image_list)), k=n)
+    plt.figure(figsize=(16, 8))
+    for i, targ_sample in enumerate(random_samples_idx):
+        plt.subplot(1, n, i+1)
+        img = Image.open(image_list[targ_sample])
+        img_as_array = np.asarray(img)
+        plt.imshow(img_as_array)
+        title = f"\nshape: {img.size}"
+        plt.axis("off")
+        plt.title(title)
+    plt.show()
     
 
 def download_images(url, data_dir, verbose=True):
@@ -208,40 +221,42 @@ if __name__ == "__main__":
         for url in tqdm.tqdm(URLS):
             download_images(url, DATA_DIR)
 
-image_list = list(DATA_DIR.glob("*.jpg"))
+    image_list = list(DATA_DIR.glob("*.jpg"))
 
-for idx in BATCHES:
-    image_batch_list = image_list[:idx]
-    print(f"\nRunning {len(image_batch_list)} tasks serially....")
-    start = time.perf_counter()
-    serial_results = run_serially(image_batch_list)
-    end = time.perf_counter()
-    elapsed = end - start
-    SERIAL_BATCH_TIMES.append((idx, round(elapsed, 2)))
-    print(f"Serial transformations/computations of {len(image_batch_list)} images: {elapsed:.2f} sec")
-    # print(f"Original and transformed shapes: {serial_results}")
+    display_random_images(image_list, n=5)
 
-# Run distributed
-print("--" * 10)
-if ray.is_initialized():
-    ray.shutdown()
-ray.init()
+    for idx in BATCHES:
+        image_batch_list = image_list[:idx]
+        print(f"\nRunning {len(image_batch_list)} tasks serially....")
+        start = time.perf_counter()
+        serial_results = run_serially(image_batch_list)
+        end = time.perf_counter()
+        elapsed = end - start
+        SERIAL_BATCH_TIMES.append((idx, round(elapsed, 2)))
+        print(f"Serial transformations/computations of {len(image_batch_list)} images: {elapsed:.2f} sec")
+        # print(f"Original and transformed shapes: {serial_results}")
 
-# Put images in object store
-object_refs_list = [ray.put(img) for img in image_list]
+    # Run distributed
+    print("--" * 10)
+    if ray.is_initialized():
+        ray.shutdown()
+    ray.init()
 
-# Iterate over batches of 10
-for idx in BATCHES:
-    image_obj_ref_batch_list = object_refs_list[:idx]
-    print(f"\nRunning {len(image_obj_ref_batch_list)} tasks distributed....")
-    start = time.perf_counter()
-    distributed_results = run_distributed(image_obj_ref_batch_list)
-    end = time.perf_counter()
-    elapsed = end - start
-    DISTRIBUTED_BATCH_TIMES.append((idx, round(elapsed, 2)))
-    print(f"Distributed transformations/computations of {len(image_obj_ref_batch_list)} images: {elapsed:.2f} sec")
-    # print(f"Original and transformed shapes: {distributed_results}")
-print(f"Serial times & batches     : {SERIAL_BATCH_TIMES}")
-print(f"Distributed times & batches: {DISTRIBUTED_BATCH_TIMES}")
+    # Put images in object store
+    object_refs_list = [ray.put(img) for img in image_list]
 
-plot_times(BATCHES, SERIAL_BATCH_TIMES, DISTRIBUTED_BATCH_TIMES)
+    # Iterate over batches of 10
+    for idx in BATCHES:
+        image_obj_ref_batch_list = object_refs_list[:idx]
+        print(f"\nRunning {len(image_obj_ref_batch_list)} tasks distributed....")
+        start = time.perf_counter()
+        distributed_results = run_distributed(image_obj_ref_batch_list)
+        end = time.perf_counter()
+        elapsed = end - start
+        DISTRIBUTED_BATCH_TIMES.append((idx, round(elapsed, 2)))
+        print(f"Distributed transformations/computations of {len(image_obj_ref_batch_list)} images: {elapsed:.2f} sec")
+        # print(f"Original and transformed shapes: {distributed_results}")
+    print(f"Serial times & batches     : {SERIAL_BATCH_TIMES}")
+    print(f"Distributed times & batches: {DISTRIBUTED_BATCH_TIMES}")
+
+    plot_times(BATCHES, SERIAL_BATCH_TIMES, DISTRIBUTED_BATCH_TIMES)
