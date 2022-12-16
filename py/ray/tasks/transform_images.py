@@ -1,12 +1,15 @@
+import os
 import requests
 import random
+import time
+import tqdm
 from pathlib import Path
 from PIL import Image, ImageFilter
 import torch
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
 from torchvision import transforms as T 
-import time
-import os
 
 import ray
 #
@@ -63,11 +66,87 @@ URLS = [
      'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg',
      'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg',
      'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg',
-     'https://images.pexels.com/photos/3586966/pexels-photo-3586966.jpeg'
+     'https://images.pexels.com/photos/3586966/pexels-photo-3586966.jpeg',
+     'https://images.pexels.com/photos/313782/pexels-photo-313782.jpeg',
+     'https://www.nasa.gov/centers/stennis/images/content/702979main_SSC-2012-01487.jpg',
+     'https://live.staticflickr.com/2443/3984080835_71b0426844_b.jpg',
+     'https://www.aero.jaxa.jp/eng/facilities/aeroengine/images/th_aeroengine05.jpg',
+     'https://images.pexels.com/photos/370717/pexels-photo-370717.jpeg',
+     'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg',
+     'https://images.pexels.com/photos/11374974/pexels-photo-11374974.jpeg',
+     'https://images.pexels.com/photos/408951/pexels-photo-408951.jpeg',
+     'https://images.pexels.com/photos/3889870/pexels-photo-3889870.jpeg',
+     'https://images.pexels.com/photos/1774389/pexels-photo-1774389.jpeg',
+     'https://images.pexels.com/photos/3889854/pexels-photo-3889854.jpeg',
+     'https://images.pexels.com/photos/2196578/pexels-photo-2196578.jpeg',
+     'https://images.pexels.com/photos/2885320/pexels-photo-2885320.jpeg',
+     'https://images.pexels.com/photos/7189303/pexels-photo-7189303.jpeg',
+     'https://images.pexels.com/photos/9697598/pexels-photo-9697598.jpeg',
+     'https://images.pexels.com/photos/6431298/pexels-photo-6431298.jpeg',
+     'https://images.pexels.com/photos/7131157/pexels-photo-7131157.jpeg',
+     'https://images.pexels.com/photos/4840134/pexels-photo-4840134.jpeg',
+     'https://images.pexels.com/photos/5359974/pexels-photo-5359974.jpeg',
+     'https://images.pexels.com/photos/3889854/pexels-photo-3889854.jpeg',
+     'https://images.pexels.com/photos/1753272/pexels-photo-1753272.jpeg',
+     'https://images.pexels.com/photos/2328863/pexels-photo-2328863.jpeg',
+     'https://images.pexels.com/photos/6102161/pexels-photo-6102161.jpeg',
+     'https://images.pexels.com/photos/6101986/pexels-photo-6101986.jpeg',
+     'https://images.pexels.com/photos/3334492/pexels-photo-3334492.jpeg',
+     'https://images.pexels.com/photos/5708915/pexels-photo-5708915.jpeg',
+     'https://images.pexels.com/photos/5708913/pexels-photo-5708913.jpeg',
+     'https://images.pexels.com/photos/6102436/pexels-photo-6102436.jpeg',
+     'https://images.pexels.com/photos/6102144/pexels-photo-6102144.jpeg',
+     'https://images.pexels.com/photos/6102003/pexels-photo-6102003.jpeg',
+     'https://images.pexels.com/photos/6194087/pexels-photo-6194087.jpeg',
+     'https://images.pexels.com/photos/5847900/pexels-photo-5847900.jpeg',
+     'https://images.pexels.com/photos/1671479/pexels-photo-1671479.jpeg',
+     'https://images.pexels.com/photos/3335507/pexels-photo-3335507.jpeg',
+     'https://images.pexels.com/photos/6102522/pexels-photo-6102522.jpeg',
+     'https://images.pexels.com/photos/6211095/pexels-photo-6211095.jpeg',
+     'https://images.pexels.com/photos/720347/pexels-photo-720347.jpeg',
+     'https://images.pexels.com/photos/3516015/pexels-photo-3516015.jpeg',
+     'https://images.pexels.com/photos/3325717/pexels-photo-3325717.jpeg',
+     'https://images.pexels.com/photos/849835/pexels-photo-849835.jpeg',
+     'https://images.pexels.com/photos/302743/pexels-photo-302743.jpeg',
+     'https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg',
+     'https://images.pexels.com/photos/259620/pexels-photo-259620.jpeg',
+     'https://images.pexels.com/photos/300857/pexels-photo-300857.jpeg',
+     'https://images.pexels.com/photos/789380/pexels-photo-789380.jpeg',
+     'https://images.pexels.com/photos/735987/pexels-photo-735987.jpeg',
+     'https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg',
+     'https://images.pexels.com/photos/300857/pexels-photo-300857.jpeg',
+     'https://images.pexels.com/photos/760971/pexels-photo-760971.jpeg',
+     'https://images.pexels.com/photos/789382/pexels-photo-789382.jpeg',
+     'https://images.pexels.com/photos/33041/antelope-canyon-lower-canyon-arizona.jpg',
+     'https://images.pexels.com/photos/1004665/pexels-photo-1004665.jpeg'
 ]
 
 THUMB_SIZE = (64, 64)
 DATA_DIR = Path(os.getcwd() + "/task_images")
+BATCHES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+SERIAL_BATCH_TIMES = []
+DISTRIBUTED_BATCH_TIMES = []
+
+
+def extract_times(lst):
+    times = [t[1] for t in lst]
+    return times
+
+def plot_times(batches, s_lst, d_lst):
+
+    s_times = extract_times(s_lst)
+    d_times = extract_times(d_lst)
+    data = {'batches': batches,
+            'serial' : s_times,
+            'distributed': d_times}
+
+    df = pd.DataFrame(data)
+    df.plot(x="batches", y=["serial", "distributed"], kind="bar")
+    plt.ylabel('Times in sec', fontsize=12)
+    plt.xlabel('Number of Batches of Images', fontsize=12)
+    plt.grid(False)
+    plt.show()
+    
 
 def download_images(url, data_dir, verbose=True):
     img_data = requests.get(url).content
@@ -75,8 +154,6 @@ def download_images(url, data_dir, verbose=True):
     img_name = f"{data_dir}/{img_name}.jpg"
     with open(img_name, 'wb+') as f:
         f.write(img_data)
-        if verbose:
-            print(f"downloading image to {img_name}")
 
 def transform_image(img_name, verbose=False):
     img = Image.open(img_name)
@@ -116,31 +193,36 @@ def augment_image_distributed(image):
 
 
 def run_serially(img_list):
-    transform_results = [transform_image(image) for image in img_list]
+    transform_results = [transform_image(image) for image in tqdm.tqdm(img_list)]
     return transform_results
 
 
 def run_distributed(img_list):
-    return ray.get([augment_image_distributed.remote(img) for img in img_list])
+    return ray.get([augment_image_distributed.remote(img) for img in tqdm.tqdm(img_list)])
+
 
 if __name__ == "__main__":
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
-        for url in URLS:
+        print(f"downloading images ...")
+        for url in tqdm.tqdm(URLS):
             download_images(url, DATA_DIR)
 
 image_list = list(DATA_DIR.glob("*.jpg"))
 
-print(f"Running {len(image_list)} tasks serially....")
-start = time.perf_counter()
-serial_results = run_serially(image_list)
-end = time.perf_counter()
-print(f"\nSerial transformations/computations of {len(image_list)} images: {end - start:.2f} sec")
-# print(f"Original and transformed shapes: {serial_results}")
+for idx in BATCHES:
+    image_batch_list = image_list[:idx]
+    print(f"\nRunning {len(image_batch_list)} tasks serially....")
+    start = time.perf_counter()
+    serial_results = run_serially(image_batch_list)
+    end = time.perf_counter()
+    elapsed = end - start
+    SERIAL_BATCH_TIMES.append((idx, round(elapsed, 2)))
+    print(f"Serial transformations/computations of {len(image_batch_list)} images: {elapsed:.2f} sec")
+    # print(f"Original and transformed shapes: {serial_results}")
 
 # Run distributed
 print("--" * 10)
-print(f"Running {len(image_list)} tasks distributed....")
 if ray.is_initialized():
     ray.shutdown()
 ray.init()
@@ -148,10 +230,18 @@ ray.init()
 # Put images in object store
 object_refs_list = [ray.put(img) for img in image_list]
 
-start = time.perf_counter()
-distributed_results = run_distributed(object_refs_list)
-end = time.perf_counter()
-print(f"\nDistributed transformations/computations of {len(image_list)} images: {end - start:.2f} sec")
-# print(f"Original and transformed shapes: {distributed_results}")
+# Iterate over batches of 10
+for idx in BATCHES:
+    image_obj_ref_batch_list = object_refs_list[:idx]
+    print(f"\nRunning {len(image_obj_ref_batch_list)} tasks distributed....")
+    start = time.perf_counter()
+    distributed_results = run_distributed(image_obj_ref_batch_list)
+    end = time.perf_counter()
+    elapsed = end - start
+    DISTRIBUTED_BATCH_TIMES.append((idx, round(elapsed, 2)))
+    print(f"Distributed transformations/computations of {len(image_obj_ref_batch_list)} images: {elapsed:.2f} sec")
+    # print(f"Original and transformed shapes: {distributed_results}")
+print(f"Serial times & batches     : {SERIAL_BATCH_TIMES}")
+print(f"Distributed times & batches: {DISTRIBUTED_BATCH_TIMES}")
 
-assert serial_results == distributed_results
+plot_times(BATCHES, SERIAL_BATCH_TIMES, DISTRIBUTED_BATCH_TIMES)
