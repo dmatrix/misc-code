@@ -1,4 +1,5 @@
 import requests
+import random
 from pathlib import Path
 from PIL import Image, ImageFilter
 import torch
@@ -42,7 +43,27 @@ URLS = [
      'https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg',
      'https://images.pexels.com/photos/3685175/pexels-photo-3685175.jpeg',
      'https://images.pexels.com/photos/2885578/pexels-photo-2885578.jpeg',
-     'https://images.pexels.com/photos/3530116/pexels-photo-3530116.jpeg?'
+     'https://images.pexels.com/photos/3530116/pexels-photo-3530116.jpeg',
+     'https://images.pexels.com/photos/9668911/pexels-photo-9668911.jpeg',
+     'https://images.pexels.com/photos/14704971/pexels-photo-14704971.jpeg',
+     'https://images.pexels.com/photos/13865510/pexels-photo-13865510.jpeg',
+     'https://images.pexels.com/photos/6607387/pexels-photo-6607387.jpeg',
+     'https://images.pexels.com/photos/13716813/pexels-photo-13716813.jpeg',
+     'https://images.pexels.com/photos/14690500/pexels-photo-14690500.jpeg',
+     'https://images.pexels.com/photos/14690501/pexels-photo-14690501.jpeg',
+     'https://images.pexels.com/photos/14615366/pexels-photo-14615366.jpeg',
+     'https://images.pexels.com/photos/14344696/pexels-photo-14344696.jpeg',
+     'https://images.pexels.com/photos/14661919/pexels-photo-14661919.jpeg',
+     'https://images.pexels.com/photos/5977791/pexels-photo-5977791.jpeg',
+     'https://images.pexels.com/photos/5211747/pexels-photo-5211747.jpeg',
+     'https://images.pexels.com/photos/5995657/pexels-photo-5995657.jpeg',
+     'https://images.pexels.com/photos/8574183/pexels-photo-8574183.jpeg',
+     'https://images.pexels.com/photos/14690503/pexels-photo-14690503.jpeg',
+     'https://images.pexels.com/photos/2100941/pexels-photo-2100941.jpeg',
+     'https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg',
+     'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg',
+     'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg',
+     'https://images.pexels.com/photos/3586966/pexels-photo-3586966.jpeg'
 ]
 
 THUMB_SIZE = (64, 64)
@@ -62,18 +83,26 @@ def transform_image(img_name, verbose=True):
     before_shape = img.size
 
     # Make the image blur with specified intensigy
+    # Use torchvision transformation to augment the image
     img = img.filter(ImageFilter.GaussianBlur(radius=20))
     augmentor = T.TrivialAugmentWide(num_magnitude_bins=31)
     img = augmentor(img)
 
-    # Convert to tensor
+    # Convert image to tensor and transpose
     tensor = torch.tensor(np.asarray(img))
+    t_tensor = torch.transpose(tensor, 0, 1)
+
+    # compute intensive operations on tensors
+    tensor.pow(3).sum()
+    t_tensor.pow(3).sum()
+    torch.mul(tensor, random.randint(2, 10))
+    torch.mul(t_tensor, random.randint(2, 10))
 
     # Resize to a thumbnail
     img.thumbnail(THUMB_SIZE)
     after_shape = img.size
     if verbose:
-        print(f"{os.path.basename(img_name)} augmented: shape:{img.size}|original image tensor shape:{tensor.size()}")
+        print(f"{os.path.basename(img_name)} augmented: shape:{img.size}| image tensor shape:{tensor.size()} transpose shape:{t_tensor.size()}")
 
     return before_shape, after_shape
 
@@ -102,7 +131,7 @@ print(f"Running {len(image_list)} tasks serially....")
 start = time.perf_counter()
 serial_results = run_serially(image_list)
 end = time.perf_counter()
-print(f"\nSerial time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
+print(f"\nSerial transformations of {len(image_list)} images: {end - start:.2f} sec")
 # print(f"Original and transformed shapes: {serial_results}")
 
 # Run distributed
@@ -111,7 +140,7 @@ print(f"Running {len(image_list)} tasks distributed....")
 start = time.perf_counter()
 distributed_results = run_distributed(image_list)
 end = time.perf_counter()
-print(f"\nDistributed time to blur and resize {len(image_list)} images: {end - start:.2f} sec")
+print(f"\nDistributed transformations of {len(image_list)} images: {end - start:.2f} sec")
 # print(f"Original and transformed shapes: {distributed_results}")
 
 assert serial_results == distributed_results
