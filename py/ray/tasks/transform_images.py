@@ -78,7 +78,7 @@ def download_images(url, data_dir, verbose=True):
         if verbose:
             print(f"downloading image to {img_name}")
 
-def transform_image(img_name, verbose=True):
+def transform_image(img_name, verbose=False):
     img = Image.open(img_name)
     before_shape = img.size
 
@@ -93,12 +93,14 @@ def transform_image(img_name, verbose=True):
     t_tensor = torch.transpose(tensor, 0, 1)
 
     # compute intensive operations on tensors
-    tensor.pow(3).sum()
-    t_tensor.pow(3).sum()
-    torch.mul(tensor, random.randint(2, 10))
-    torch.mul(t_tensor, random.randint(2, 10))
-    torch.mul(tensor, tensor)
-    torch.mul(t_tensor, t_tensor)
+    random.seed(42)
+    for _ in range(3):
+        tensor.pow(3).sum()
+        t_tensor.pow(3).sum()
+        torch.mul(tensor, random.randint(2, 10))
+        torch.mul(t_tensor, random.randint(2, 10))
+        torch.mul(tensor, tensor)
+        torch.mul(t_tensor, t_tensor)
 
     # Resize to a thumbnail
     img.thumbnail(THUMB_SIZE)
@@ -113,13 +115,13 @@ def augment_image_distributed(image):
     return transform_image(image)
 
 
-def run_serially(image_list):
-    transform_results = [transform_image(image) for image in image_list]
+def run_serially(img_list):
+    transform_results = [transform_image(image) for image in img_list]
     return transform_results
 
 
-def run_distributed(image_list):
-    return ray.get([augment_image_distributed.remote(img) for img in image_list])
+def run_distributed(img_list):
+    return ray.get([augment_image_distributed.remote(img) for img in img_list])
 
 if __name__ == "__main__":
     if not os.path.exists(DATA_DIR):
@@ -133,16 +135,23 @@ print(f"Running {len(image_list)} tasks serially....")
 start = time.perf_counter()
 serial_results = run_serially(image_list)
 end = time.perf_counter()
-print(f"\nSerial transformations of {len(image_list)} images: {end - start:.2f} sec")
+print(f"\nSerial transformations/computations of {len(image_list)} images: {end - start:.2f} sec")
 # print(f"Original and transformed shapes: {serial_results}")
 
 # Run distributed
 print("--" * 10)
 print(f"Running {len(image_list)} tasks distributed....")
+if ray.is_initialized():
+    ray.shutdown()
+ray.init()
+
+# Put images in object store
+object_refs_list = [ray.put(img) for img in image_list]
+
 start = time.perf_counter()
-distributed_results = run_distributed(image_list)
+distributed_results = run_distributed(object_refs_list)
 end = time.perf_counter()
-print(f"\nDistributed transformations of {len(image_list)} images: {end - start:.2f} sec")
+print(f"\nDistributed transformations/computations of {len(image_list)} images: {end - start:.2f} sec")
 # print(f"Original and transformed shapes: {distributed_results}")
 
 assert serial_results == distributed_results
