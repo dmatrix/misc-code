@@ -97,6 +97,8 @@ def transform_image(img_name, verbose=True):
     t_tensor.pow(3).sum()
     torch.mul(tensor, random.randint(2, 10))
     torch.mul(t_tensor, random.randint(2, 10))
+    torch.mul(tensor, tensor)
+    torch.mul(t_tensor, t_tensor)
 
     # Resize to a thumbnail
     img.thumbnail(THUMB_SIZE)
