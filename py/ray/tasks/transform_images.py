@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
 from torchvision import transforms as T 
+from torch import nn
 
 import ray
 #
@@ -161,7 +162,7 @@ def display_random_images(image_list, n=3):
     plt.show()
     
 
-def download_images(url, data_dir, verbose=True):
+def download_images(url, data_dir):
     img_data = requests.get(url).content
     img_name = url.split("/")[4]
     img_name = f"{data_dir}/{img_name}.jpg"
@@ -191,6 +192,7 @@ def transform_image(img_name, verbose=False):
         torch.mul(t_tensor, random.randint(2, 10))
         torch.mul(tensor, tensor)
         torch.mul(t_tensor, t_tensor)
+        y = nn.ReLU(torch.mul(t_tensor, t_tensor))
 
     # Resize to a thumbnail
     img.thumbnail(THUMB_SIZE)
