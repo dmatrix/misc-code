@@ -2,6 +2,8 @@ import ray
 from random_forest_regressor import RFRActor
 from decsion_tree import DTActor
 from xgboost_regressor import XGBoostActor
+from operator import itemgetter
+from pprint import pprint
 
 DECISION_TREE_CONFIGS = {"max_depth": 15,
                          "name": "decision_tree"}
@@ -54,12 +56,14 @@ if __name__ == "__main__":
     # Wait for all models to finish
     while True:
         for value in values:
-            states.append(value[0])
+            states.append(value["state"])
         result = all('DONE' == e for e in states)
         if result:
             break
 
-    print(f"\n Results from three training models: {values}")
+    sorted_by_mse = sorted(values, key=itemgetter('mse'))
+    print(f"\nResults from three training models sorted by MSE ascending order:")
+    pprint(sorted_by_mse)
 
 
 
