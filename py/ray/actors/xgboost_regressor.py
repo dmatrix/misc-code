@@ -19,6 +19,10 @@ class XGBoostActor(ActorCls):
         self.lr = configs["lr"]
     
     def train_and_evaluate_model(self) -> Dict[Any, Any]:
+        """
+        Implement the decision tree regressor with the appropriate
+        parameters
+        """
 
         self._prepare_data_and_model()
         self.model = xgb.XGBRegressor(objective='reg:squarederror',
@@ -56,6 +60,7 @@ if __name__ == "__main__":
                "name": "xgboost"}
     model_cls = XGBoostActor.remote(configs)
     values = ray.get(model_cls.train_and_evaluate_model.remote())
+    print("\nThe returned values from the training:")
     pprint(values)
     
 

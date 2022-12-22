@@ -13,6 +13,10 @@ class DTActor(ActorCls):
        self.max_depth = configs["max_depth"]
 
     def train_and_evaluate_model(self) -> Dict[Any, Any]:
+        """
+        Implement the decision tree regressor with the appropriate
+        parameters
+        """
 
         self._prepare_data_and_model()
         self.model = DecisionTreeRegressor(max_depth=self.max_depth, random_state=42)
@@ -26,7 +30,9 @@ class DTActor(ActorCls):
         self.state = STATES[2]
 
         end_time = time.time()
+        
         print(f"End training model {self.name} with max_depth tree: {self.max_depth} took: {end_time - start_time:.2f} seconds")
+
         return { "state": self.get_state(), 
                  "name": self.get_name(),
                  "max_depth": self.max_depth, 
@@ -34,7 +40,7 @@ class DTActor(ActorCls):
                  "time": round(end_time - start_time, 2)}
 
 if __name__ == "__main__":
-    configs = {"max_depth": 15, "name": "decision_tree"}
+    configs = {"max_depth": 10, "name": "decision_tree"}
     model_cls = DTActor.remote(configs)
     values = ray.get(model_cls.train_and_evaluate_model.remote())
     pprint(values)
