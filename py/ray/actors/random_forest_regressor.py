@@ -13,6 +13,10 @@ class RFRActor(ActorCls):
         self.estimators = configs["n_estimators"]
 
     def train_and_evaluate_model(self) -> Dict[Any, Any]:
+        """
+        Implement the Random forest regressor with the appropriate
+        parameters
+        """
 
         self._prepare_data_and_model()
         self.model = RandomForestRegressor(n_estimators=self.estimators, random_state=42)
@@ -40,4 +44,5 @@ if __name__ == "__main__":
     configs = {"n_estimators": 150, "name": "random_forest"}
     model_cls = RFRActor.remote(configs)
     values = ray.get(model_cls.train_and_evaluate_model.remote())
+    print("\nThe returned values from the training:")
     pprint(values)

@@ -5,7 +5,7 @@ from xgboost_regressor import XGBoostActor
 from operator import itemgetter
 from pprint import pprint
 
-DECISION_TREE_CONFIGS = {"max_depth": 15,
+DECISION_TREE_CONFIGS = {"max_depth": 10,
                          "name": "decision_tree"}
 
 RANDOM_FOREST_CONFIGS = {"n_estimators": 150,
