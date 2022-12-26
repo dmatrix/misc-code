@@ -9,7 +9,7 @@ from typing import List, Tuple
 import ray
 
 MAX_TASKS = 10000
-BATCH_SIZE = 2000
+BATCH_SIZE = 10
 NUM_BATCHES = int(MAX_TASKS / BATCH_SIZE)
 
 def process_distributed_tasks(obj_refs: List[object]) -> float:
@@ -48,13 +48,12 @@ def run_serially(m, x_tr:float, x_t: float, y_tr:float, y_t:float, num_tasks: in
     for _ in tqdm(range(num_tasks)):
         score = train_model(m, x_tr, x_t, y_tr, y_t)
 
-    # they all will have the same MSE, just return 
+    # they all will have the same MSE, just return the last one
     return score
 
 def run_distributed(m, x_tr:float, x_t: float, y_tr:float, y_t:float, num_tasks: int) -> List[float]:
     results = [train_model_distributed.remote(m, x_tr, x_t, y_tr, y_t) for _ in tqdm(range(num_tasks))]
-
-    return ray.get(results[0])
+    return results
 
 if __name__ == "__main__":
 
@@ -84,7 +83,8 @@ if __name__ == "__main__":
 
     start_time = time.time()
     for tasks in range(NUM_BATCHES):
-        dist_mse = run_distributed(lr_model_ref, x_train_ref, x_test_ref, y_train_ref, y_test_ref, BATCH_SIZE)
+        results = run_distributed(lr_model_ref, x_train_ref, x_test_ref, y_train_ref, y_test_ref, BATCH_SIZE)
+    dist_mse = ray.get(results[0])
     end_time = time.time()
     run_times["distributed"] = round((end_time - start_time), 2)
     print(f"Distributed took: {run_times['distributed']:.2f} seconds | mse: {dist_mse:.4f}")
