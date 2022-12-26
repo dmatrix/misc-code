@@ -8,8 +8,8 @@ from tqdm.auto import tqdm
 from typing import List, Tuple
 import ray
 
-MAX_TASKS = 1000
-BATCH_SIZE = 200
+MAX_TASKS = 10000
+BATCH_SIZE = 2000
 NUM_BATCHES = int(MAX_TASKS / BATCH_SIZE)
 
 def process_distributed_tasks(obj_refs: List[object]) -> float:
