@@ -1,6 +1,8 @@
 import time
+import random
 from sklearn.datasets import fetch_california_housing
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from pprint import pprint
@@ -11,6 +13,7 @@ import ray
 MAX_TASKS = 10000
 BATCH_SIZE = 1000
 NUM_BATCHES = int(MAX_TASKS / BATCH_SIZE)
+MODEL_TYPE = 0              # 0 for RandomForest, 1 for LinearRegressor
 
 def process_distributed_tasks(obj_refs: List[object]) -> float:
     processed_refs = []
@@ -55,9 +58,12 @@ def run_distributed(m, x_tr:float, x_t: float, y_tr:float, y_t:float, num_tasks:
     results = [train_model_distributed.remote(m, x_tr, x_t, y_tr, y_t) for _ in tqdm(range(num_tasks))]
     return results
 
+def get_model(m_type: int) -> object:
+    model = RandomForestRegressor(n_estimators=random.randint(10, 100)) if m_type == 0 else LinearRegression()
+    return model
+
 if __name__ == "__main__":
 
-    lr_model =  LinearRegression()
     X_train, X_test, y_train, y_test = prepare_data()
     run_times = {}
 
@@ -66,6 +72,8 @@ if __name__ == "__main__":
 
     start_time = time.time()
     for tasks in range(NUM_BATCHES):
+        # for each batch get a different model
+        lr_model =  get_model(MODEL_TYPE)
         score = run_serially(lr_model, X_train, X_test, y_train, y_test, BATCH_SIZE)
     end_time = time.time()
     run_times["serial"] = round((end_time - start_time), 2)
@@ -83,6 +91,7 @@ if __name__ == "__main__":
 
     start_time = time.time()
     for tasks in range(NUM_BATCHES):
+        lr_model =  get_model(MODEL_TYPE)
         results = run_distributed(lr_model_ref, x_train_ref, x_test_ref, y_train_ref, y_test_ref, BATCH_SIZE)
     dist_mse = ray.get(results[0])
     end_time = time.time()
