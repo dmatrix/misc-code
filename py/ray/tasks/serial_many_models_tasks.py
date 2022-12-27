@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         MODEL_TYPE = int(sys.argv[1])
-    model_str = "RandomForestRegressor" if MODEL_TYPE == 0 else "LinearRegressor"
+    model_str = "RandomForestRegressor" if MODEL_TYPE == 0 else "LinearRegression"
     print(f"Selecting and training model type: {model_str}")
     
     X_train, X_test, y_train, y_test = prepare_data()
