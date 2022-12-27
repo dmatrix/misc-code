@@ -29,7 +29,9 @@ in Python 3
  * Delta Lake Offline Store and Feast Example
 
 ### Ray Sample Code
- * Tutorials & Gettibng Started
+ * Tutorials & Getting Started
+ * Tasks, Actors, Object stores
+ * Ray AIR
 
 __
 
