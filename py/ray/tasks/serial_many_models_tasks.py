@@ -1,4 +1,5 @@
 import time
+import sys
 import random
 from sklearn.datasets import fetch_california_housing
 from sklearn.linear_model import LinearRegression
@@ -64,6 +65,11 @@ def get_model(m_type: int) -> object:
 
 if __name__ == "__main__":
 
+    if len(sys.argv) > 1:
+        MODEL_TYPE = int(sys.argv[1])
+    model_str = "RandomForestRegressor" if MODEL_TYPE == 0 else "LinearRegressor"
+    print(f"Selecting and training model type: {model_str}")
+    
     X_train, X_test, y_train, y_test = prepare_data()
     run_times = {}
 
