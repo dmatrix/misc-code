@@ -1,6 +1,7 @@
 import time
 import sys
 import random
+import argparse
 from sklearn.datasets import fetch_california_housing
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
@@ -14,7 +15,8 @@ import ray
 MAX_TASKS = 10000
 BATCH_SIZE = 1000
 NUM_BATCHES = int(MAX_TASKS / BATCH_SIZE)
-MODEL_TYPE = 0              # 0 for RandomForest, 1 for LinearRegressor
+MODEL_TYPE = 0              # 0 for LinearRegression (default) ; 1 for RandomForestRegressor
+RUN_TYPE = "all"            # "serial", "dist", or "all", default=all
 
 def process_distributed_tasks(obj_refs: List[object]) -> float:
     processed_refs = []
@@ -60,49 +62,56 @@ def run_distributed(m, x_tr:float, x_t: float, y_tr:float, y_t:float, num_tasks:
     return results
 
 def get_model(m_type: int) -> object:
-    model = RandomForestRegressor(n_estimators=random.randint(10, 100)) if m_type == 0 else LinearRegression()
+    model = LinearRegression() if m_type == 0 else  RandomForestRegressor(n_estimators=random.randint(10, 30))
     return model
 
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1:
-        MODEL_TYPE = int(sys.argv[1])
-    model_str = "RandomForestRegressor" if MODEL_TYPE == 0 else "LinearRegression"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--model", default=0, type=int, choices=[0, 1], help="model type: 0 for default linear regression, 1 for RandormForestRegressor")
+    parser.add_argument("-r", "--run", default="all", type=str, choices=["serial", "dist", "all"], help="Runs: only, serial, only distributed, or all")
+
+    args = parser.parse_args()
+    MODEL_TYPE = args.model
+    RUN_TYPE = args.run 
+    model_str = "LinearRegression" if MODEL_TYPE == 0 else "RandomForestRegressor"
     print(f"Selecting and training model type: {model_str}")
     
     X_train, X_test, y_train, y_test = prepare_data()
     run_times = {}
 
-    print("-----" * 10)
-    print(f"\nSerially training {MAX_TASKS} models in {NUM_BATCHES} batches of size : {BATCH_SIZE} ... ")
+    if RUN_TYPE == "serial" or RUN_TYPE == "all":
+        print("-----" * 10)
+        print(f"\nSerially training {MAX_TASKS} models in {NUM_BATCHES} batches of size : {BATCH_SIZE} ... ")
 
-    start_time = time.time()
-    for tasks in range(NUM_BATCHES):
-        # for each batch get a different model
+        start_time = time.time()
+        for tasks in range(NUM_BATCHES):
+            # Fetch the model type
+            lr_model =  get_model(MODEL_TYPE)
+            score = run_serially(lr_model, X_train, X_test, y_train, y_test, BATCH_SIZE)
+        end_time = time.time()
+        run_times["serial"] = round((end_time - start_time), 2)
+        print(f"Serially took: {run_times['serial']:.2f} seconds | mse: {score:.4f}")
+
+    if RUN_TYPE == "dist" or RUN_TYPE == "all":
+        # Put data in the object store
+        # Fetch the model type
         lr_model =  get_model(MODEL_TYPE)
-        score = run_serially(lr_model, X_train, X_test, y_train, y_test, BATCH_SIZE)
-    end_time = time.time()
-    run_times["serial"] = round((end_time - start_time), 2)
-    print(f"Serially took: {run_times['serial']:.2f} seconds | mse: {score:.4f}")
+        lr_model_ref = ray.put(lr_model)
+        x_train_ref  = ray.put(X_train)
+        x_test_ref   = ray.put(X_test)
+        y_train_ref  = ray.put(y_train)
+        y_test_ref   = ray.put(y_test)
 
-    # Put data in the object store
-    lr_model_ref = ray.put(lr_model)
-    x_train_ref  = ray.put(X_train)
-    x_test_ref   = ray.put(X_test)
-    y_train_ref  = ray.put(y_train)
-    y_test_ref   = ray.put(y_test)
+        print("-----" * 10)
+        print(f"\nDistributed training {MAX_TASKS} models in {NUM_BATCHES} batches of size : {BATCH_SIZE} ... ")
 
-    print("-----" * 10)
-    print(f"\nDistributed training {MAX_TASKS} models in {NUM_BATCHES} batches of size : {BATCH_SIZE} ... ")
-
-    start_time = time.time()
-    for tasks in range(NUM_BATCHES):
-        lr_model =  get_model(MODEL_TYPE)
-        results = run_distributed(lr_model_ref, x_train_ref, x_test_ref, y_train_ref, y_test_ref, BATCH_SIZE)
-    dist_mse = ray.get(results[0])
-    end_time = time.time()
-    run_times["distributed"] = round((end_time - start_time), 2)
-    print(f"Distributed took: {run_times['distributed']:.2f} seconds | mse: {dist_mse:.4f}")
-    print("-----" * 10)
+        start_time = time.time()
+        for tasks in range(NUM_BATCHES):
+            results = run_distributed(lr_model_ref, x_train_ref, x_test_ref, y_train_ref, y_test_ref, BATCH_SIZE)
+        dist_mse = ray.get(results[0])
+        end_time = time.time()
+        run_times["distributed"] = round((end_time - start_time), 2)
+        print(f"Distributed took: {run_times['distributed']:.2f} seconds | mse: {dist_mse:.4f}")
+        print("-----" * 10)
     pprint(run_times)
-    
