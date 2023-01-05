@@ -3,11 +3,7 @@ from time import time
 from ray.util.multiprocessing import Pool
 import ray
 
-MAX_FILES_TO_READ=100              # Increase to 1M
-
-@ray.remote
-def train_remote_task(file_path: str, verbose: bool=False) -> object:
-    return train_model(file_path, verbose)
+MAX_FILES_TO_READ = 100              # Increase to 1M
 
 def train_model(file_path: str, verbose: bool=False) -> object:
     data_ds = ray.data.read_csv(file_path)
@@ -43,11 +39,14 @@ if __name__ == "__main__":
 	    f"s3://anonymous@air-example-data/h2oai_1m_files/file_{i:07}.csv"
 	    for i in range(MAX_FILES_TO_READ) ]
 
-    models_refs = [train_remote_task.remote(f) for f in models_to_train]
-    done_models = []
-    while len(models_refs) > 0:
-        ready_models, models_refs = ray.wait(models_refs, num_returns=10)
-        done_models.extend(ray.get(ready_models))
+    # Create a pool, where each worker is assigned 1 CPU by Ray.
+    pool = Pool(ray_remote_args={"num_cpus": 1})
+
+    # Use the pool to run `train_model` on the data, in batches of 10.
+    iterator = pool.imap_unordered(train_model, models_to_train, chunksize=10)
+    
+    # Track the progress using tqdm and retrieve the results into a list.
+    list(tqdm(iterator, total=MAX_FILES_TO_READ))
     elapsed = time() - start
-    print(f"Trained {len(done_models)} models in {elapsed:.2f} seconds")
-    print(f"lr model: {done_models[:5]}")
+    print(f"Trained {len(MAX_FILES_TO_READ)} models in {elapsed:.2f} seconds")
+    print(f"lr model: {ray.get(next(iterator))}")
