@@ -3,10 +3,10 @@ from time import time
 from ray.util.multiprocessing import Pool
 import ray
 
-MAX_FILES_TO_READ=100               # Increase to 1M
+MAX_FILES_TO_READ=10000              # Increase to 1M
 
 @ray.remote
-def train_model(file_path: str, verbose: bool=False) -> None:
+def train_model(file_path: str, verbose: bool=False) -> object:
     data_ds = ray.data.read_csv(file_path)
     data = data_ds.to_pandas()
 
@@ -21,7 +21,13 @@ def train_model(file_path: str, verbose: bool=False) -> None:
 
     # Columns names are anonymized
     lr.fit(data[["id4", "id5"]], data["v3"])
-    return lr
+    
+    # Return a single dict of the model and stats, etc.
+    return [{
+        "coef": lr.coef_,
+        "intercept": lr.intercept_,
+        "customer_id": data["customer_id"][0],
+    }]
 
 if __name__ == "__main__":
 
@@ -49,7 +55,7 @@ if __name__ == "__main__":
         ready_models, models_refs = ray.wait(models_refs, num_returns=10)
         done_models.extend(ray.get(ready_models))
 
-    results = ray.get(models_refs)
     print(f"Trained {len(done_models)} models in {elapsed:.2f} seconds")
+    print(f"lr model: {done_models[:5]}")
 
 
