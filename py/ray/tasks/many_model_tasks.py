@@ -40,12 +40,16 @@ if __name__ == "__main__":
     # # Use the pool to run `train_model` on the data, in batches of 10.
     # iterator = pool.imap_unordered(train_model, models_to_train, chunksize=10)
     
-
     # # Track the progress using tqdm and retrieve the results into a list.
     # list(tqdm(iterator, total=MAX_FILES_TO_READ))
-    models_ref = [train_model.remote(f) for f in models_to_train]
+    models_refs = [train_model.remote(f) for f in models_to_train]
     elapsed = time() - start
-    results = ray.get(models_ref)
-    print(f"Trained {len(models_to_train)} models in {elapsed:.2f} seconds")
+    done_models = []
+    while len(models_refs) > 0:
+        ready_models, models_refs = ray.wait(models_refs, num_returns=10)
+        done_models.extend(ray.get(ready_models))
+
+    results = ray.get(models_refs)
+    print(f"Trained {len(done_models)} models in {elapsed:.2f} seconds")
 
 
