@@ -3,7 +3,7 @@ from time import time
 from ray.util.multiprocessing import Pool
 import ray
 
-MAX_FILES_TO_READ = 10000             # Increase to 1M
+MAX_FILES_TO_READ = 10_000             # Increase to 1M
 
 def train_model(file_path: str, verbose: bool=False) -> object:
     data_ds = ray.data.read_csv(file_path)
@@ -33,6 +33,8 @@ if __name__ == "__main__":
     if ray.is_initialized():
         ray.shutdown()
     ray.init()
+    num_cpus_available = ray.available_resources()["CPU"]
+    num_pool_actors = int(num_cpus_available / 2)
 
     start = time()
     models_to_train = [
@@ -40,7 +42,8 @@ if __name__ == "__main__":
 	    for i in range(MAX_FILES_TO_READ) ]
 
     # Create a pool, where each worker is assigned 1 CPU by Ray.
-    pool = Pool(5, ray_remote_args={"num_cpus": 1})
+    print(f"Using a pool of {num_pool_actors} of actors")
+    pool = Pool(num_pool_actors, ray_remote_args={"num_cpus": 1})
 
     # Use the pool to run `train_model` on the data, in batches of 10.
     iterator = pool.imap_unordered(train_model, models_to_train, chunksize=5)
