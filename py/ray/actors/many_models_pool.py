@@ -40,13 +40,13 @@ if __name__ == "__main__":
 	    for i in range(MAX_FILES_TO_READ) ]
 
     # Create a pool, where each worker is assigned 1 CPU by Ray.
-    pool = Pool(ray_remote_args={"num_cpus": 1})
+    pool = Pool(5, ray_remote_args={"num_cpus": 1})
 
     # Use the pool to run `train_model` on the data, in batches of 10.
     iterator = pool.imap_unordered(train_model, models_to_train, chunksize=10)
     
     # Track the progress using tqdm and retrieve the results into a list.
-    list(tqdm(iterator, total=MAX_FILES_TO_READ))
+    results = list(tqdm(iterator, total=MAX_FILES_TO_READ))
     elapsed = time() - start
-    print(f"Trained {len(MAX_FILES_TO_READ)} models in {elapsed:.2f} seconds")
-    print(f"lr model: {ray.get(next(iterator))}")
+    print(f"Trained {MAX_FILES_TO_READ} models in {elapsed:.2f} seconds")
+    print(f"Sample of lr models: {results[:2]}")
