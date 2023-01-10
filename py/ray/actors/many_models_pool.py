@@ -33,8 +33,9 @@ if __name__ == "__main__":
     if ray.is_initialized():
         ray.shutdown()
     ray.init()
+    fraction_of_cpus = 3
     num_cpus_available = ray.available_resources()["CPU"]
-    num_pool_actors = int(num_cpus_available / 2)
+    num_pool_actors = int(num_cpus_available / fraction_of_cpus)
 
     start = time()
     models_to_train = [
@@ -52,4 +53,4 @@ if __name__ == "__main__":
     results = list(tqdm(iterator, total=MAX_FILES_TO_READ))
     elapsed = time() - start
     print(f"Trained {MAX_FILES_TO_READ} models in {elapsed:.2f} seconds")
-    print(f"Sample of lr models: {results[:2]}")
+    print(f"Sample of lr models: {results[-2:]}")
