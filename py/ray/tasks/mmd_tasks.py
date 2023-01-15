@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 from pyarrow import dataset as ds
 import ray
 
-# Use this flag to test with smaller files for testing & debugging
-SMOKE_TEST = True
 my_runtime_env = {"working_dir": "."}
 
 if __name__ == "__main__":
