@@ -3,7 +3,7 @@ from time import time
 from ray.util.multiprocessing import Pool
 import ray
 
-MAX_FILES_TO_READ=100              # Increase to 1M
+MAX_FILES_TO_READ = 100              # Increase to 1M
 
 @ray.remote
 def train_remote_task(file_path: str, verbose: bool=False) -> object:
