@@ -1,39 +1,56 @@
-import os
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from tqdm import tqdm
 import mmd_utils as mmt
+import pandas as pd
+import matplotlib.pyplot as plt
 from pyarrow import dataset as ds
 import ray
 
 # Use this flag to test with smaller files for testing & debugging
 SMOKE_TEST = True
+my_runtime_env = {"working_dir": "."}
 
 if __name__ == "__main__":
 
     if ray.is_initialized():
         ray.shutdown()
-    ray.init(ignore_reinit_error=True)
+    ray.init(runtime_env=my_runtime_env, ignore_reinit_error=True)
 
     # Let's read the data as pyarrow table
     dataset = ds.dataset(
         "s3://anonymous@air-example-data/ursa-labs-taxi-data/by_year/",
         partitioning=["year", "month"],
     )
-    starting_idx = -1 if SMOKE_TEST else 0
-    files = [f"s3://anonymous@{file}" for file in tqdm(dataset.files)][starting_idx:]
-    print(f"Total files obtained {len(files)}")
-
     # Let's use three sklearn estimator models
     models = [LinearRegression(), 
               DecisionTreeRegressor(),
               DecisionTreeRegressor(splitter="random"),
               ]
 
-    results, time_stats = mmt.run_batch_training(files, models=models, verbose=False)
-    print(f" Sample of results: {results[:-1][0]}")
-    print("", flush=True)
-    print(f"Total number of pickup locations: {time_stats['total_pickup_locations']}")
-    print(f"Total number of pickup locations with enough records to train: {time_stats['total_pickup_locations_trained']}")
-    print(f"Total number of models trained: {time_stats['total_models_trained']}")
-    print(f"TOTAL TIME TAKEN: {time_stats['total_training_time']} seconds")
+    all_stats_times = []
+    starting_indexes = [-3, -6, -9, -12, -15, -18]
+    for starting_idx in tqdm(starting_indexes):
+        files = [f"s3://anonymous@{file}" for file in tqdm(dataset.files)][starting_idx:]
+        print(f"Total files obtained {len(files)}")
+        results, time_stats = mmt.run_batch_training(files, models=models, verbose=False)
+        print(f" Sample of results: {results[:-1][0]}")
+        print("", flush=True)
+        print(f"Total number of pickup locations: {time_stats['total_pickup_locations']}")
+        print(f"Total number of pickup locations with enough records to train: {time_stats['total_pickup_locations_trained']}")
+        print(f"Total number of models trained: {time_stats['total_models_trained']}")
+        print(f"TOTAL TIME TAKEN: {time_stats['total_training_time']} seconds")
+        print("--" * 10)
+
+    #  Print all cumulative results and stats
+    all_stats_times_df = pd.DataFrame(all_stats_times, index=[3, 6, 9, 12, 15, 18])
+    print(all_stats_times_df)
+
+    # Plot some times
+    all_stats_times_df.plot(kind="bar")
+
+    plt.ylabel("Total locations, Models Trained, Training times", fontsize=12)
+    plt.xlabel("Number of files per batch", fontsize=12)
+    plt.title("Unoptimized batch training without Ray object store")
+    plt.grid(False)
+    plt.show()
