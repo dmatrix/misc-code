@@ -26,8 +26,7 @@ if __name__ == "__main__":
               DecisionTreeRegressor(splitter="random"),
               ]
     all_stats_times = []
-    starting_indexes = [-3, -6]
-    # starting_indexes = [-3, -6, -9, -12, -15, -18]
+    starting_indexes = [-3, -6, -9, -12, -15, -18]
     for starting_idx in tqdm(starting_indexes):
         files = [f"s3://anonymous@{file}" for file in tqdm(dataset.files)][starting_idx:]
         print(f"Total files obtained {len(files)}")
@@ -42,7 +41,7 @@ if __name__ == "__main__":
         print("--" * 10)
     
     #  Print all cumulative results and stats
-    all_stats_times_df = pd.DataFrame(all_stats_times, index=[3, 6])
+    all_stats_times_df = pd.DataFrame(all_stats_times, index=[3, 6, 9, 12, 15, 18])
     print(all_stats_times_df)
 
     # Plot some times
