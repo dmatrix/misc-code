@@ -222,9 +222,11 @@ def run_batch_training(files: List[str], models: List[BaseEstimator], verbose: b
             locdf = pq.read_table(file, columns=["pickup_location_id"])
         except Exception:
             continue
+
+        # Only process unique ids
         pickup_location_ids = locdf["pickup_location_id"].unique()
 
-        # For each pickup location train and fit each model
+        # For each unique pickup location, train and fit each model
         for pickup_location_id in pickup_location_ids:
             # Cast PyArrow scalar to Python if needed.
             try:
