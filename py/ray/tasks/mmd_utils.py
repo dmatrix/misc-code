@@ -25,7 +25,7 @@ def read_data(file: str, pickup_location_id: int) -> pd.DataFrame:
         pickup_location_id: int id to filter out
 
     Returns:
-        Pandas DataFrame filtered by pickup_locatio_id and respective 
+        Pandas DataFrame filtered by pickup_location_id and respective 
         columns
     """
     return pq.read_table(
@@ -51,7 +51,7 @@ def transform_batch(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         a transformed Pandas DataFrame with time formats and duration
-        in seconds
+        in seconds as an additonal column
     """
     df["pickup_at"] = pd.to_datetime(
         df["pickup_at"], format="%Y-%m-%d %H:%M:%S"
@@ -69,9 +69,9 @@ def fit_and_score_sklearn(
     train: pd.DataFrame, test: pd.DataFrame, model: BaseEstimator
 ) -> Tuple[BaseEstimator, float]:
     """
-    A Ray rempte task that fits and scores a sklearn model base estimator with the train and test 
-    data set supplied. Each ray task will train on its respective batch of dataframe.
-    The model will establish a linear relationship between the dropoff location
+    A Ray remote task that fits and scores a sklearn model base estimator with the train and test 
+    data set supplied. Each Ray task will train on its respective batch of dataframe comprised of
+    a pickup_location_id.The model will establish a linear relationship between the dropoff location
     and the trip duration.
 
     Args:
@@ -80,7 +80,7 @@ def fit_and_score_sklearn(
         model: sklearn BaseEstimator
 
     Returns: 
-        a Tuple of fitted model and its corrosponding mean absolute error (MAE)
+        a Tuple of a fitted model and its corrosponding mean absolute error (MAE)
     """
     train_X = train[["dropoff_location_id"]]
     train_y = train["trip_duration"]
@@ -98,8 +98,9 @@ def train_and_evaluate_internal(
     df: pd.DataFrame, models: List[BaseEstimator], pickup_location_id: int = 0
 ) -> List[Tuple[BaseEstimator, float]]:
     """
-    A task which contains all logic necessary to load a data batch, transform it, split it into 
-    train and test and fit and evaluate models on it by invoking a remote Ray task. 
+    A Python functional task which contains all logic necessary to load a data batch, 
+    transform it, split it into train and test and fit and evaluate 
+    models on it by invoking a remote Ray task. 
     
     Args:
         df: Pandas DataFrame holding transformed data
@@ -115,15 +116,18 @@ def train_and_evaluate_internal(
         return None
 
     # Train / test split.
-    train, test = train_test_split(df)
+    train, test = train_test_split(df) 
 
     # We put the train & test dataframes into Ray object store
     # so that they can be reused by all models fitted here.
     # https://docs.ray.io/en/master/ray-core/patterns/pass-large-arg-by-value.html
+    # This is the only time in this approach we explicity put data into the 
+    # Ray object store.
     train_ref = ray.put(train)
     test_ref = ray.put(test)
 
-    # Launch a fit and score task for each model.
+    # Launch a fit and score task for each scklearn BaseEstimator model.
+    # this will block until all the modesl have been trained.
     results = ray.get(
         [
             fit_and_score_sklearn.remote(train_ref, test_ref, model)
@@ -131,8 +135,8 @@ def train_and_evaluate_internal(
         ]
     )
     # Since we are doing a ray.get above, the results will block.
-    # Theuy contain a Tuple of (fitted model, mae), and sort the list of
-    # tuples by mae error.
+    # They contain a Tuple of (fitted model, mae), so sort the list of
+    # tuples by mae error,in ascending order
     results.sort(key=lambda x: x[1])  # sort by error
     return results
 
@@ -156,6 +160,8 @@ def train_and_evaluate(
         A tuple of file path, location id, and results
     """
     start_time = time.time()
+
+    # Get batch data for specific pickup_location_id
     data = read_data(file_name, pickup_location_id)
     data_loading_time = time.time() - start_time
     if verbose:
@@ -165,13 +171,15 @@ def train_and_evaluate(
 
     # Perform transformation
     start_time = time.time()
+
+    # Transform the batch 
     data = transform_batch(data)
     transform_time = time.time() - start_time
     if verbose:
         print_time_info_stats(
             f"Data transform time for LocID: {pickup_location_id}: {transform_time:.3f}")
 
-    # Perform training & evaluation for each model
+    # Perform training & evaluation for each model with this batch-id data set
     start_time = time.time()
     results = (train_and_evaluate_internal(data, models, pickup_location_id),)
     training_time = time.time() - start_time
@@ -208,7 +216,7 @@ def run_batch_training(files: List[str], models: List[BaseEstimator], verbose: b
     task_refs = []
     
     # For each file only fetch the pickup_location_id since we want
-    # to train each model on this attribute
+    # to train each model on this attribute's associated batch of data
     for file in files:
         try:
             locdf = pq.read_table(file, columns=["pickup_location_id"])

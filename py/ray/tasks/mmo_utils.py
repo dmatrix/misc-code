@@ -34,7 +34,7 @@ def train_and_evaluate_optimized(
     Returns:
         A tuple file_name, id, and list tuple of estimators and respective MAE
     """
-    # Extract respective id and data
+    # Unpack the tupel to extract respective id and data
     pickup_location_id, data = pickup_location_id_and_data
 
     # Perform transformation
@@ -61,14 +61,14 @@ def train_and_evaluate_optimized(
 def read_into_object_store(file: str) -> ray.ObjectRefGenerator:
     """
     This function creates a Ray Task that is a generator, returning an
-    object references. Read the table from the file. It stores the data
+    object reference generator. Read the table from the file. It stores the data
     into the Ray object store. 
 
     Args: 
         str path to the file name
 
     Returns:
-        Yields Ray Object references as tuple of pickup_id and associated data
+        Yields Ray Object reference as tuple of pickup_id and associated batch data
     """
     # print(f"Loading {file} into arrow table")
     # Read the entire single file into memory.
@@ -89,7 +89,8 @@ def read_into_object_store(file: str) -> ray.ObjectRefGenerator:
     pickup_location_ids = locdf["pickup_location_id"].unique()
 
     for pickup_location_id in pickup_location_ids:
-        # Each id-data batch tuple will be put as a separate object into the Ray object store.
+        # Each id-data batch tuple will be put as a separate object into the Ray object store,
+        # part of the yield statement
         # Cast PyArrow scalar to Python if needed.
         try:
             pickup_location_id = pickup_location_id.as_py()
@@ -111,11 +112,11 @@ def run_batch_training_with_object_store(
     strategy and fetches id-data from Ray's object store
 
     Args:
-        List of parquet files to the data
+        List of parquet files to the NYC data
         List of model estimators to use to train
 
     Returns:
-        the results from all the runs and timiings
+        the tuple of results from all the runs (tuples) and timings (dict)
     """
 
     print("Starting optimized run: each task fetching pre-loaded data from Ray object store...")
@@ -133,21 +134,28 @@ def run_batch_training_with_object_store(
         scheduling_strategy="SPREAD"
     )
 
-    # Dictionary of references to read tasks with file names as keys
+    # Dictionary of references to read tasks with file ids as keys and its
+    # respective object reference in the object store as value
+    # This remote task will stores respective object referrences to the batch-id
+    # as part of the yield statement. 
     read_tasks_by_file = {
         files[file_id]: read_into_object_store_spread.remote(file)
         for file_id, file in enumerate(files)
     }
 
+    # Iterate over all the object refs returned by the generator and
+    # placed in the dictionary above
     for file, read_task_ref in read_tasks_by_file.items():
-        # We iterate over references and pass them to the tasks directly
+        # Note: We iterate over references and pass them to the tasks directly.
+        # No actual data batch is passed, only the reference to it is to train and 
+        # evaluate
         for pickup_location_id_and_data_batch_ref in iter(ray.get(read_task_ref)):
             task_refs.append(
                 train_and_evaluate_optimized.remote(
                     pickup_location_id_and_data_batch_ref, file, models, verbose=verbose)
                 )
 
-    # Block to obtain results from each task
+    # Block ray.get is delayed until we need to obtain results from each task
     results = ray.get(task_refs)
 
     taken = time.time() - start
