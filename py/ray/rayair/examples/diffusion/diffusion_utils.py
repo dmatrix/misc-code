@@ -28,9 +28,8 @@ class TrainingConfig:
     gradient_accumulation_steps = 1
     learning_rate = 1e-4
     lr_warmup_steps = 500
-    save_image_epochs = 10
-    save_model_epochs = 10       
-    save_model_epochs = 10
+    save_image_epochs = int(num_epochs / 2)     
+    save_model_epochs = int(num_epochs / 2)
     mixed_precision = 'fp16'  # `no` for float32, `fp16` for automatic mixed precision
     output_dir = '/mnt/cluster_storage/ddpm-butterflies-128'  # save the mode on the Anyscale storage locally or on the HF Hub
  
