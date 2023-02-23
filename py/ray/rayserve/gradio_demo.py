@@ -1,6 +1,7 @@
 from ray.serve.gradio_integrations import GradioServer
 import gradio as gr
 from transformers import pipeline
+import tokenizers
 
 EXAMPLE = (
     "HOUSTON -- Men have landed and walked on the moon. "
@@ -20,17 +21,21 @@ EXAMPLE = (
     "transmitted his every move to an awed and excited audience of hundreds "
     "of millions of people on earth."
 )
-summarizer = pipeline("summarization", model_max_length=512, model="t5-small")
 
-def model(text):
-    summary_list = summarizer(text)
-    summary = summary_list[0]["summary_text"]
-    return summary
+def gradio_summarizer_builder():
+    summarizer = pipeline("summarization", model_max_length=512, model="t5-small")
 
+    def model(text):
+        summary_list = summarizer(text)
+        summary = summary_list[0]["summary_text"]
+        return summary
 
-io = gr.Interface(fn=model,
-                inputs=[gr.inputs.Textbox(default=EXAMPLE, label="Input prompt")],
-                outputs=[gr.outputs.Textbox(label="Model output")],
+    return gr.Interface(
+        fn=model,
+        inputs=[gr.inputs.Textbox(default=EXAMPLE, label="Input prompt")],
+        outputs=[gr.outputs.Textbox(label="Model output")],
+    )
+
+app = GradioServer.options(num_replicas=2, ray_actor_options={"num_cpus": 4}).bind(
+    gradio_summarizer_builder
 )
-
-app = GradioServer.options(num_replicas=2, ray_actor_options={"num_cpus": 4}).bind(io)
