@@ -23,7 +23,7 @@ EXAMPLE = (
 )
 
 def gradio_summarizer_builder():
-    summarizer = pipeline("summarization", model_max_length=512, model="t5-small")
+    summarizer = pipeline("summarization", tokenizer='bert-base-cased', model="t5-small")
 
     def model(text):
         summary_list = summarizer(text)
