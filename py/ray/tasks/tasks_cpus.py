@@ -1,5 +1,3 @@
-import os
-import time
 import math
 import ray
 import numpy as np
@@ -17,7 +15,9 @@ if __name__ == "__main__":
         ray.shutdown()
     ray.init(logging_level=logging.ERROR)
 
-    obj_ref = [ray_task.remote(random.randint(10000, 50000), random.randint(10000, 50000)) for i in range(100)]
-    results = sum(ray.get(object_refs=obj_ref))
-    print(f"Number of arrays: {len(obj_ref)}, Sum of all Numpy arrays: {results:.2f})")
-    ra
+    NUM_TASKS = [25, 50, 75, 100]
+    for task in NUM_TASKS:
+        obj_ref = [ray_task.remote(random.randint(100, 200), random.randint(100, 200)) for i in range(task)]
+        print("Num of tasks: {task}")
+        results = sum(ray.get(object_refs=obj_ref))
+        print(f"Number of arrays: {len(obj_ref)}, Sum of all Numpy arrays: {results:.2f})")
