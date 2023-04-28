@@ -49,7 +49,7 @@ class AnswerPDFQuestions():
     
 if __name__ == "__main__":
 
-    KEY = "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"
+    KEY = "your_key""
     vector_db = Path(Path.cwd(), "vector_oai_db").as_posix()
     deployment = AnswerPDFQuestions.bind(vector_db, KEY)
     serve.run(deployment)

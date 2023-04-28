@@ -5,7 +5,7 @@ from langchain.vectorstores import Chroma # for the vectorization part
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 
-KEY = "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"
+KEY = "your_key"
 os.environ["OPENAI_API_KEY"] = KEY
 VERBOSE=False
 

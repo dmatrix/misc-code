@@ -37,7 +37,7 @@ def create_index(document: str, vector_db_path: str, open_ai_key: str) -> None:
     print(f"Embeddings created from {vectordbs} pages")
 
 if __name__ == "__main__":
-    KEY = "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"
+    KEY = "you_key""
     document = Path(Path.cwd(), "hai_ai_index_report.pdf").as_posix()
     vector_db_path = Path(Path.cwd(), "vector_oai_db").as_posix()
     index_path = Path(vector_db_path, "index")

@@ -54,7 +54,7 @@ class AnswerPDFQuestions():
     
 if __name__ == "__main__":
 
-    HF_TOKEN = "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"
+    HF_TOKEN = "you_token""
     document = Path(Path.cwd(), "hai_ai_index_report.pdf").as_posix()
     vector_db_path = Path(Path.cwd(), "vector_hf_db").as_posix()
     deployment = AnswerPDFQuestions.bind(vector_db_path, HF_TOKEN)
