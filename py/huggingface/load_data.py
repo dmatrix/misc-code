@@ -6,9 +6,9 @@ from datasets import load_dataset
 data_set_url = "https://the-eye.eu/public/AI/pile_preliminary_components/EuroParliamentProceedings_1996_2011.jsonl.zst"
 if __name__ == "__main__":
 
-    data_set = load_dataset("json", data_files=data_set_url, split="train", streaming=True)
+    data_set = load_dataset("json", data_files=data_set_url, split="train")
     print(f"Dataset contents: {data_set}")
-    print(f"Sample data: {next(iter(data_set))}")
+    print(f"Sample data: {data_set[0]}")
 
     # let's check its size in memory
 
