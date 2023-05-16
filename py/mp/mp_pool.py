@@ -5,6 +5,7 @@ import numpy as np
 import os
 import time
 import logging
+from defs import get_cpu_count
 
 # iterations_count = round(1e7)
 iterations_count = round(1e5)
@@ -38,20 +39,23 @@ if __name__ == '__main__':
     cores = mp.cpu_count()
     print(f"number of cores: {cores}")
     start = time.time()
-    with mp.Pool(cores) as p:
+    mp_pool = mp.Pool(cores)
+    with mp_pool as p:
         results = p.map(is_prime, list(range(200000)))
     print(f"sum of all: {sum(results):.2f}")
     end = time.time()
+    mp_pool.terminate()
     print(f"Multi Process access: Time elapsed: {end - start:.2f} sec")
 
-    ray_pool = Pool(cores)
+
     if ray.is_initialized:
         ray.shutdown()
     ray.init(logging_level=logging.ERROR)
 
     results = []
+    ray_pool = Pool(get_cpu_count())
     start = time.time()
-    for result in ray_pool.map(is_prime, list(range(200000))):
+    for result in ray_pool.map(is_prime, list(range(2000000))):
         results.append(result)
     end = time.time()
     print(f"sum of all: {sum(results):10.2f}")
