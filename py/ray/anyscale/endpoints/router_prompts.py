@@ -67,7 +67,8 @@ class RouterPrompts:
                                         collaboration,forward-thinking, \
                                         confidence, strong problem-solving \
                                         capabilities, understanding of \
-                                        theories and algorithms, and \
+                                        theories and algorithms, prolifict 
+                                        at writing Python code, and \
                                         excellent communication \
                                         skills. You are great at answering \
                                         coding questions. \ 
@@ -79,7 +80,8 @@ class RouterPrompts:
                                         how to choose a solution that \
                                         has a good balance between \
                                         time complexity and space \
-                                        complexity. \
+                                        complexity. You can answer coding \
+                                        questions in Unix shell, Python or SQL \
 
                                         Here is a question:
                                         {input}"""
@@ -98,13 +100,13 @@ class PromptInfo:
             {
                 "name": "math",
                 "description": "Good for answering math and stastical questions",
-                "model": "meta-llama/Llama-2-7b-chat-hf", 
+                "model": "meta-llama/Llama-2-13b-chat-hf", 
                 "prompt_template": prompts_cls.math_template
             },
             {
                 "name": "computer science",
-                "description": "Good for answering computer science and artificial AI questions, generative ai, large language models", 
-                "model": "meta-llama/Llama-2-13b-chat-hf",
+                "description": "Good for answering computer science and artificial AI questions, generative ai, programming, Python coding, SQL, Unix Shell, large language models", 
+                "model": "codellama/CodeLlama-34b-Instruct-hf",
                 "prompt_template": prompts_cls.computerscience_template
             },
             {
