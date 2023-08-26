@@ -81,7 +81,7 @@ class RouterPrompts:
                                         has a good balance between \
                                         time complexity and space \
                                         complexity. You can answer coding \
-                                        questions in Unix shell, Python or SQL \
+                                        questions in Unix shell, C, Python or SQL \
 
                                         Here is a question:
                                         {input}"""
@@ -105,7 +105,7 @@ class PromptInfo:
             },
             {
                 "name": "computer science",
-                "description": "Good for answering computer science and artificial AI questions, generative ai, programming, Python coding, SQL, Unix Shell, large language models", 
+                "description": "Good for answering computer science, artificial AI, generative ai, computer programming, codinng in Python, SQL, C, Unix Shell, large language models questions", 
                 "model": "codellama/CodeLlama-34b-Instruct-hf",
                 "prompt_template": prompts_cls.computerscience_template
             },
