@@ -6,7 +6,7 @@ from ray.util.multiprocessing import Pool
 
 
 def task(n):
-    time.sleep(0.5 * n)
+    time.sleep(0.005 * n)
     
     array_1 = np.random.randint(n*50, size=n) * 0.05
     array_2 = np.random.randint(n * 50, size=n) * 0.03
