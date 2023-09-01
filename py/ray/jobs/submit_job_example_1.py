@@ -5,7 +5,7 @@ import ray
 from ray.util.multiprocessing import Pool
 
 
-def task(n):
+def task(n:int):
     time.sleep(0.005 * n)
     
     array_1 = np.random.randint(n*50, size=n) * 0.05
@@ -15,7 +15,7 @@ def task(n):
 
 
 @ray.remote
-def launch_long_running_tasks(num_pool=5):
+def launch_long_running_tasks(num_pool:int=5):
     # doing the work, collecting data, updating the database
     # create an Actor pool of num_pool workers nodes
     pool = Pool(num_pool)
@@ -28,7 +28,7 @@ def launch_long_running_tasks(num_pool=5):
 
 @ray.remote
 class LaunchDistributedTasks:
-    def __init__(self, limit=10):
+    def __init__(self, limit:int=10):
         self._limit = limit
 
     def launch(self):

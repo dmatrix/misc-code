@@ -4,7 +4,7 @@ from ray.util.multiprocessing import Pool
 
 
 def f(index):
-    time.sleep(5)
+    time.sleep(0.5)
     return index
 
 
