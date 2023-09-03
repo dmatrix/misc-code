@@ -17,7 +17,9 @@ if __name__ == "__main__":
         # Entrypoint shell command to execute
         entrypoint="python submit_job_example_1.py",
         # Path to the local directory that contains the script.py file
-        runtime_env={"working_dir": "./"}
+        runtime_env={"working_dir": "./"},
+        metadata={"job_submission_id": "123", 
+                  "submitter": "Jules Damji"}
     )
     print(job_id)
 
@@ -26,4 +28,8 @@ if __name__ == "__main__":
                                JobStatus.STOPPED, 
                                JobStatus.FAILED}, 30)
 logs = client.get_job_logs(job_id)
+job_info = client.get_job_info(job_id)
+print(f"Job Info: {job_info}")
+print(f"Job metadata: {type(job_info)}")
+print("----" * 10)
 print(logs)
