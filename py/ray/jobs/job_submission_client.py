@@ -30,6 +30,5 @@ if __name__ == "__main__":
 logs = client.get_job_logs(job_id)
 job_info = client.get_job_info(job_id)
 print(f"Job Info: {job_info}")
-print(f"Job metadata: {type(job_info)}")
 print("----" * 10)
 print(logs)
