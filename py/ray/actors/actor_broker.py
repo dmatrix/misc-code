@@ -2,7 +2,7 @@ from typing import Dict, Any
 import ray
 
 def compute_cube(x: int) -> int:
-        return x * x * x
+        return x**3
 
 @ray.remote
 def run_tasks(args: Dict[str, Any]):
@@ -13,8 +13,11 @@ def run_tasks(args: Dict[str, Any]):
 
 @ray.remote
 class BrokerActor():
-    def __init__(self):
+    def __init__(self) -> None:
         self.id_to_ref = {}
+
+    def count(self) -> int:
+        return len(self.id_to_ref)
 
     @ray.method(num_returns=2)
     def exec(self, task_args) -> object:
