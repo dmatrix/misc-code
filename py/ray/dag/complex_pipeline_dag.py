@@ -16,8 +16,8 @@ def lowercase(sentences: List[str]) -> List[str]:
 
 @ray.remote
 def aggregate(data: List[str]) -> int:
-    #print(f"Aggregating data: {ray.get(data)})")
-    return len (data)
+    print(f"Aggregating data: {ray.get(data)})")
+    return sum(ray.get(data))
 
 @ray.remote
 def sentence_count(data: List[str]) -> int:
@@ -26,7 +26,7 @@ def sentence_count(data: List[str]) -> int:
     for sentence in data:
         # print(f"Counting words in sentence: {sentence}")
         count += len(sentence.split()) if isinstance(sentence, str) else sentence
-        # print(f"Current count: {count}")
+    print(f"Total count: {count}")
     return count
 
 if __name__ == "__main__":
@@ -35,23 +35,23 @@ if __name__ == "__main__":
         ray.init()
 
     # Build the DAG:
-    # data -> capitalized_data -> aggregated_data
-    #       \____lowercase_____/
+    # data -> capitalize_data -> aggregated_data
+    #       \____lowercase____/
     #        \__sentencecount_/
     
     # Generate 25 random sentences
     
-    data_node = gen_data.bind(25)
+    data_node_1 = gen_data.bind(10)
+    data_node_2 = gen_data.bind(10)
+
 
     # Capitalize and lowercase the sentences
-    capitalized_data_node = capitalize.bind(data_node)
-    lowercased_data_node = lowercase.bind(data_node)
+    capitalized_data_node = capitalize.bind(data_node_1)
+    lowercased_data_node = lowercase.bind(data_node_2)
 
     # Aggregate the data
     sentence_count_node_1 = sentence_count.bind(capitalized_data_node)
     sentence_count_node_2 = sentence_count.bind(lowercased_data_node)
     aggregated_data_node = aggregate.bind([sentence_count_node_1, sentence_count_node_2])
     results = ray.get(aggregated_data_node.execute())
-    print(f"Aggregated merged elements in merged lists: {results}")
-    print(f"Word count in capitalized list: {ray.get(sentence_count_node_1.execute())}")
-    print(f"Word count in lowercased list : {ray.get(sentence_count_node_2.execute())}")
+    print(f"Aggregated word count of merged list: {results}")
