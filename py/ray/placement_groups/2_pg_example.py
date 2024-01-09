@@ -1,5 +1,6 @@
 import time
 import ray
+from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 from ray.util.placement_group import (placement_group_table, placement_group)
 
 
@@ -22,7 +23,7 @@ if __name__ == "__main__":
 
     # create a placement group and reserve 2 CPUs
     # Reserve bundles with strict pack strategy.
-    # It means Ray will reserve 2 "GPU" and 2 "extra_resource" on the same node (strict pack)
+    # It means Ray will reserve 2 "CPU" and 2 "extra_resource" on the same node (strict pack)
     # within a Ray cluster. Using this placement group for scheduling actors or tasks will
     # guarantee that they will be colocated on the same node.
     pg = placement_group([bundle_1, bundle_2], strategy="STRICT_PACK")
@@ -38,7 +39,9 @@ if __name__ == "__main__":
     try:
         print(ray.get(func.remote(), timeout=2))
     except ray.exceptions.GetTimeoutError:
-        print("Timeout and could be scheduled")
+        print("***** Timeout and could not be scheduled")
 
     # Now let's make this task as part of the placement group
-    print(ray.get(func2.options(placement_group=pg).remote()))
+    if ray.get(func2.options(scheduling_strategy=PlacementGroupSchedulingStrategy(
+        placement_group=pg)).remote(), timeout=2):
+        print("func2 scheduled successfully")
