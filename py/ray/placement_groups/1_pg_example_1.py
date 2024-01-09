@@ -1,6 +1,6 @@
 import time
 import ray
-from ray.util.placement_group import (placement_group, placement_group_table, remove_placement_group)
+from ray.util.placement_group import (placement_group, placement_group_table)
 
 if __name__ == "__main__":
     ray.init(num_cpus=2, resources={"extra_resources": 2})
@@ -14,4 +14,4 @@ if __name__ == "__main__":
     print(f"placement group status:{ready}")
     print(placement_group_table(pg))
 
-    time.sleep(10)
+    time.sleep(6)
