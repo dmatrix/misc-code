@@ -1,4 +1,0 @@
-openai
-langchain
-gradio
-dotenv
