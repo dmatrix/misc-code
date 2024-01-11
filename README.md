@@ -28,11 +28,6 @@ in Python 3
  * Feast + MLflow
  * Delta Lake Offline Store and Feast Example
 
-### Ray Sample Code
- * Tutorials & Getting Started
- * Tasks, Actors, Object stores
- * Ray AIR
-
 __
 
 Cheers
