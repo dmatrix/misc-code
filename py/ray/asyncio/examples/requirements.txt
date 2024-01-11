@@ -1,5 +1,0 @@
-ray[default]
-aiosqlite
-aiohttp
-aiofiles
-aiohttp_requests
