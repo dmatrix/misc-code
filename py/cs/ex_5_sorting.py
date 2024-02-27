@@ -60,3 +60,46 @@ print("--sorted: NFD--")
 print(sorted(names, key=partial(normalize, 'NFD')))
 print("--sorted: NFC--")
 print(sorted(names, key=partial(normalize, 'NFC')))
+
+def custom_sort(iterable, key, reverse=False):
+    """Customer sort function."""
+    # sort by key
+    return sorted(iterable, key=key, reverse=reverse)
+
+# Creating a partial function for custom sorting
+sort_descending = partial(custom_sort, reverse=True)
+
+numbers = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]
+numbers_2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print("--sorted: descending--")
+print(f"Original numbers: {numbers}")
+print(f"Sorted numbers: {custom_sort(numbers, key=lambda x: x % 3)}")
+
+print("--sorted: descending--")
+print(f"Original numbers: {numbers_2}")
+print(f"Sorted numbers: {sort_descending(numbers_2, key=lambda x: x % 2)}")
+
+print("--" * 10)
+
+# The functools.partial() function allows one to derive a new function with some of the arguments of the original function fixed.
+# This is useful to adapt a function to a specific use case without needing to rewrite the original function.
+
+us_currency = [1, 5, 10, 25, 50, 100]
+uk_currency = [1, 2, 5, 10, 20, 50, 100]
+
+# Create a partial function to convert US currency to UK currency
+def convert_currency(amount, conversion_rate):
+    return amount * conversion_rate
+
+us_to_uk = partial(convert_currency, conversion_rate=0.75)
+uk_to_us = partial(convert_currency, conversion_rate=1.33)
+
+print(f"US currency: {us_currency}")
+us_2_uk = sorted([us_to_uk(x) for x in us_currency])
+print(f"US currency to UK currency: {us_2_uk}")
+print("--" * 10)
+print(f"UK currency: {uk_currency}")
+uk_2_us = sorted([uk_to_us(x) for x in uk_currency])
+print(f"UK currency to US currency: {uk_2_us}")
+
+
