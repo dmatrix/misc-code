@@ -91,6 +91,7 @@ uk_currency = [1, 2, 5, 10, 20, 50, 100]
 def convert_currency(amount, conversion_rate):
     return amount * conversion_rate
 
+# create our partial functions for respective currencies
 us_to_uk = partial(convert_currency, conversion_rate=0.75)
 uk_to_us = partial(convert_currency, conversion_rate=1.33)
 
