@@ -33,6 +33,11 @@ class Student:
     def __ne__(self, __value: object) -> bool:
         return self.grade != __value.grade and self.course == __value.course
     
+    def __hash__(self) -> int:
+        return hash(self.__dict__)
+    
+    def dict(self) -> dict:
+        return self.__dict__
 
 if __name__ == "__main__":
     # Generate 10 random students
@@ -98,4 +103,9 @@ if __name__ == "__main__":
     print("-- students who received an A in English or Math --")
     filtered_students = [x for x in students if x.grade == "A" and (x.course == "Math" or x.course == "English")]   
     print(filtered_students)
+
+    print("--dict--")
+    print(students[1].__dict__)
+    print(students[1].dict())
+    print(students[1].__dict__ == students[1].dict())
 
